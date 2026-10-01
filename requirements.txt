@@ -1,0 +1,16 @@
+# Entregable 1 — dependencias (Python >= 3.11; probado en 3.11, pensado para 3.14)
+numpy>=2.0
+pandas>=2.3
+scipy>=1.14
+scikit-learn>=1.6
+matplotlib>=3.9
+seaborn>=0.13
+folium>=0.17
+pyarrow>=17
+# ejecución y construcción del libro
+jupyter-book>=1.0,<2
+ipykernel
+nbclient
+nbformat
+# opcional: descarga de dominios ArcGIS (mismo cliente que 01_descarga_predios.py)
+curl_cffi

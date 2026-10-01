@@ -1,0 +1,35 @@
+title: "Estrato y catastro en Barranquilla — Entregable 1"
+author: "María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)"
+copyright: "2026"
+logo: ""
+language: es
+
+# Los notebooks se ejecutan ANTES de construir el libro con
+# `python ejecutar_libro.py` (así las salidas quedan guardadas y el build es
+# rápido). Por eso aquí no se re-ejecutan.
+execute:
+  execute_notebooks: "off"
+  timeout: 3600
+
+exclude_patterns:
+  - "tests/*"
+  - "datos/*"
+  - "_build/*"
+  - "LEEME.md"
+  - "**.ipynb_checkpoints"
+
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - amsmath
+    - colon_fence
+    - deflist
+
+sphinx:
+  config:
+    html_show_copyright: false
+    language: es
+
+html:
+  use_repository_button: false
+  home_page_in_navbar: true

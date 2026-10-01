@@ -1,0 +1,144 @@
+{
+  "tam_bloque_km": {
+    "valor": 2.0,
+    "motivo": "Bloques de 2 km: mayores que la escala de un barrio/edificio, de modo que unidades vecinas casi idénticas no queden a ambos lados de la partición."
+  },
+  "semilla": {
+    "valor": 42,
+    "motivo": "Semilla única para partición, CV, muestreos y modelos."
+  },
+  "imputacion_numericas": {
+    "valor": "mediana + indicador de faltante (SimpleImputer(add_indicator=True)), dentro del Pipeline",
+    "motivo": "Faltantes < 30 % en todas las variables; mecanismo MAR/informativo según AUC y SMD (cap. 3.1); la mediana es robusta a la asimetría fuerte de áreas y conteos."
+  },
+  "imputacion_categoricas": {
+    "valor": "categoría explícita 'faltante'",
+    "motivo": "Conserva la información de que el dato no existía, sin inventar una categoría real."
+  },
+  "winsorizacion_cuantiles": {
+    "valor": [
+      0.001,
+      0.999
+    ],
+    "motivo": "Colas largas plausibles (cap. 3.2): se recortan a p0.1/p99.9 de train dentro del Pipeline en lugar de eliminar filas, para no sesgar las clases altas."
+  },
+  "metrica_principal": {
+    "valor": "f1_macro",
+    "motivo": "Desbalance 4.6:1 y 6 clases (cap. 4.1): el accuracy premia a la clase mayoritaria."
+  },
+  "metricas_ordinales": {
+    "valor": [
+      "MAE_ordinal",
+      "accuracy_±1",
+      "kappa_cuadrático"
+    ],
+    "motivo": "El estrato es ordinal (cap. 4.2): errores lejanos deben pesar más."
+  },
+  "num_log": {
+    "valor": [
+      "area_construida",
+      "area_catastral_terreno",
+      "total_habitaciones",
+      "total_banios",
+      "total_plantas",
+      "antiguedad",
+      "planta_ubicacion"
+    ],
+    "motivo": "Variables no negativas con |asimetría| > 1 que log1p reduce (cap. 5.5)."
+  },
+  "num_lineal": {
+    "valor": [
+      "altura"
+    ],
+    "motivo": "Variables sin asimetría fuerte o que log1p no mejora (cap. 5.5)."
+  },
+  "onehot_min_frecuencia": {
+    "valor": 0.01,
+    "motivo": "Categorías con < 1 % en train se agrupan en 'infrequent' (cap. 5.7)."
+  },
+  "excluir_multicolinealidad": {
+    "valor": [],
+    "motivo": "VIF > 10 (cap. 6.8); se retira la de menor η²_H con el estrato."
+  },
+  "categoricas_preliminares": {
+    "valor": [
+      "tipo_vivienda",
+      "uso",
+      "condicion_predio"
+    ],
+    "motivo": "Categóricas con V de Cramér ≥ 0.1 con el estrato (cap. 6.3)."
+  },
+  "numericas_preliminares": {
+    "valor": [
+      "area_construida",
+      "area_catastral_terreno",
+      "total_habitaciones",
+      "total_banios",
+      "total_plantas",
+      "antiguedad",
+      "planta_ubicacion",
+      "altura"
+    ],
+    "motivo": "Numéricas tras quitar las de VIF alto (cap. 6.8)."
+  },
+  "outliers_multivariados": {
+    "valor": "conservar (sin eliminar filas)",
+    "motivo": "0.57% marcados por ambos métodos; 25% de ellos son estrato 5-6 (vs 12% en el resto): eliminarlos sesgaría las clases altas (cap. 7.2)."
+  },
+  "buffer_km": {
+    "valor": 1.0,
+    "motivo": "Correlograma en train (cap. 8.4): Moran's I del estrato cae por debajo de 0.3 a ~2.88 km; se recorta a [0.25, 1.0] km para no perder demasiado entrenamiento."
+  },
+  "alcance_correlograma_km": {
+    "valor": 2.875,
+    "motivo": "Distancia a la que el Moran's I del estrato baja de 0.3 (cap. 8.4); referencia para el análisis de sensibilidad del buffer (cap. 10)."
+  },
+  "k_vecinos": {
+    "valor": 8,
+    "motivo": "Densidad muy desigual: kNN garantiza vecinos para todos (cap. 8.4)."
+  },
+  "espaciales": {
+    "valor": [
+      "x_km",
+      "y_km",
+      "dist_centro_km"
+    ],
+    "motivo": "Tendencia norte-sur y radial (cap. 4.3 y 8.2); proyección local en km; controladas por validación por bloques + buffer (cap. 8.7)."
+  },
+  "variables_modelo": {
+    "valor": {
+      "numericas": [
+        "area_construida",
+        "area_catastral_terreno",
+        "total_habitaciones",
+        "total_banios",
+        "total_plantas",
+        "antiguedad",
+        "planta_ubicacion",
+        "altura"
+      ],
+      "categoricas": [
+        "tipo_vivienda",
+        "uso",
+        "condicion_predio"
+      ],
+      "espaciales": [
+        "x_km",
+        "y_km",
+        "dist_centro_km"
+      ]
+    },
+    "motivo": "Tras VIF (cap. 6), V de Cramér (cap. 6) y auditoría de fuga (cap. 9): sin identificadores, metadatos ni variables con AUC univariado ≥ 0.95."
+  },
+  "variables_excluidas": {
+    "valor": [
+      "destinacion_economica",
+      "tipo_planta",
+      "numero_predial_nacional",
+      "npn_edificio",
+      "id_fila",
+      "centroide_fuente"
+    ],
+    "motivo": "Ver tablas 9.1 y 9.2."
+  }
+}

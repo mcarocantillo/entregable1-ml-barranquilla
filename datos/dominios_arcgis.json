@@ -1,0 +1,98 @@
+{
+  "_nota": "Caché reconstruida a partir de la descarga original del servicio ArcGIS (ejecución local del 28-sep-2026); el servidor no respondió desde el entorno de esta ejecución.",
+  "numero_predial_nacional": {
+    "capa": null,
+    "alias": "Número Predial Nacional",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "estrato": {
+    "capa": null,
+    "alias": "Estrato",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "area_construida": {
+    "capa": null,
+    "alias": "Área Construida",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "area_catastral_terreno": {
+    "capa": null,
+    "alias": "Área Catastral Terreno",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "total_habitaciones": {
+    "capa": null,
+    "alias": "Total Habitaciones",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "total_banios": {
+    "capa": null,
+    "alias": "Total Baños",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "total_plantas": {
+    "capa": null,
+    "alias": "Total Pisos",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "anio_construccion": {
+    "capa": null,
+    "alias": "Año Construcción",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "planta_ubicacion": {
+    "capa": null,
+    "alias": "Planta Ubicación",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "altura": {
+    "capa": null,
+    "alias": "Altura",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "tipo_vivienda": {
+    "capa": null,
+    "alias": "Tipo de Vivienda",
+    "tipo_arcgis": null,
+    "dominio": {
+      "1": "Vivienda de Interés Social",
+      "2": "Vivienda de Interés Prioritario",
+      "3": "Vivienda que no es de interés social",
+      "4": "No Aplica"
+    }
+  },
+  "uso": {
+    "capa": null,
+    "alias": "Uso",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "condicion_predio": {
+    "capa": null,
+    "alias": "Condición Predio",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "destinacion_economica": {
+    "capa": null,
+    "alias": "Destinación Económica",
+    "tipo_arcgis": null,
+    "dominio": {}
+  },
+  "tipo_planta": {
+    "capa": null,
+    "alias": "Tipo Planta",
+    "tipo_arcgis": null,
+    "dominio": {}
+  }
+}

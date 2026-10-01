@@ -1,0 +1,183 @@
+
+==============================================================================
+1. DATOS ANALIZADOS
+==============================================================================
+CSV: predios_residenciales_barranquilla.csv | filas tras pasos 1-3 del embudo: 333,871
+Partición del cap. 2: {'train': 219628, 'test': 60111, nan: 54132}
+-> Se analiza SOLO TRAIN: 219,628 filas (orden de trabajo del rubric).
+   Las filas sin coordenadas no están en la partición y quedan fuera.
+
+==============================================================================
+2. RESUMEN POR VARIABLE (valores crudos, antes de anular imposibles)
+==============================================================================
+variable        total_habitaciones total_banios total_plantas planta_ubicacion area_construida area_catastral_terreno anio_construccion
+n                           219628       219628        219628           219628          219628                 219628            219628
+% faltante                     0.0          0.0           0.0              0.0             0.0                    0.0               0.0
+min                            0.0          0.0           1.0              1.0             1.0                    0.0            1512.0
+p50                            3.0          1.0           1.0              1.0            76.0                  71.56            2010.0
+p90                            4.0          3.0           2.0              8.0           169.0                  248.0            2022.0
+p99                            7.0          5.0           4.0             15.0         374.073                  526.0            2025.0
+p99.9                         12.0          8.0          12.0             99.0           747.0                 5193.0            2026.0
+max                          684.0        456.0          70.0             99.0         52168.0                36022.0            2026.0
+Tukey sup                      4.5          3.5           1.0              8.5           207.8                  316.1            2048.0
+n > Tukey                    10580         7423         24519            17753           13009                  10589                 0
+Tukey sup (log)                5.2          4.5           1.0             18.8           362.7                 1444.0            2048.4
+n > Tukey log                 5240         2811         24519              707            2484                    380                 0
+límite actual              [0, 30]      [0, 20]       [0, 40]          [1, 40]      [1, 20000]             [0, 50000]      [1900, 2026]
+n fuera límite                  40           32             2              300               3                      0               129
+umbral revisión                 10            8            35               35            1000                  10000                 -
+n > umbral                     379          153             2              312             100                     48                 -
+
+Lectura: 'n > Tukey' son outliers estadísticos (profesor Lihki), NO imposibles. Si Tukey marca
+miles de filas en una variable de cola larga, el criterio no sirve como regla de limpieza.
+
+==============================================================================
+3. ¿QUIÉN SUPERA LOS UMBRALES DE REVISIÓN? (condición del predio, uso, estrato)
+==============================================================================
+
+--- total_habitaciones > 10: 379 filas (0.173 %) ---
+condición del predio: {'NPH': 347, 'PH_Unidad_Predial': 20, 'Informal': 11, 'PH_Matriz': 1}
+uso (top 5): {'Residencial_Vivienda_Hasta_3_Pisos': 293, 'Residencial_Apartamentos_4_y_mas_pisos': 67, 'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 11, 'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 8}
+estrato: {1: 42, 2: 52, 3: 150, 4: 81, 5: 34, 6: 20} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 467.8 | p10 223.4 | p90 1128.1
+
+--- total_banios > 8: 153 filas (0.070 %) ---
+condición del predio: {'NPH': 135, 'PH_Unidad_Predial': 15, 'Informal': 2, 'PH_Matriz': 1}
+uso (top 5): {'Residencial_Vivienda_Hasta_3_Pisos': 90, 'Residencial_Apartamentos_4_y_mas_pisos': 49, 'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 7, 'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 7}
+estrato: {1: 10, 2: 13, 3: 40, 4: 45, 5: 28, 6: 17} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 611.0 | p10 142.6 | p90 3199.6
+
+--- total_plantas > 35: 2 filas (0.001 %) ---
+condición del predio: {'PH_Unidad_Predial': 1, 'NPH': 1}
+uso (top 5): {'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 1, 'Residencial_Apartamentos_4_y_mas_pisos': 1}
+estrato: {5: 1, 6: 1} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 14149.9 | p10 2982.8 | p90 25317.0
+
+--- planta_ubicacion > 35: 312 filas (0.142 %) ---
+condición del predio: {'PH_Unidad_Predial': 312}
+uso (top 5): {'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 297, 'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 13, 'Residencial_Vivienda_Recreacional_En_PH': 2}
+estrato: {3: 238, 4: 13, 5: 24, 6: 37} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 10.0 | p10 2.0 | p90 47.8
+
+--- area_construida > 1000: 100 filas (0.046 %) ---
+condición del predio: {'NPH': 87, 'Informal': 7, 'PH_Matriz': 4, 'PH_Unidad_Predial': 2}
+uso (top 5): {'Residencial_Vivienda_Hasta_3_Pisos': 50, 'Residencial_Apartamentos_4_y_mas_pisos': 48, 'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 2}
+estrato: {1: 12, 2: 2, 3: 18, 4: 23, 5: 16, 6: 29} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 1493.0 | p10 1057.5 | p90 8111.3
+
+--- area_catastral_terreno > 10000: 48 filas (0.022 %) ---
+condición del predio: {'NPH': 47, 'PH_Matriz': 1}
+uso (top 5): {'Residencial_Vivienda_Hasta_3_Pisos': 43, 'Residencial_Apartamentos_4_y_mas_pisos': 5}
+estrato: {1: 40, 2: 4, 3: 1, 4: 2, 5: 1} | estrato en todo el conjunto (%): {1: 25.5, 2: 19.9, 3: 26.0, 4: 16.9, 5: 6.1, 6: 5.7}
+área construida de esas filas: mediana 46.0 | p10 20.7 | p90 2287.6
+
+==============================================================================
+4. INCOHERENCIAS DENTRO DE LA FILA (razones entre variables)
+==============================================================================
+                                                                      n       % condición más común
+regla                                                                                              
+área por habitación < 6 m2 (habitación imposible de tan pequeña)    517   0.235   PH_Unidad_Predial
+área por habitación > 300 m2                                         45   0.020                 NPH
+baños > habitaciones + 3                                             38   0.017                 NPH
+planta_ubicacion > total_plantas (piso por encima del edificio)   87891  40.018   PH_Unidad_Predial
+área > 1 000 m2 con <= 3 habitaciones                                23   0.010                 NPH
+
+Distribución de área por habitación (m2): {'count': 217614.0, 'mean': 33.0, 'std': 27.7, 'min': 0.3, '0.1%': 3.3, '1%': 11.2, '50%': 28.0, '99%': 104.0, '99.9%': 186.1, 'max': 5474.0}
+
+==============================================================================
+5. AÑO DE CONSTRUCCIÓN
+==============================================================================
+valores < 1950 (valor: filas): {1512: 129, 1932: 192, 1940: 740, 1942: 656, 1949: 1}
+valores > 2026: {}
+año real mínimo >= 1800: 1932 | filas 1800-1899: 0
+Lectura: si no hay años reales entre 1800 y 1899, el límite 1900 no corta construcciones
+históricas reales; los valores como 1512 o 2500 son códigos centinela.
+
+==============================================================================
+6. ALTURA: total_plantas y planta_ubicacion
+==============================================================================
+total_plantas, 15 valores más altos (valor: filas): {7: 29, 8: 38, 9: 81, 10: 112, 11: 266, 12: 145, 13: 60, 14: 41, 16: 5, 17: 1, 19: 1, 20: 1, 35: 1, 46: 1, 70: 1}
+planta_ubicacion, 15 valores más altos (valor: filas): {30: 7, 31: 6, 32: 4, 33: 5, 34: 2, 35: 3, 36: 2, 37: 3, 38: 2, 39: 2, 40: 3, 41: 2, 97: 1, 98: 1, 99: 296}
+Lectura: el techo debe ser el edificio más alto real de la ciudad (verificar con fuente
+externa); valores aislados por encima de él son códigos o errores.
+
+==============================================================================
+7. CASOS EXTREMOS PARA INSPECCIÓN (NPN truncado por privacidad)
+==============================================================================
+
+Top 10 por total_habitaciones:
+  numero_predial_nacional condicion_predio                                     uso  estrato_num  total_habitaciones  total_banios  total_plantas  planta_ubicacion  area_construida  area_catastral_terreno
+0           080010102000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            5                 684           456             19              11.0         52168.00                 7080.00
+1           080010116000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            1                 352           176              1               1.0         17820.00                11932.10
+2           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            6                 350           264             14              13.0         17314.00                 3390.10
+3           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            4                 192            96             10               3.0         11559.80                16198.90
+4           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            5                 190            64             16               2.0          4800.00                  444.00
+5           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            5                 190            60             16               2.0          4800.00                  449.80
+6           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            5                 190            64             16               2.0          4800.00                  453.90
+7           080010004000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            1                 176            88             11               3.0         11504.05                 4519.50
+8           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            4                 128            64              8               2.0          8815.92                16999.32
+9           080010101000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            4                  96            99              1               1.0          2299.00                  784.60
+
+Top 10 por total_banios:
+  numero_predial_nacional   condicion_predio                                           uso  estrato_num  total_habitaciones  total_banios  total_plantas  planta_ubicacion  area_construida  area_catastral_terreno
+0           080010102000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            5                 684           456             19              11.0         52168.00                 7080.00
+1           080010103000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            6                 350           264             14              13.0         17314.00                 3390.10
+2           080010116000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            1                 352           176              1               1.0         17820.00                11932.10
+3           080010101000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            4                  96            99              1               1.0          2299.00                  784.60
+4           080010103000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            4                 192            96             10               3.0         11559.80                16198.90
+5           080010004000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            1                 176            88             11               3.0         11504.05                 4519.50
+6           080010105000…  PH_Unidad_Predial  Residencial_Apartamentos_4_y_mas_pisos_en_PH            3                   2            82              1               2.0            82.00                   89.86
+7           080010103000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            5                 190            64             16               2.0          4800.00                  444.00
+8           080010103000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            5                 190            64             16               2.0          4800.00                  453.90
+9           080010103000…                NPH        Residencial_Apartamentos_4_y_mas_pisos            4                 128            64              8               2.0          8815.92                16999.32
+
+Top 10 por area_construida:
+  numero_predial_nacional condicion_predio                                     uso  estrato_num  total_habitaciones  total_banios  total_plantas  planta_ubicacion  area_construida  area_catastral_terreno
+0           080010102000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            5                 684           456             19              11.0         52168.00                 7080.00
+1           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            6                   0             0             46               7.0         28108.76                  845.30
+2           080010101000…              NPH      Residencial_Vivienda_Hasta_3_Pisos            4                   4             2              2               2.0         21896.00                  241.20
+3           080010116000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            1                 352           176              1               1.0         17820.00                11932.10
+4           080010117000…        PH_Matriz  Residencial_Apartamentos_4_y_mas_pisos            3                   0             0             12               6.0         17756.40                13295.00
+5           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            6                 350           264             14              13.0         17314.00                 3390.10
+6           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            4                 192            96             10               3.0         11559.80                16198.90
+7           080010004000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            1                 176            88             11               3.0         11504.05                 4519.50
+8           080010001000…         Informal      Residencial_Vivienda_Hasta_3_Pisos            1                   2             1              1               1.0          9599.00                  106.80
+9           080010103000…              NPH  Residencial_Apartamentos_4_y_mas_pisos            4                 128            64              8               2.0          8815.92                16999.32
+
+==============================================================================
+8. ¿CUÁNTO FALTANTE CREARÍA CADA OPCIÓN? (criterio de imputación del profesor Lihki)
+==============================================================================
+                        % faltante original  % tras límite actual  % si el techo fuera el umbral de revisión
+variable                                                                                                    
+total_habitaciones                      0.0                 0.018                                      0.173
+total_banios                            0.0                 0.015                                      0.070
+total_plantas                           0.0                 0.001                                      0.001
+planta_ubicacion                        0.0                 0.137                                      0.142
+area_construida                         0.0                 0.001                                      0.046
+area_catastral_terreno                  0.0                 0.000                                      0.022
+anio_construccion                       0.0                 0.059                                        NaN
+
+Lectura (notas 9.10.4.1.4): con % bajos la imputación por mediana dentro del Pipeline
+es adecuada; ninguna opción se acerca al 30 % ni al 70 % que justificarían otro tratamiento.
+
+==============================================================================
+9. SEGUNDA RONDA: UNIDADES DIMINUTAS, CEROS Y REGISTROS QUE SON EDIFICIOS
+==============================================================================
+Área construida pequeña (filas con área < umbral): {'< 5 m2': 215, '< 10 m2': 656, '< 15 m2': 1411, '< 20 m2': 2203, '< 25 m2': 3743, '< 30 m2': 5084}
+
+Filas con área < 20 m2: 2203
+  condición: {'NPH': 1077, 'PH_Unidad_Predial': 753, 'Informal': 373}
+  uso: {'Residencial_Vivienda_Hasta_3_Pisos': 1450, 'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 458, 'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 292, 'Residencial_Vivienda_Recreacional_En_PH': 3}
+  planta_ubicacion (top): {1: 1886, 99: 254, 2: 37, 3: 9, 4: 6, 7: 3, 6: 3, 9: 2, 97: 1, 98: 1}
+  habitaciones: {1: 1070, 0: 526, 3: 377, 2: 213, 4: 15, 6: 1, 11: 1} | baños: {0: 1269, 1: 591, 2: 336, 3: 4, 4: 3}
+  estrato: {1: 710, 2: 541, 3: 649, 4: 184, 5: 84, 6: 35}
+
+Filas con planta_ubicacion >= 90 (códigos): 298 | área mediana: 10.0 | habitaciones: {3: 245, 0: 39, 1: 6, 2: 5, 4: 3}
+Filas con planta_ubicacion 30-89: 41 | área mediana: 362.0 | uso: {'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 41} | estrato: {5: 13, 6: 28}
+
+Ceros: habitaciones = 0: 2014 | baños = 0: 7145 | ambos = 0: 1661
+  habitaciones = 0 por condición: {'NPH': 1118, 'PH_Unidad_Predial': 802, 'Informal': 90, 'PH_Matriz': 4} | área mediana: 49.0
+
+PH_Matriz en train: 66 | área mediana: 91.0
+Registros tipo 'edificio' (habitaciones > 20 o área > 2 000 m2): 87 | condición: {'NPH': 63, 'PH_Unidad_Predial': 15, 'Informal': 5, 'PH_Matriz': 4} | uso: {'Residencial_Apartamentos_4_y_mas_pisos': 43, 'Residencial_Vivienda_Hasta_3_Pisos': 30, 'Residencial_Apartamentos_4_y_mas_pisos_en_PH': 9, 'Residencial_Vivienda_Hasta_3_Pisos_En_PH': 5}
+Años con muchas filas iguales (posible 'amontonamiento'), top 10: {1986: 27280, 2014: 21249, 2022: 13468, 2010: 12568, 2020: 9711, 2011: 9365, 2018: 8668, 2023: 7496, 2007: 7056, 1996: 6969}

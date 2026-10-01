@@ -1,0 +1,25 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Base de datos
+    chapters:
+      - file: notebooks/01_base_de_datos
+      - file: notebooks/02_particion
+      - file: notebooks/03_calidad_train
+  - caption: Análisis exploratorio (solo entrenamiento)
+    chapters:
+      - file: notebooks/04_variable_objetivo
+      - file: notebooks/05_unidimensional
+      - file: notebooks/06_bidimensional
+      - file: notebooks/07_multivariado
+      - file: notebooks/08_espacial
+      - file: notebooks/09_fuga_de_datos
+  - caption: Modelo base
+    chapters:
+      - file: notebooks/10_modelo_base
+      - file: notebooks/11_conclusiones
+  - caption: Apéndices
+    chapters:
+      - file: notebooks/A_bitacora
+      - file: notebooks/12_reproducibilidad
+      - file: notebooks/13_referencias

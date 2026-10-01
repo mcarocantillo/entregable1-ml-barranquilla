@@ -1,0 +1,219 @@
+{
+  "tabla_cv": {
+    "f1_macro (media)": {
+      "Dummy (mayoritaria)": 0.0569,
+      "Dummy (estratificada)": 0.1429,
+      "Dummy (uniforme)": 0.1379,
+      "Moda por zona": 0.1931,
+      "Logística A_fisicas": 0.2832,
+      "Logística B_fisicas+ubicacion": 0.2988
+    },
+    "accuracy (media)": {
+      "Dummy (mayoritaria)": 0.2153,
+      "Dummy (estratificada)": 0.2159,
+      "Dummy (uniforme)": 0.1662,
+      "Moda por zona": 0.334,
+      "Logística A_fisicas": 0.3874,
+      "Logística B_fisicas+ubicacion": 0.4635
+    },
+    "balanced_accuracy (media)": {
+      "Dummy (mayoritaria)": 0.1667,
+      "Dummy (estratificada)": 0.1593,
+      "Dummy (uniforme)": 0.1771,
+      "Moda por zona": 0.2606,
+      "Logística A_fisicas": 0.3608,
+      "Logística B_fisicas+ubicacion": 0.3687
+    },
+    "F1 macro (desv. entre folds)": {
+      "Dummy (mayoritaria)": 0.0253,
+      "Dummy (estratificada)": 0.0131,
+      "Dummy (uniforme)": 0.0129,
+      "Moda por zona": 0.0757,
+      "Logística A_fisicas": 0.0862,
+      "Logística B_fisicas+ubicacion": 0.0856
+    }
+  },
+  "resultados_test": {
+    "accuracy": {
+      "Dummy (mayoritaria)": 0.2892,
+      "Dummy (estratificada)": 0.2251,
+      "Dummy (uniforme)": 0.165,
+      "Moda por zona": 0.4807,
+      "Logística A_fisicas": 0.4203,
+      "Logística B_fisicas+ubicacion": 0.598
+    },
+    "balanced_accuracy": {
+      "Dummy (mayoritaria)": 0.1667,
+      "Dummy (estratificada)": 0.1703,
+      "Dummy (uniforme)": 0.1648,
+      "Moda por zona": 0.3748,
+      "Logística A_fisicas": 0.4112,
+      "Logística B_fisicas+ubicacion": 0.4691
+    },
+    "precision_macro": {
+      "Dummy (mayoritaria)": 0.0482,
+      "Dummy (estratificada)": 0.1691,
+      "Dummy (uniforme)": 0.1655,
+      "Moda por zona": 0.3295,
+      "Logística A_fisicas": 0.3808,
+      "Logística B_fisicas+ubicacion": 0.5402
+    },
+    "recall_macro": {
+      "Dummy (mayoritaria)": 0.1667,
+      "Dummy (estratificada)": 0.1703,
+      "Dummy (uniforme)": 0.1648,
+      "Moda por zona": 0.3748,
+      "Logística A_fisicas": 0.4112,
+      "Logística B_fisicas+ubicacion": 0.4691
+    },
+    "f1_macro": {
+      "Dummy (mayoritaria)": 0.0748,
+      "Dummy (estratificada)": 0.1667,
+      "Dummy (uniforme)": 0.1458,
+      "Moda por zona": 0.328,
+      "Logística A_fisicas": 0.349,
+      "Logística B_fisicas+ubicacion": 0.45
+    },
+    "f1_weighted": {
+      "Dummy (mayoritaria)": 0.1298,
+      "Dummy (estratificada)": 0.2244,
+      "Dummy (uniforme)": 0.1844,
+      "Moda por zona": 0.396,
+      "Logística A_fisicas": 0.426,
+      "Logística B_fisicas+ubicacion": 0.5536
+    },
+    "MAE_ordinal": {
+      "Dummy (mayoritaria)": 1.5654,
+      "Dummy (estratificada)": 1.5007,
+      "Dummy (uniforme)": 1.8977,
+      "Moda por zona": 0.9363,
+      "Logística A_fisicas": 0.8182,
+      "Logística B_fisicas+ubicacion": 0.4637
+    },
+    "accuracy_±1": {
+      "Dummy (mayoritaria)": 0.5018,
+      "Dummy (estratificada)": 0.5543,
+      "Dummy (uniforme)": 0.4479,
+      "Moda por zona": 0.7471,
+      "Logística A_fisicas": 0.8027,
+      "Logística B_fisicas+ubicacion": 0.9411
+    },
+    "kappa_cuadrático": {
+      "Dummy (mayoritaria)": 0.0,
+      "Dummy (estratificada)": 0.0066,
+      "Dummy (uniforme)": -0.0014,
+      "Moda por zona": 0.4296,
+      "Logística A_fisicas": 0.6546,
+      "Logística B_fisicas+ubicacion": 0.8137
+    },
+    "AUC_OvR_macro": {
+      "Dummy (mayoritaria)": 0.5,
+      "Dummy (estratificada)": 0.5021,
+      "Dummy (uniforme)": 0.5,
+      "Moda por zona": 0.6636,
+      "Logística A_fisicas": 0.7965,
+      "Logística B_fisicas+ubicacion": 0.886
+    },
+    "log_loss": {
+      "Dummy (mayoritaria)": 19.6391,
+      "Dummy (estratificada)": 21.4107,
+      "Dummy (uniforme)": 1.7918,
+      "Moda por zona": 2.5752,
+      "Logística A_fisicas": 1.351,
+      "Logística B_fisicas+ubicacion": 1.0345
+    },
+    "brier_multiclase": {
+      "Dummy (mayoritaria)": 1.4215,
+      "Dummy (estratificada)": 1.5498,
+      "Dummy (uniforme)": 0.8333,
+      "Moda por zona": 0.7389,
+      "Logística A_fisicas": 0.6863,
+      "Logística B_fisicas+ubicacion": 0.5479
+    }
+  },
+  "ic_modelo_principal": {
+    "valor en test": {
+      "accuracy": 0.598,
+      "f1_macro": 0.45,
+      "MAE_ordinal": 0.4637,
+      "kappa_cuadrático": 0.8137
+    },
+    "IC95_inf": {
+      "accuracy": 0.3559,
+      "f1_macro": 0.1631,
+      "MAE_ordinal": 0.2083,
+      "kappa_cuadrático": 0.1428
+    },
+    "IC95_sup": {
+      "accuracy": 0.8098,
+      "f1_macro": 0.4627,
+      "MAE_ordinal": 0.7361,
+      "kappa_cuadrático": 0.9119
+    },
+    "desv_boot": {
+      "accuracy": 0.1182,
+      "f1_macro": 0.0884,
+      "MAE_ordinal": 0.1386,
+      "kappa_cuadrático": 0.2094
+    }
+  },
+  "comparaciones_f1": {
+    "diferencia": {
+      "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.3753",
+      "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.2834",
+      "Logística B_fisicas+ubicacion − Moda por zona": "0.1221",
+      "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.101"
+    },
+    "IC95_inf": {
+      "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.1144",
+      "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.0264",
+      "Logística B_fisicas+ubicacion − Moda por zona": "-0.0134",
+      "Logística B_fisicas+ubicacion − Logística A_fisicas": "-0.0538"
+    },
+    "IC95_sup": {
+      "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.3921",
+      "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.3076",
+      "Logística B_fisicas+ubicacion − Moda por zona": "0.188",
+      "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.1406"
+    },
+    "p_bootstrap": {
+      "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.002",
+      "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.028",
+      "Logística B_fisicas+ubicacion − Moda por zona": "0.124",
+      "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.312"
+    },
+    "¿IC excluye 0?": {
+      "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "True",
+      "Logística B_fisicas+ubicacion − Dummy (estratificada)": "True",
+      "Logística B_fisicas+ubicacion − Moda por zona": "False",
+      "Logística B_fisicas+ubicacion − Logística A_fisicas": "False"
+    }
+  },
+  "optimismo_validacion_aleatoria": {
+    "F1 macro CV": {
+      "aleatoria (StratifiedKFold)": 0.6022,
+      "espacial (bloques + buffer)": 0.2988
+    },
+    "desv.": {
+      "aleatoria (StratifiedKFold)": 0.0039,
+      "espacial (bloques + buffer)": 0.0856
+    },
+    "diferencia vs espacial": {
+      "aleatoria (StratifiedKFold)": 0.3034,
+      "espacial (bloques + buffer)": 0.0
+    }
+  },
+  "mejores_hiperparametros": {
+    "A_fisicas": {
+      "clf__C": "0.01",
+      "clf__class_weight": "balanced"
+    },
+    "B_fisicas+ubicacion": {
+      "clf__C": "0.01",
+      "clf__class_weight": "None"
+    }
+  },
+  "n_train_final": 138239,
+  "n_test": 59954,
+  "buffer_km": 1.0
+}
