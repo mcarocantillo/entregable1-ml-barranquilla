@@ -1,0 +1,1238 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>9. Auditoría de fuga de datos (sección 2.5) &#8212; Estrato y catastro en Barranquilla — Entregable 1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/09_fuga_de_datos';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="10. Modelo base (sección 3)" href="10_modelo_base.html" />
+    <link rel="prev" title="8. Componente espacial (sección 2.7)" href="08_espacial.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/09_fuga_de_datos.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>9. Auditoría de fuga de datos (sección 2.5)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#disponibilidad-derivacion-del-objetivo-identificadores-y-proxies">9.1 Disponibilidad, derivación del objetivo, identificadores y proxies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desempeno-univariado-auc-one-vs-rest-macro">9.2 Desempeño univariado (AUC one-vs-rest macro)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entidades-repetidas-entre-entrenamiento-y-prueba">9.3 Entidades repetidas entre entrenamiento y prueba</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lista-final-de-variables">9.4 Lista final de variables</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="auditoria-de-fuga-de-datos-seccion-2-5">
+<h1>9. Auditoría de fuga de datos (sección 2.5)<a class="headerlink" href="#auditoria-de-fuga-de-datos-seccion-2-5" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<p>La fuga ocurre cuando el modelo usa información que <strong>no estaría disponible
+en el momento de predecir</strong>, lo que produce estimaciones optimistas (notas de
+clase, sección 10.3). Se revisa:</p>
+<ol class="arabic simple">
+<li><p>Disponibilidad de cada variable al momento de la predicción.</p></li>
+<li><p>Variables derivadas del objetivo, identificadores y proxies.</p></li>
+<li><p>Desempeño <strong>univariado</strong> de cada variable (AUC one-vs-rest): valores
+cercanos a 1 son señal de alerta.</p></li>
+<li><p>Entidades repetidas entre entrenamiento y prueba.</p></li>
+</ol>
+<p><strong>Escenario de predicción:</strong> se conoce la ficha catastral de una unidad de
+vivienda (características físicas, régimen, uso) y su ubicación, pero <strong>no</strong>
+su estrato, ni el de sus vecinos inmediatos.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Preparación: librerías, módulos propios y datos. Solo se carga train (la auditoría</span>
+<span class="c1"># decide qué variables entran al modelo, así que no puede mirar test) y el registro</span>
+<span class="c1"># de decisiones de capítulos anteriores (variables con log, tamaño del buffer).</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Raíz del libro en el path, se ejecute desde notebooks/ o desde la raíz.</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;notebooks&quot;</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span><span class="p">))</span>
+<span class="c1"># Se silencian avisos (p. ej. de convergencia en variables casi constantes), que</span>
+<span class="c1"># se repetirían cientos de veces dentro de los folds sin aportar información.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_auc_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">clone</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedKFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">C</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">estadistica</span> <span class="k">as</span> <span class="n">E</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">graficos</span> <span class="k">as</span> <span class="n">G</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">modelo</span> <span class="k">as</span> <span class="n">M</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">particion</span> <span class="k">as</span> <span class="n">P</span>
+
+<span class="n">G</span><span class="o">.</span><span class="n">estilo</span><span class="p">()</span>  <span class="c1"># estilo común de figuras</span>
+<span class="n">C</span><span class="o">.</span><span class="n">aviso_sintetico</span><span class="p">()</span>  <span class="c1"># avisa si se ejecuta con el CSV sintético de pruebas</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.float_format&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">,.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_colwidth&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>  <span class="c1"># para leer las justificaciones de la tabla 9.1</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">cargar_particion</span><span class="p">(</span><span class="n">solo</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="c1"># Decisiones registradas por el EDA (decisiones_eda.json): así el AUC univariado usa</span>
+<span class="c1"># el mismo preprocesamiento y el mismo buffer que el modelo final.</span>
+<span class="n">dec</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">leer_decisiones</span><span class="p">()</span>
+<span class="c1"># Variables numéricas sesgadas que reciben log1p (cap. 5); lista vacía si no existe.</span>
+<span class="n">num_log</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_log&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valor&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c1"># Buffer elegido con el correlograma (cap. 8.4); 0.5 km solo como respaldo si el</span>
+<span class="c1"># capítulo 8 no se ha ejecutado.</span>
+<span class="n">buffer_km</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;buffer_km&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valor&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<section id="disponibilidad-derivacion-del-objetivo-identificadores-y-proxies">
+<h2>9.1 Disponibilidad, derivación del objetivo, identificadores y proxies<a class="headerlink" href="#disponibilidad-derivacion-del-objetivo-identificadores-y-proxies" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Auditoría cualitativa, variable por variable: ¿estaría disponible al predecir el</span>
+<span class="c1"># estrato de una vivienda nueva? ¿se deriva del objetivo? ¿es un identificador o</span>
+<span class="c1"># un proxy de la ubicación fina? Cada fila deja escrita la decisión y su porqué.</span>
+<span class="n">auditoria</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;numero_predial_nacional&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;IDENTIFICADOR; sus dígitos codifican sector, barrio y manzana, y el estrato se asigna por manzana → proxy casi perfecto de la ubicación fina&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;npn_edificio&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;IDENTIFICADOR de edificio: usarlo permitiría memorizar el estrato de cada edificio&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR (solo para agrupar)&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;estrato (texto)&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;Es el objetivo en texto&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;centroide_fuente&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Metadato de cómo se construyó el dato (pipeline), no una característica de la vivienda; redundante con condicion_predio&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;bloque / particion&quot;</span><span class="p">,</span> <span class="s2">&quot;—&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Artefactos de la partición&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;flag_imposible_*, flag_incoherente_*&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Equivalentes al indicador de faltante que ya agrega el imputador&quot;</span><span class="p">,</span> <span class="s2">&quot;EXCLUIR (redundantes)&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;anio_construccion&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Se usa transformada como antigüedad&quot;</span><span class="p">,</span> <span class="s2">&quot;sustituida por antiguedad&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;area_construida, habitaciones, baños, plantas, antigüedad, planta_ubicacion&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ficha catastral física, anterior a la asignación de estrato&quot;</span><span class="p">,</span> <span class="s2">&quot;INCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;area_catastral_terreno&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ficha catastral del predio&quot;</span><span class="p">,</span> <span class="s2">&quot;INCLUIR&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;altura&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ficha catastral; casi constante (vale 3 en el 99.7 </span><span class="si">% d</span><span class="s2">e las filas, cap. 5) y sin asociación con el estrato (cap. 6)&quot;</span><span class="p">,</span> <span class="s2">&quot;INCLUIR (aporta poco)&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;tipo_vivienda, uso, condicion_predio&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ficha catastral. Revisar que ninguna categoría codifique el estrato (AUC univariado)&quot;</span><span class="p">,</span> <span class="s2">&quot;INCLUIR / en observación&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;destinacion_economica, tipo_planta&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ficha catastral; asociación casi nula con el estrato (cap. 6)&quot;</span><span class="p">,</span> <span class="s2">&quot;según V de Cramér&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;x_km, y_km, dist_centro_km&quot;</span><span class="p">,</span> <span class="s2">&quot;sí&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;Ubicación conocida al predecir. Riesgo de fuga espacial controlado con bloques + buffer&quot;</span><span class="p">,</span> <span class="s2">&quot;INCLUIR (en observación)&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;rezago espacial del estrato (vecinos)&quot;</span><span class="p">,</span> <span class="s2">&quot;NO&quot;</span><span class="p">,</span> <span class="s2">&quot;sí (de vecinos)&quot;</span><span class="p">,</span> <span class="s2">&quot;Requiere el estrato de los vecinos, que es lo que se quiere predecir; con Moran ≈ 0.9 volvería trivial el problema&quot;</span><span class="p">,</span> <span class="s2">&quot;NO SE CONSTRUYE&quot;</span><span class="p">),</span>
+<span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;¿disponible al predecir?&quot;</span><span class="p">,</span> <span class="s2">&quot;¿derivada del objetivo?&quot;</span><span class="p">,</span> <span class="s2">&quot;justificación&quot;</span><span class="p">,</span> <span class="s2">&quot;decisión&quot;</span><span class="p">])</span>
+<span class="n">auditoria</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>¿disponible al predecir?</th>
+      <th>¿derivada del objetivo?</th>
+      <th>justificación</th>
+      <th>decisión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>numero_predial_nacional</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>IDENTIFICADOR; sus dígitos codifican sector, barrio y manzana, y el estrato se asigna ...</td>
+      <td>EXCLUIR</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>npn_edificio</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>IDENTIFICADOR de edificio: usarlo permitiría memorizar el estrato de cada edificio</td>
+      <td>EXCLUIR (solo para agrupar)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>estrato (texto)</td>
+      <td>no</td>
+      <td>sí</td>
+      <td>Es el objetivo en texto</td>
+      <td>EXCLUIR</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>centroide_fuente</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Metadato de cómo se construyó el dato (pipeline), no una característica de la vivienda...</td>
+      <td>EXCLUIR</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bloque / particion</td>
+      <td>—</td>
+      <td>no</td>
+      <td>Artefactos de la partición</td>
+      <td>EXCLUIR</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>flag_imposible_*, flag_incoherente_*</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Equivalentes al indicador de faltante que ya agrega el imputador</td>
+      <td>EXCLUIR (redundantes)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>anio_construccion</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Se usa transformada como antigüedad</td>
+      <td>sustituida por antiguedad</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>area_construida, habitaciones, baños, plantas, antigüedad, planta_ubicacion</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ficha catastral física, anterior a la asignación de estrato</td>
+      <td>INCLUIR</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>area_catastral_terreno</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ficha catastral del predio</td>
+      <td>INCLUIR</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>altura</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ficha catastral; casi constante (vale 3 en el 99.7 % de las filas, cap. 5) y sin asoci...</td>
+      <td>INCLUIR (aporta poco)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>tipo_vivienda, uso, condicion_predio</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ficha catastral. Revisar que ninguna categoría codifique el estrato (AUC univariado)</td>
+      <td>INCLUIR / en observación</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>destinacion_economica, tipo_planta</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ficha catastral; asociación casi nula con el estrato (cap. 6)</td>
+      <td>según V de Cramér</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>x_km, y_km, dist_centro_km</td>
+      <td>sí</td>
+      <td>no</td>
+      <td>Ubicación conocida al predecir. Riesgo de fuga espacial controlado con bloques + buffer</td>
+      <td>INCLUIR (en observación)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>rezago espacial del estrato (vecinos)</td>
+      <td>NO</td>
+      <td>sí (de vecinos)</td>
+      <td>Requiere el estrato de los vecinos, que es lo que se quiere predecir; con Moran ≈ 0.9 ...</td>
+      <td>NO SE CONSTRUYE</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="desempeno-univariado-auc-one-vs-rest-macro">
+<h2>9.2 Desempeño univariado (AUC one-vs-rest macro)<a class="headerlink" href="#desempeno-univariado-auc-one-vs-rest-macro" title="Link to this heading">#</a></h2>
+<p>Para cada variable por separado se ajusta una regresión logística con solo
+esa variable (con el mismo preprocesamiento del modelo) y se mide el AUC
+macro one-vs-rest con la <strong>misma validación espacial por bloques + buffer</strong>.
+Referencia de lectura: ≥ 0.95 alerta de fuga/proxy; 0.85–0.95 revisar;
+0.7–0.85 informativa.</p>
+<p><strong>El AUC se calcula dentro de cada fold y luego se promedia.</strong> Si se
+calculara sobre las predicciones fuera-de-fold <em>agrupadas</em> de los 5 folds,
+variables sin información podrían dar AUC &lt; 0.5 (incluso una constante como
+<code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>). Es un artefacto conocido: con una variable
+sin información el modelo predice la proporción de clases de su fold de
+entrenamiento, y en validación por bloques esa proporción es <em>menor</em>
+justamente en el fold que tiene <em>más</em> casos de la clase (el total es fijo),
+así que al agrupar folds las probabilidades quedan anticorrelacionadas con la
+verdad. Promediar el AUC por fold compara solo predicciones de un mismo
+modelo y elimina el artefacto (Forman y Scholz, 2010).</p>
+<p>Para las espaciales se compara además con una validación <strong>aleatoria</strong>
+(StratifiedKFold): la diferencia muestra cuánto «copia» la ubicación cuando
+no se controla la vecindad.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># AUC univariado: una regresión logística con UNA sola variable por vez, evaluada</span>
+<span class="c1"># con la misma validación espacial (bloques de 2 km + buffer) que el modelo. Un AUC</span>
+<span class="c1"># cercano a 1 delataría una variable que &quot;contiene&quot; el estrato (fuga o proxy).</span>
+<span class="c1"># Folds de train: folds_estratificados_por_grupo (bloques de 2 km, estratificado por</span>
+<span class="c1"># estrato, semilla fija), excluyendo del entrenamiento de cada fold los puntos a</span>
+<span class="c1"># menos de buffer_km de la validación.</span>
+<span class="n">folds</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">folds_espaciales_con_buffer</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">buffer_km</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="c1"># Validación ALEATORIA de contraste (solo para las espaciales): mide cuánto &quot;copia&quot;</span>
+<span class="c1"># la ubicación el estrato de los vecinos cuando no se controla la vecindad.</span>
+<span class="n">aleatorio</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">N_FOLDS</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span>
+<span class="c1"># Candidatas: todas las numéricas, espaciales y categóricas presentes, más el</span>
+<span class="c1"># metadato centroide_fuente, para documentar por qué se excluye.</span>
+<span class="n">candidatas</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">NUMERICAS</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">ESPACIALES</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span> <span class="o">+</span> \
+             <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">CATEGORICAS</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;centroide_fuente&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_auc_fold</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">va</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AUC OvR macro en UN fold, solo con las clases presentes en validación.&quot;&quot;&quot;</span>
+    <span class="c1"># clone: un pipeline nuevo sin ajustar por fold; el preprocesador (winsorizado,</span>
+    <span class="c1"># imputación, escalado, one-hot) se ajusta SOLO con el train del fold.</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">tr</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">tr</span><span class="p">])</span>
+    <span class="n">proba</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">va</span><span class="p">])</span>
+    <span class="n">aucs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># One-vs-rest: un AUC binario por clase (clase k contra las demás) y luego media</span>
+    <span class="c1"># simple (macro), de modo que los estratos minoritarios pesan lo mismo.</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">clase</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">classes_</span><span class="p">):</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">va</span><span class="p">]</span> <span class="o">==</span> <span class="n">clase</span>
+        <span class="c1"># Un bloque de validación puede no tener alguna clase (p. ej. estrato 6 en el</span>
+        <span class="c1"># sur): el AUC no está definido sin positivos o sin negativos, así que se omite.</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">pos</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+            <span class="n">aucs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">proba</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">aucs</span><span class="p">)</span> <span class="k">if</span> <span class="n">aucs</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">auc_univariado</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">cv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media (y desviación) del AUC por fold: no se agrupan predicciones de folds distintos.&quot;&quot;&quot;</span>
+    <span class="c1"># Por qué NO se agrupan las predicciones fuera-de-fold de los 5 folds: cada fold</span>
+    <span class="c1"># tiene su propio modelo. Con una variable sin información, el modelo predice la</span>
+    <span class="c1"># proporción de clases de su train; en validación por bloques, el fold con MÁS</span>
+    <span class="c1"># casos de una clase deja MENOS de esa clase en su train (el total es fijo), así</span>
+    <span class="c1"># que predice una probabilidad más baja justo donde la clase abunda. Al juntar</span>
+    <span class="c1"># los folds, las probabilidades quedan anticorrelacionadas con la verdad y el</span>
+    <span class="c1"># AUC cae por debajo de 0.5 de forma espuria. Calcular el AUC dentro de cada fold</span>
+    <span class="c1"># (un solo modelo) y promediar evita el sesgo (Forman y Scholz, 2010).</span>
+    <span class="n">es_cat</span> <span class="o">=</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">CATEGORICAS</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s2">&quot;centroide_fuente&quot;</span>
+    <span class="c1"># Mismo preprocesamiento que el modelo final: log1p si la variable es sesgada,</span>
+    <span class="c1"># escalado lineal si es numérica no sesgada, one-hot si es categórica.</span>
+    <span class="n">prep</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">construir_preprocesador</span><span class="p">(</span><span class="n">num_log</span><span class="o">=</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">num_log</span> <span class="k">else</span> <span class="p">[],</span>
+                                     <span class="n">num_lineal</span><span class="o">=</span><span class="p">[]</span> <span class="k">if</span> <span class="p">(</span><span class="n">es_cat</span> <span class="ow">or</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">num_log</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">var</span><span class="p">],</span>
+                                     <span class="n">categoricas</span><span class="o">=</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="k">if</span> <span class="n">es_cat</span> <span class="k">else</span> <span class="p">[])</span>
+    <span class="c1"># Pipeline preprocesador + logística: todo se ajusta dentro del fold (sin fuga).</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;prep&quot;</span><span class="p">,</span> <span class="n">prep</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">))])</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">train</span><span class="p">[[</span><span class="n">var</span><span class="p">]]</span>
+    <span class="c1"># Acepta un objeto de sklearn con .split (validación aleatoria) o la lista de</span>
+    <span class="c1"># (idx_train, idx_val) ya construida (validación espacial con buffer).</span>
+    <span class="n">divisiones</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="s2">&quot;split&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">cv</span>
+    <span class="c1"># Los folds son independientes entre sí: se ajustan en paralelo en todos los núcleos.</span>
+    <span class="n">aucs</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">_auc_fold</span><span class="p">)(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">va</span><span class="p">)</span> <span class="k">for</span> <span class="n">tr</span><span class="p">,</span> <span class="n">va</span> <span class="ow">in</span> <span class="n">divisiones</span><span class="p">)</span>
+    <span class="c1"># Media y desviación entre folds (nanmean: ignora folds sin AUC definido).</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">aucs</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">aucs</span><span class="p">))</span>
+
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">candidatas</span><span class="p">:</span>
+    <span class="n">media</span><span class="p">,</span> <span class="n">sd</span> <span class="o">=</span> <span class="n">auc_univariado</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">folds</span><span class="p">)</span>
+    <span class="n">fila</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">&quot;AUC espacial (bloques+buffer)&quot;</span><span class="p">:</span> <span class="n">media</span><span class="p">,</span> <span class="s2">&quot;desv. entre folds&quot;</span><span class="p">:</span> <span class="n">sd</span><span class="p">}</span>
+    <span class="c1"># Solo para las espaciales se agrega el AUC con validación aleatoria: la brecha</span>
+    <span class="c1"># aleatorio - espacial es la &quot;ventaja&quot; que da conocer la vecindad.</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">ESPACIALES</span><span class="p">:</span>
+        <span class="n">fila</span><span class="p">[</span><span class="s2">&quot;AUC aleatorio (StratifiedKFold)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc_univariado</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">aleatorio</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fila</span><span class="p">)</span>
+<span class="n">auc_uni</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;variable&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;AUC espacial (bloques+buffer)&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Lectura por umbrales: &gt;= 0.95 alerta de fuga, 0.85-0.95 revisar, 0.7-0.85 informativa.</span>
+<span class="n">auc_uni</span><span class="p">[</span><span class="s2">&quot;lectura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc_uni</span><span class="p">[</span><span class="s2">&quot;AUC espacial (bloques+buffer)&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">interpretar_auc_univariado</span><span class="p">)</span>
+<span class="n">auc_uni</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AUC espacial (bloques+buffer)</th>
+      <th>desv. entre folds</th>
+      <th>AUC aleatorio (StratifiedKFold)</th>
+      <th>lectura</th>
+    </tr>
+    <tr>
+      <th>variable</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>y_km</th>
+      <td>0.764</td>
+      <td>0.058</td>
+      <td>0.778</td>
+      <td>informativo</td>
+    </tr>
+    <tr>
+      <th>total_banios</th>
+      <td>0.688</td>
+      <td>0.007</td>
+      <td>NaN</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>area_construida</th>
+      <td>0.633</td>
+      <td>0.036</td>
+      <td>NaN</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>dist_centro_km</th>
+      <td>0.630</td>
+      <td>0.042</td>
+      <td>0.713</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>condicion_predio</th>
+      <td>0.629</td>
+      <td>0.049</td>
+      <td>NaN</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>centroide_fuente</th>
+      <td>0.615</td>
+      <td>0.026</td>
+      <td>NaN</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>uso</th>
+      <td>0.606</td>
+      <td>0.048</td>
+      <td>NaN</td>
+      <td>débil</td>
+    </tr>
+    <tr>
+      <th>planta_ubicacion</th>
+      <td>0.599</td>
+      <td>0.043</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>x_km</th>
+      <td>0.573</td>
+      <td>0.074</td>
+      <td>0.670</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>total_habitaciones</th>
+      <td>0.563</td>
+      <td>0.015</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>tipo_vivienda</th>
+      <td>0.560</td>
+      <td>0.036</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>antiguedad</th>
+      <td>0.519</td>
+      <td>0.018</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>total_plantas</th>
+      <td>0.513</td>
+      <td>0.006</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>tipo_planta</th>
+      <td>0.500</td>
+      <td>0.000</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>destinacion_economica</th>
+      <td>0.500</td>
+      <td>0.000</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>altura</th>
+      <td>0.500</td>
+      <td>0.000</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+    <tr>
+      <th>area_catastral_terreno</th>
+      <td>0.483</td>
+      <td>0.038</td>
+      <td>NaN</td>
+      <td>casi nulo</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Barras horizontales del AUC univariado espacial de cada variable, con la</span>
+<span class="c1"># desviación entre folds como barra de error. La línea negra (0.5) es el azar y la</span>
+<span class="c1"># roja discontinua (0.95) el umbral de alerta de fuga.</span>
+<span class="c1"># Alto de la figura proporcional al número de variables, para que no se encimen.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">0.45</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">auc_uni</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.5</span><span class="p">))</span>
+<span class="c1"># Orden invertido: barh dibuja de abajo hacia arriba y así la mayor queda arriba.</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">auc_uni</span><span class="p">[</span><span class="s2">&quot;AUC espacial (bloques+buffer)&quot;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Rojo: alerta (&gt;= 0.95); ámbar: revisar (&gt;= 0.85); azul: sin sospecha de fuga.</span>
+<span class="n">colores</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#d1495b&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mf">0.95</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;#edae49&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mf">0.85</span> <span class="k">else</span> <span class="s2">&quot;#4c72b0&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">vals</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colores</span><span class="p">,</span>
+        <span class="n">xerr</span><span class="o">=</span><span class="n">auc_uni</span><span class="p">[</span><span class="s2">&quot;desv. entre folds&quot;</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">error_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;capsize&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;ecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#555555&quot;</span><span class="p">})</span>
+<span class="c1"># Valor numérico al final de cada barra.</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;alerta (0.95)&quot;</span><span class="p">)</span>
+<span class="c1"># El eje empieza un poco por debajo del mínimo para que se vean los AUC &lt; 0.5.</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.45</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">-</span> <span class="mf">0.05</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;AUC OvR macro univariado (validación espacial)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Desempeño de cada variable por separado&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">G</span><span class="o">.</span><span class="n">guardar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">&quot;09_auc_univariado&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/4d7f15cd00b80301cec84f61aaa3825f5265928ba3ef0441a2333adb4dfef258.png" src="../_images/4d7f15cd00b80301cec84f61aaa3825f5265928ba3ef0441a2333adb4dfef258.png" />
+</div>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Interpretación</p>
+<ul class="simple">
+<li><p><strong>Ninguna variable se acerca a la alerta de 0.95</strong>; la más alta llega a
+0.76. No hay una predictora que «contenga» el estrato, y las categóricas
+(<code class="docutils literal notranslate"><span class="pre">uso</span></code>, <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code>, <code class="docutils literal notranslate"><span class="pre">tipo_vivienda</span></code>) no tienen una categoría
+exclusiva de un estrato (cap. 6: V ≤ 0.33).</p></li>
+<li><p>La variable individual más informativa en zonas no vistas es <strong><code class="docutils literal notranslate"><span class="pre">y_km</span></code></strong>
+(AUC = 0.76), seguida de <strong>baños</strong> (0.69), distancia al centro, área
+construida y <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code> (≈ 0.63 cada una). Es coherente con el EDA
+(cap. 6: η² = 0.50 para y_km y 0.31 para baños).</p></li>
+<li><p><strong>Aleatoria frente a espacial:</strong> en <code class="docutils literal notranslate"><span class="pre">y_km</span></code> la brecha es pequeña (0.78
+frente a 0.76), porque el gradiente norte-sur es de gran escala y se
+transfiere entre zonas. En cambio, <code class="docutils literal notranslate"><span class="pre">x_km</span></code> (0.67 frente a 0.57) y la
+distancia al centro (0.71 frente a 0.63) pierden mucho más: por sí solas
+mezclan el norte (estratos altos) con el sur (bajos) a la misma longitud o
+distancia, y solo discriminan cuando hay vecinos de la misma zona en
+entrenamiento. Esa diferencia es la «ventaja» que la validación por
+bloques elimina.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">area_catastral_terreno</span></code> queda por debajo de 0.5</strong> (0.48 ± 0.04): por
+sí sola, lo que el modelo aprende de ella en unas zonas se invierte en
+otras. Es coherente con su relación no monótona con el estrato (cap. 6:
+medianas de 66, 91 y 72 m² en los estratos 1–3 frente a 38, 46 y 52 m² en
+los 4–6) y con la heterogeneidad espacial del cap. 8.5.</p></li>
+<li><p>Las variables constantes o casi constantes (<code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>,
+<code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code>, <code class="docutils literal notranslate"><span class="pre">altura</span></code>) dan <strong>exactamente 0.500</strong> (desviación
+0 entre folds), como debe ser con una variable sin información: el
+cálculo por fold no tiene el sesgo descrito arriba. Las dos primeras son
+degeneradas (cap. 5) y se excluyen en la lista final (9.4); <code class="docutils literal notranslate"><span class="pre">altura</span></code>, casi
+constante (cap. 5: vale 3 en más del 99 % de las filas), se mantiene,
+pero no aporta información.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">centroide_fuente</span></code> (0.61) se excluye aunque no sea despreciable: es un
+metadato del pipeline de descarga (propagado = apartamento), redundante
+con <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code>.</p></li>
+</ul>
+</div>
+</section>
+<section id="entidades-repetidas-entre-entrenamiento-y-prueba">
+<h2>9.3 Entidades repetidas entre entrenamiento y prueba<a class="headerlink" href="#entidades-repetidas-entre-entrenamiento-y-prueba" title="Link to this heading">#</a></h2>
+<p>Esta verificación solo usa <strong>identificadores</strong> del conjunto de prueba (no
+sus etiquetas ni sus distribuciones).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Entidades compartidas entre train y test: si un mismo edificio, predio o</span>
+<span class="c1"># coordenada aparece en ambos lados, el modelo podría &quot;reconocerlo&quot; en vez de</span>
+<span class="c1"># generalizar (fuga por grupo). Solo se usan IDENTIFICADORES de test, nunca su</span>
+<span class="c1"># estrato ni sus distribuciones, así que test sigue sin influir en decisiones.</span>
+<span class="n">todo</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">cargar_particion</span><span class="p">()</span>  <span class="c1"># train + test, con la columna &quot;particion&quot;</span>
+<span class="n">ids</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c1"># Intersección de conjuntos de identificadores de cada lado (se ignoran nulos).</span>
+<span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">nombre</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;npn_edificio&quot;</span><span class="p">,</span> <span class="s2">&quot;edificios&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;numero_predial_nacional&quot;</span><span class="p">,</span> <span class="s2">&quot;predios&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;bloque&quot;</span><span class="p">,</span> <span class="s2">&quot;bloques&quot;</span><span class="p">)]:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">todo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">todo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+    <span class="n">ids</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> compartidos&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+<span class="c1"># Coordenadas redondeadas a 6 decimales (~0.1 m) y convertidas a texto, para comparar</span>
+<span class="c1"># centroides como claves exactas sin problemas de coma flotante.</span>
+<span class="n">coord</span> <span class="o">=</span> <span class="n">todo</span><span class="p">[</span><span class="s2">&quot;centroide_lat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">todo</span><span class="p">[</span><span class="s2">&quot;centroide_lon&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">ids</span><span class="p">[</span><span class="s2">&quot;coordenadas idénticas compartidas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">]))</span>
+<span class="c1"># Unidades de train demasiado cercanas a test: mascara_buffer devuelve True para</span>
+<span class="c1"># las que están a &gt;= buffer_km de todo punto de test (búsqueda con KDTree en km).</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.particion</span><span class="w"> </span><span class="kn">import</span> <span class="n">mascara_buffer</span>
+<span class="n">xy_tr</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x_km&quot;</span><span class="p">,</span> <span class="s2">&quot;y_km&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">xy_te</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">todo</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x_km&quot;</span><span class="p">,</span> <span class="s2">&quot;y_km&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="c1"># &quot;~&quot; invierte la máscara: se cuentan las que caen DENTRO del buffer, que el modelo</span>
+<span class="c1"># final excluirá del entrenamiento para que test evalúe zonas realmente no vistas.</span>
+<span class="n">ids</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;unidades de train a &lt; </span><span class="si">{</span><span class="n">buffer_km</span><span class="si">}</span><span class="s2"> km de test (se excluirán)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="o">~</span><span class="n">mascara_buffer</span><span class="p">(</span><span class="n">xy_tr</span><span class="p">,</span> <span class="n">xy_te</span><span class="p">,</span> <span class="n">buffer_km</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;conteo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>conteo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>edificios compartidos</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>predios compartidos</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>bloques compartidos</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>coordenadas idénticas compartidas</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>unidades de train a &lt; 1.0 km de test (se excluirán)</th>
+      <td>80631</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Interpretación</p>
+<ul class="simple">
+<li><p><strong>Cero edificios, cero predios y cero coordenadas idénticas</strong> compartidos
+entre train y test: ningún apartamento tiene un «gemelo» del mismo edificio
+al otro lado de la partición. El único bloque que aparece en ambos es el
+del edificio que se movió completo a test (cap. 2).</p></li>
+<li><p><strong>80 631 unidades de train</strong> (el 37 %) están a menos de 1 km de algún
+punto de test. En el modelo final (cap. 10) se excluyen del
+entrenamiento: es el costo de que el test evalúe de verdad zonas no
+vistas. Train pasa de 218 870 a 138 239 filas.</p></li>
+</ul>
+</div>
+</section>
+<section id="lista-final-de-variables">
+<h2>9.4 Lista final de variables<a class="headerlink" href="#lista-final-de-variables" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lista final de variables del modelo: se parte de las listas preliminares que ya</span>
+<span class="c1"># pasaron los filtros de VIF y V de Cramér (cap. 6) y se quitan las que activaron la</span>
+<span class="c1"># alerta de fuga (AUC univariado &gt;= 0.95). Se registra en decisiones_eda.json, que</span>
+<span class="c1"># es lo que lee el capítulo del modelo base.</span>
+<span class="c1"># Si el cap. 6 no registró listas preliminares, se usan las de config.py.</span>
+<span class="n">nums_pre</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;numericas_preliminares&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valor&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">NUMERICAS</span><span class="p">)</span>
+<span class="n">cats_pre</span> <span class="o">=</span> <span class="n">dec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;categoricas_preliminares&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valor&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">CATEGORICAS</span><span class="p">)</span>
+<span class="n">alerta</span> <span class="o">=</span> <span class="n">auc_uni</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">auc_uni</span><span class="p">[</span><span class="s2">&quot;AUC espacial (bloques+buffer)&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.95</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">nums_final</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nums_pre</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">alerta</span><span class="p">]</span>
+<span class="c1"># centroide_fuente se excluye siempre: es un metadato del pipeline, no una</span>
+<span class="c1"># característica de la vivienda (tabla 9.1).</span>
+<span class="n">cats_final</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cats_pre</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">alerta</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">&quot;centroide_fuente&quot;</span><span class="p">]</span>
+<span class="n">esp_final</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">ESPACIALES</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">alerta</span><span class="p">]</span>
+<span class="c1"># Excluidas = todas las candidatas de config.py menos las finales (por VIF,</span>
+<span class="c1"># asociación nula o alerta de fuga), para dejar constancia explícita.</span>
+<span class="n">excluidas</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">NUMERICAS</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">CATEGORICAS</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">ESPACIALES</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nums_final</span> <span class="o">+</span> <span class="n">cats_final</span> <span class="o">+</span> <span class="n">esp_final</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Numéricas:&quot;</span><span class="p">,</span> <span class="n">nums_final</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Categóricas:&quot;</span><span class="p">,</span> <span class="n">cats_final</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Espaciales:&quot;</span><span class="p">,</span> <span class="n">esp_final</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Excluidas (VIF, asociación nula o alerta de fuga):&quot;</span><span class="p">,</span> <span class="n">excluidas</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Identificadores/metadatos excluidos:&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">IDENTIFICADORES</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">METADATOS_PIPELINE</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">guardar_decision</span><span class="p">(</span><span class="s2">&quot;variables_modelo&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;numericas&quot;</span><span class="p">:</span> <span class="n">nums_final</span><span class="p">,</span> <span class="s2">&quot;categoricas&quot;</span><span class="p">:</span> <span class="n">cats_final</span><span class="p">,</span> <span class="s2">&quot;espaciales&quot;</span><span class="p">:</span> <span class="n">esp_final</span><span class="p">},</span>
+                   <span class="s2">&quot;Tras VIF (cap. 6), V de Cramér (cap. 6) y auditoría de fuga (cap. 9): sin identificadores, &quot;</span>
+                   <span class="s2">&quot;metadatos ni variables con AUC univariado ≥ 0.95.&quot;</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">guardar_decision</span><span class="p">(</span><span class="s2">&quot;variables_excluidas&quot;</span><span class="p">,</span> <span class="n">excluidas</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">IDENTIFICADORES</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;centroide_fuente&quot;</span><span class="p">],</span>
+                   <span class="s2">&quot;Ver tablas 9.1 y 9.2.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Numéricas: [&#39;area_construida&#39;, &#39;area_catastral_terreno&#39;, &#39;total_habitaciones&#39;, &#39;total_banios&#39;, &#39;total_plantas&#39;, &#39;antiguedad&#39;, &#39;planta_ubicacion&#39;, &#39;altura&#39;]
+Categóricas: [&#39;tipo_vivienda&#39;, &#39;uso&#39;, &#39;condicion_predio&#39;]
+Espaciales: [&#39;x_km&#39;, &#39;y_km&#39;, &#39;dist_centro_km&#39;]
+Excluidas (VIF, asociación nula o alerta de fuga): [&#39;destinacion_economica&#39;, &#39;tipo_planta&#39;]
+Identificadores/metadatos excluidos: [&#39;numero_predial_nacional&#39;, &#39;npn_edificio&#39;, &#39;id_fila&#39;, &#39;centroide_fuente&#39;, &#39;estrato&#39;, &#39;bloque&#39;, &#39;particion&#39;]
+[decisión registrada] variables_modelo = {&#39;numericas&#39;: [&#39;area_construida&#39;, &#39;area_catastral_terreno&#39;, &#39;total_habitaciones&#39;, &#39;total_banios&#39;, &#39;total_plantas&#39;, &#39;antiguedad&#39;, &#39;planta_ubicacion&#39;, &#39;altura&#39;], &#39;categoricas&#39;: [&#39;tipo_vivienda&#39;, &#39;uso&#39;, &#39;condicion_predio&#39;], &#39;espaciales&#39;: [&#39;x_km&#39;, &#39;y_km&#39;, &#39;dist_centro_km&#39;]}
+   motivo: Tras VIF (cap. 6), V de Cramér (cap. 6) y auditoría de fuga (cap. 9): sin identificadores, metadatos ni variables con AUC univariado ≥ 0.95.
+[decisión registrada] variables_excluidas = [&#39;destinacion_economica&#39;, &#39;tipo_planta&#39;, &#39;numero_predial_nacional&#39;, &#39;npn_edificio&#39;, &#39;id_fila&#39;, &#39;centroide_fuente&#39;]
+   motivo: Ver tablas 9.1 y 9.2.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_espacial.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">8. Componente espacial (sección 2.7)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="10_modelo_base.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">10. Modelo base (sección 3)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#disponibilidad-derivacion-del-objetivo-identificadores-y-proxies">9.1 Disponibilidad, derivación del objetivo, identificadores y proxies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desempeno-univariado-auc-one-vs-rest-macro">9.2 Desempeño univariado (AUC one-vs-rest macro)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entidades-repetidas-entre-entrenamiento-y-prueba">9.3 Entidades repetidas entre entrenamiento y prueba</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lista-final-de-variables">9.4 Lista final de variables</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,809 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Apéndice A. Bitácora metodológica (decisiones y hallazgos) &#8212; Estrato y catastro en Barranquilla — Entregable 1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/A_bitacora';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Apéndice B. Reproducibilidad" href="12_reproducibilidad.html" />
+    <link rel="prev" title="11. Conclusiones, limitaciones y próximos pasos" href="11_conclusiones.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/A_bitacora.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Apéndice A. Bitácora metodológica (decisiones y hallazgos)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-1-contexto">A.1 Contexto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-2-variable-objetivo">A.2 Variable objetivo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-3-componente-geoespacial">A.3 Componente geoespacial</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-4-calidad-de-datos">A.4 Calidad de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-5-orden-de-trabajo-y-particion">A.5 Orden de trabajo y partición</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-6-eda-solo-train">A.6 EDA (solo train)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-7-fuga-de-datos">A.7 Fuga de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-8-modelo-base">A.8 Modelo base</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre">A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026">A.10 Revisión de rangos y ejecución final (30-sep-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-pendientes">A.11 Pendientes</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="apendice-a-bitacora-metodologica-decisiones-y-hallazgos">
+<h1>Apéndice A. Bitácora metodológica (decisiones y hallazgos)<a class="headerlink" href="#apendice-a-bitacora-metodologica-decisiones-y-hallazgos" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<p>Registro cronológico de decisiones, hallazgos y su justificación. Complementa
+el archivo <code class="docutils literal notranslate"><span class="pre">datos/procesados/decisiones_eda.json</span></code>, que registra las decisiones
+automáticas de cada capítulo.</p>
+<section id="a-1-contexto">
+<h2>A.1 Contexto<a class="headerlink" href="#a-1-contexto" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Curso de Machine Learning (maestría), profesor Lihki Rubio. El clustering de
+tipologías es la <strong>tesis</strong>; este entregable es <strong>supervisado</strong>
+(clasificación multiclase del estrato).</p></li>
+<li><p>Fuente: servicio ArcGIS REST de datos abiertos de catastro de Barranquilla.</p></li>
+</ul>
+</section>
+<section id="a-2-variable-objetivo">
+<h2>A.2 Variable objetivo<a class="headerlink" href="#a-2-variable-objetivo" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">estrato</span></code> (texto de dominio ArcGIS) → <code class="docutils literal notranslate"><span class="pre">estrato_num</span></code> (1–6). Filas
+<code class="docutils literal notranslate"><span class="pre">No_Aplica</span></code>/<code class="docutils literal notranslate"><span class="pre">Otro</span></code>/nulas se <strong>excluyen</strong> (no se imputa el objetivo: se
+inventaría la respuesta).</p></li>
+</ul>
+</section>
+<section id="a-3-componente-geoespacial">
+<h2>A.3 Componente geoespacial<a class="headerlink" href="#a-3-componente-geoespacial" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Predio (capa 500) no tiene geometría; el terreno (315) sí. ~60 % de las
+unidades (PH) no tienen terreno propio → heredan el centroide de su edificio
+matriz (prefijo de 22 dígitos del NPN).</p></li>
+<li><p>Predios <code class="docutils literal notranslate"><span class="pre">Informal</span></code> sin terreno ni matriz quedan sin coordenadas (16.2 % de
+las unidades del dataset de trabajo, cap. 2); el
+intento de ubicarlos por manzana (capa 320) se descartó (prefijo genérico).</p></li>
+</ul>
+</section>
+<section id="a-4-calidad-de-datos">
+<h2>A.4 Calidad de datos<a class="headerlink" href="#a-4-calidad-de-datos" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Duplicados (resuelto):</strong> ~29 % de filas repetidas por uniones M:N
+duplicadas → dedup de pares en tablas de relación + invariante «una fila por
+característica (objectid)». El 7 % de NPN repetidos restante son unidades
+reales (proyectos en serie, varias construcciones por lote): se conservan y
+se agrupan al partir.</p></li>
+<li><p><strong>Valores imposibles:</strong> rangos de dominio. <code class="docutils literal notranslate"><span class="pre">anio_construccion</span> <span class="pre">=</span> <span class="pre">1512</span></code> aparece
+exactamente 200 veces → <strong>código centinela</strong> de «año desconocido»; no hay
+datos reales entre el año 20 y 1899 → límite inferior 1900 justificado con
+datos. En el crudo también aparece <code class="docutils literal notranslate"><span class="pre">2500</span></code> ×809 (mismo patrón; la mayoría
+en garajes o filas sin estrato, que salen antes); en el dataset de trabajo
+quedan 129 años imposibles (0.04 %).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span> <span class="pre">=</span> <span class="pre">99</span></code> (ejecución real, 28-sep):</strong> el máximo y el p99.9
+son exactamente 99, mientras que el edificio más alto tiene 35 plantas → es
+un código, no un piso. Primero se fijó el rango [1, 40]; tras el diagnóstico
+de rangos (A.10) el techo pasó a 60 porque hay pisos reales hasta el 41. En
+la ejecución final se anulan 351 valores de piso (0.11 %) y 484 filas tienen
+algún valor imposible.</p></li>
+<li><p>Casos extremos en habitaciones/baños/área: eran mayoritariamente <code class="docutils literal notranslate"><span class="pre">NPH</span></code> +
+apartamentos, es decir, <strong>edificios completos en una sola fila</strong>. Tras el
+diagnóstico de rangos (A.10) ya no se anulan valor por valor: se excluyen del
+alcance como registros agregados (paso 2c del embudo). Precedentes: De Cock
+(2011) y valoración catastral masiva (boxplots + Moran local).</p></li>
+<li><p><strong>Cambio metodológico (28-sep, noche):</strong> antes se imputaba con la mediana de
+TODO el dataset dentro de <code class="docutils literal notranslate"><span class="pre">limpieza.py</span></code>. El rubric exige que toda decisión que
+aprende de los datos se calcule <strong>solo con train</strong>. Ahora <code class="docutils literal notranslate"><span class="pre">limpieza.py</span></code> solo
+convierte los valores imposibles en NaN (+ bandera) y la mediana se aprende
+dentro del <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> en cada fold. Mismo criterio del profesor Lihki (imputar con
+mediana cuando el % es bajo), aplicado en el lugar correcto.</p></li>
+</ul>
+</section>
+<section id="a-5-orden-de-trabajo-y-particion">
+<h2>A.5 Orden de trabajo y partición<a class="headerlink" href="#a-5-orden-de-trabajo-y-particion" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Reglas fila a fila (sin estadísticas del dataset) → antes del split.</p></li>
+<li><p><strong>Split:</strong> partición estratificada por grupos sobre bloques de 2 km × 2 km
+(1 de 5 folds = test ≈ 20 %), con la función propia determinista
+<code class="docutils literal notranslate"><span class="pre">folds_estratificados_por_grupo</span></code> (mismo algoritmo que <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>,
+ver A.10). Cubre a la vez desbalance (estratifica), entidades repetidas
+(edificio completo en un bloque) y autocorrelación espacial (bloques).</p></li>
+<li><p>Filas sin coordenadas: fuera del modelado (sesgo documentado en el cap. 3).</p></li>
+<li><p><strong>Buffer:</strong> se decide con el correlograma de train (distancia a la que el
+Moran’s I del estrato baja de 0.3, recortada a [0.25, 1] km) y se aplica
+tanto en la CV interna como entre train y test. Si el alcance supera 1 km la
+separación es parcial (compromiso para no perder demasiado entrenamiento);
+el capítulo 10 reporta la sensibilidad del F1 al buffer.</p></li>
+<li><p><strong>Transparencia:</strong> el tamaño de bloque (2 km) y los rangos plausibles se
+fijaron con corridas exploratorias previas sobre el dataset completo, antes
+de formalizar la partición. Son reglas de diseño/dominio que no ajustan
+parámetros con las etiquetas de test, pero se declara por honestidad
+metodológica.</p></li>
+<li><p><strong>Excepción declarada al «solo train»:</strong> el análisis de patrón de puntos y
+cobertura (cap. 8.3) usa las ubicaciones de train + test (sin etiquetas),
+para que los bloques de prueba no aparezcan como huecos artificiales.</p></li>
+</ul>
+</section>
+<section id="a-6-eda-solo-train">
+<h2>A.6 EDA (solo train)<a class="headerlink" href="#a-6-eda-solo-train" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Faltantes: &lt; 30 % en todas las variables → mediana + indicador de faltante
+(mecanismo evaluado con V de Cramér, SMD y AUC de predecir el nulo).</p></li>
+<li><p>Outliers estadísticos: no se eliminan (sesgarían estratos altos) → log1p +
+winsorización p0.1/p99.9 aprendida en train.</p></li>
+<li><p>Transformación log1p para variables no negativas con |asimetría| &gt; 1 que
+la transformación reduce.</p></li>
+<li><p>Categorías &lt; 1 % → <code class="docutils literal notranslate"><span class="pre">infrequent</span></code> (OneHotEncoder, frecuencias de train).</p></li>
+<li><p>Multicolinealidad: VIF &gt; 10 → se retira la variable de menor η² con el
+estrato.</p></li>
+<li><p>Bidimensional: Kruskal-Wallis + η²_H, χ² + V de Cramér (corregida),
+información mutua, Pearson vs Spearman (regla del profesor Lihki), corrección de Holm
+y BH.</p></li>
+<li><p>Multivariado: PCA, Mahalanobis robusta (MCD) + Isolation Forest (1 %),
+K-Means con silueta, t-SNE solo visual.</p></li>
+<li><p>Espacial: Clark-Evans, L de Ripley, DBSCAN haversine, Moran global/LISA/Gi*
+a nivel de edificio (kNN k = 8), correlograma/semivariograma,
+heterogeneidad por macrozonas, MAUP.</p></li>
+</ul>
+</section>
+<section id="a-7-fuga-de-datos">
+<h2>A.7 Fuga de datos<a class="headerlink" href="#a-7-fuga-de-datos" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Excluidos: NPN (identificador y proxy de manzana), prefijo de edificio,
+<code class="docutils literal notranslate"><span class="pre">centroide_fuente</span></code> (metadato), estrato en texto, banderas.</p></li>
+<li><p>No se construye el rezago espacial del estrato (usaría la respuesta de los
+vecinos).</p></li>
+<li><p>AUC univariado ≥ 0.95 con validación espacial → alerta y exclusión.</p></li>
+<li><p><strong>Corrección metodológica (ejecución real, 28-sep):</strong> el AUC univariado se
+calculaba sobre las predicciones fuera-de-fold <em>agrupadas</em> y daba AUC &lt; 0.5
+incluso para una variable constante (<code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>). Con bloques
+espaciales, las proporciones de clase del fold de entrenamiento quedan
+anticorrelacionadas con las del fold de validación, y al agrupar folds
+aparece ese artefacto (Forman y Scholz, 2010). Ahora el AUC se calcula
+dentro de cada fold y se promedia.</p></li>
+</ul>
+</section>
+<section id="a-8-modelo-base">
+<h2>A.8 Modelo base<a class="headerlink" href="#a-8-modelo-base" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Pipeline: winsorización → imputación (mediana + indicador) → log1p →
+estandarización; categóricas: “faltante” + one-hot con <code class="docutils literal notranslate"><span class="pre">infrequent</span></code>.</p></li>
+<li><p>Regresión logística multinomial L2; <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> sobre <code class="docutils literal notranslate"><span class="pre">C</span></code> y
+<code class="docutils literal notranslate"><span class="pre">class_weight</span></code> con F1 macro y folds espaciales con buffer.</p></li>
+<li><p>Dos conjuntos de variables: A (físicas) y B (físicas + ubicación). El
+principal se elige por la CV, nunca por test.</p></li>
+<li><p>Líneas base: Dummy (mayoritaria, estratificada, uniforme) y moda por zona,
+con tamaño de zona elegido por la misma CV espacial (en la ejecución final
+resultó 2 km; en ejecuciones anteriores, 4 km).</p></li>
+<li><p>Test evaluado una sola vez; IC por <strong>bootstrap de bloques</strong>; diferencias
+pareadas; Moran de residuos ordinales; curva de aprendizaje; calibración.</p></li>
+</ul>
+</section>
+<section id="a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre">
+<h2>A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)<a class="headerlink" href="#a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre" title="Link to this heading">#</a></h2>
+<p>Las cifras de esta sección corresponden a ejecuciones anteriores y se
+conservan como registro del proceso. Las vigentes están en A.10.</p>
+<ul class="simple">
+<li><p><strong>Embudo:</strong> 382 597 → −36 497 usos no habitables → −11 sin área → −12 218
+sin estrato residencial → <strong>333 871</strong> unidades (321 156 predios, 168 224
+edificios). 279 739 con coordenadas (83.8 %).</p></li>
+<li><p><strong>Dependencia:</strong> ICC = 0.991; m̃ = 179 (torre máxima 3 048 unidades);
+deff = 177.6; n efectivo ≈ 1 900.</p></li>
+<li><p><strong>Partición:</strong> test 60 111 filas en 7 bloques (21.5 %); train 219 628 en
+34 bloques. Divergencia JS = 0.009; estrato 6: 1.3 % en test frente a 5.7 %
+en train.</p></li>
+<li><p><strong>Sesgo de cobertura:</strong> filas sin coordenadas: 66 % estrato 1, 30 %
+estrato 2, 99.5 % informales (V = 0.42).</p></li>
+<li><p><strong>EDA:</strong> η² de y_km 0.50, baños 0.31, piso 0.21, área 0.18. VIF &lt; 3.
+Moran’s I del estrato 0.915; alcance del correlograma 2.9 km → buffer
+1 km (excluye 36–38 % de train en promedio; 27–49 % según el fold). MAUP: I = 0.48 entre celdas de
+2 km. DBSCAN con ε = 300 m: un cluster con el 94 % de los puntos → se añade
+una rejilla de ε.</p></li>
+<li><p><strong>Modelo (primera ejecución, ahora superada por la tercera):</strong> ambas logísticas eligen C = 0.01 y <code class="docutils literal notranslate"><span class="pre">balanced</span></code>. CV espacial:
+F1 A 0.303, B 0.314, moda por zona 0.205. Test (B): F1 macro 0.435 [IC
+0.14–0.46], accuracy 0.568, AUC 0.88, accuracy ±1 0.94, kappa 0.82. Moda
+por zona: accuracy 0.607, kappa 0.83; ΔF1 B − moda = +0.09, IC [−0.06,
+0.13], no significativo. Validación aleatoria: F1 0.62 (optimismo +0.30).
+Moran de residuos 0.67; ECE 0.16; recall del estrato 2 = 0.03. La alerta de
+accuracy ≥ 0.80 no se activó.</p></li>
+<li><p><strong>Segunda ejecución (28-sep, tarde) y regla 1-SE:</strong> con el piso 99 como
+faltante, los capítulos 1–9 cambian solo en decimales, y DBSCAN elige
+ε = 150 m (33 clusters). En el cap. 10, la «mejor» combinación del conjunto
+B saltó de C = 0.01 balanceado (F1 CV 0.315) a C = 10 sin pesos (0.317):
+una diferencia de 0.002 frente a una desviación entre folds de ~0.09. Ese
+modelo casi sin regularizar tenía coeficientes de hasta 81 por DE y peor
+calibración (ECE 0.22). Se adopta la <strong>regla de una desviación estándar</strong>
+(Breiman et al., 1984; Hastie et al., 2009): se elige la combinación más
+regularizada a menos de 1 SE de la mejor.</p></li>
+<li><p><strong>Tercera ejecución del cap. 10 (30-sep, en Google Colab):</strong> el equipo
+local bloqueó las librerías compiladas de Python (política de control de
+aplicaciones de Windows), así que el capítulo se ejecutó en Colab con la
+partición ya guardada (idéntica: 138 779 filas de train tras el buffer, 60 111
+de test). Los folds de la CV cambiaron (excluyen de 9.7 % a 70.3 % del
+entrenamiento según el fold; media 32.3 %), y con ellos las cifras de CV:
+F1 A 0.237 (C = 0.01, balanceado), B 0.230 (C = 0.01, sin pesos; la regla
+1-SE descartó el máximo C = 1 con 0.244), moda por zona 0.209 (4 km), Dummy
+0.04–0.12. Por la regla (mayor F1 en CV) el <strong>modelo principal es A</strong>.
+Test: A F1 0.346 [IC 0.19–0.36], accuracy 0.416, AUC 0.79, MAE 0.83,
+kappa 0.65, ECE 0.11; B F1 0.450, accuracy 0.599, AUC 0.89, MAE 0.46,
+kappa 0.82; moda por zona F1 0.346, accuracy 0.607, MAE 0.46, kappa 0.83.
+Δ F1 A − moda = −0.0002 [−0.12, 0.05]; A − B = −0.10 [−0.15, 0.05].
+Validación aleatoria 0.484 (optimismo +0.25). Moran de residuos A 0.35, B
+0.71. Lección metodológica: la CV espacial es sensible a la asignación de
+bloques a folds; diferencias de ≈0.01 entre modelos no se interpretan.</p></li>
+<li><p><strong>Alcance del clustering:</strong> el K-Means del cap. 7 es exploratorio (rubric
+2.4, «si procede») y DBSCAN (cap. 8) describe el patrón de puntos
+(rubric 2.7, obligatorio). Ninguno alimenta al modelo. El clustering de
+tipologías constructivas es objeto de otro trabajo (tesis).</p></li>
+</ul>
+</section>
+<section id="a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026">
+<h2>A.10 Revisión de rangos y ejecución final (30-sep-2026)<a class="headerlink" href="#a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026" title="Link to this heading">#</a></h2>
+<ul>
+<li><p><strong>Diagnóstico de rangos</strong> (<code class="docutils literal notranslate"><span class="pre">diagnostico_rangos.py</span></code>, sobre el train de la
+partición anterior; reporte completo en <code class="docutils literal notranslate"><span class="pre">diagnostico_rangos_reporte.txt</span></code>, en
+la raíz del libro). Motivación:
+¿los rangos de imposibilidad eran demasiado amplios? Hallazgos:</p>
+<ul class="simple">
+<li><p>la regla de Tukey (notas de clase 9.10.4.1.2) marcaba miles de viviendas
+reales (10 580 en habitaciones, 13 009 en área) → se usa para describir,
+no para limpiar;</p></li>
+<li><p>los extremos de habitaciones, baños y área eran <strong>edificios completos en
+una fila</strong> (p. ej. 684 habitaciones y 52 168 m²), no errores de digitación;</p></li>
+<li><p>había unidades de 2 a 10 m² (656 filas &lt; 10 m²), muchas con piso «99»:
+probables parqueaderos o depósitos;</p></li>
+<li><p>errores visibles solo en conjunto (2 habitaciones y 82 baños en 82 m²);</p></li>
+<li><p>pisos reales hasta el 41 (torres de estrato 5–6): el techo de 40 anulaba
+datos reales;</p></li>
+<li><p>2 014 viviendas con 0 habitaciones y 7 145 con 0 baños, y el año 1986 en el
+12 % de train (amontonamiento) → se documentan como limitaciones.</p></li>
+</ul>
+</li>
+<li><p><strong>Decisiones (src/config.py, src/limpieza.py):</strong> paso 2b, excluir área
+&lt; 10 m² (umbral conservador para no sacar viviendas mínimas de estratos 1–2);
+paso 2c, excluir registros agregados (&gt; 20 habitaciones, &gt; 15 baños o</p>
+<blockquote>
+<div><p>2 000 m²); paso 5, incoherencias → NaN + <code class="docutils literal notranslate"><span class="pre">flag_incoherente_*</span></code> (baños &gt;
+habitaciones + 3; &lt; 6 m² por habitación); techo del piso 40 → 60. Con los %
+de faltantes resultantes (&lt; 0.2 %), la imputación por mediana dentro del
+Pipeline sigue justificada (notas de clase 9.10.4.1.4).</p>
+</div></blockquote>
+</li>
+<li><p><strong>Problema de reproducibilidad de la partición:</strong> al ejecutar en Colab
+(scikit-learn 1.6.1), <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold(shuffle=True)</span></code> produjo un test
+con 46 % de estrato 3 y casi sin estratos 4–6 (Jensen-Shannon 0.12, frente a
+0.009). <strong>Decisión:</strong> función propia <code class="docutils literal notranslate"><span class="pre">folds_estratificados_por_grupo</span></code>
+(mismo algoritmo voraz, con <code class="docutils literal notranslate"><span class="pre">numpy.random.default_rng</span></code> y semilla fija) para
+el test y para los folds de la CV. Reproduce la partición buena (JS 0.009)
+en cualquier versión.</p></li>
+<li><p><strong>Ejecución final</strong> (Linux en la nube, Python 3.11, scikit-learn 1.8.0, CSV
+real): embudo 382 597 → −36 497 usos no habitables → −11 sin área → −1 044
+área &lt; 10 m² → −234 registros agregados → −12 093 sin estrato residencial →
+<strong>332 718</strong> unidades (278 824 con coordenadas). Test 59 954 filas (21.5 %,
+7 bloques); train 218 870 → 138 239 tras el buffer de 1 km. Moran 0.913;
+K-Means k = 4 (V = 0.31).</p></li>
+<li><p><strong>Modelo:</strong> el principal por CV espacial es <strong>B</strong> (físicas + ubicación;
+C = 0.01 sin pesos; la regla 1-SE descartó C = 0.1). CV: B 0.299 ± 0.086,
+A 0.283, moda por zona (2 km) 0.193. Test: B F1 0.450 [IC 0.16–0.46],
+accuracy 0.598, MAE 0.46, κ 0.81, AUC 0.89, ECE 0.14; moda por zona F1 0.328
+(Δ +0.12, IC [−0.01, 0.19], no significativo); A F1 0.349. Validación
+aleatoria 0.602 (optimismo +0.30). Moran de residuos 0.70 (B). Estrato 2:
+recall 0.06 (83 % → 3).</p></li>
+<li><p><strong>Caché de dominios ArcGIS:</strong> el servidor no respondió desde el entorno de
+la ejecución final; <code class="docutils literal notranslate"><span class="pre">datos/dominios_arcgis.json</span></code> se reconstruyó con los
+alias y el dominio de <code class="docutils literal notranslate"><span class="pre">tipo_vivienda</span></code> de la descarga original (28-sep).</p></li>
+</ul>
+</section>
+<section id="a-11-pendientes">
+<h2>A.11 Pendientes<a class="headerlink" href="#a-11-pendientes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>(Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
+textos, conclusiones y resumen.</p></li>
+<li><p>Opcional: calcular el bootstrap pareado B − moda por zona (hoy solo se prueba
+el modelo principal contra las bases).</p></li>
+<li><p>Verificar licencia y fecha de descarga.</p></li>
+<li><p>Verificar con el diccionario del catastro: terreno de unidades PH (cuota
+del lote) y si 0 habitaciones es un valor válido.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_conclusiones.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">11. Conclusiones, limitaciones y próximos pasos</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="12_reproducibilidad.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Apéndice B. Reproducibilidad</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-1-contexto">A.1 Contexto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-2-variable-objetivo">A.2 Variable objetivo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-3-componente-geoespacial">A.3 Componente geoespacial</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-4-calidad-de-datos">A.4 Calidad de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-5-orden-de-trabajo-y-particion">A.5 Orden de trabajo y partición</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-6-eda-solo-train">A.6 EDA (solo train)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-7-fuga-de-datos">A.7 Fuga de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-8-modelo-base">A.8 Modelo base</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre">A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026">A.10 Revisión de rangos y ejecución final (30-sep-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-pendientes">A.11 Pendientes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
