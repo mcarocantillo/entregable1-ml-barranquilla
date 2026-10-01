@@ -324,21 +324,27 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 # - **Clases.** Estrato 1: 32.8 %, 2: 21.8 %, 3: 21.6 %, 4: 14.8 %, 5: 5.1 %,
 #   6: 4.0 %. Las dos clases altas suman menos del 10 %, pero aún tienen más de
 #   13 000 casos cada una (16 843 y 13 207).
-# - **Dependencia dentro del edificio.** El ICC(1) es **0.991**: dentro de un
-#   edificio el estrato prácticamente no varía, así que cien apartamentos de
-#   una misma torre aportan casi la misma información sobre el estrato que uno
-#   solo. La mediana es 1 unidad por edificio (la mayoría son casas), pero hay
-#   torres de hasta **3 045 unidades**, y como $\tilde m$ pondera por tamaño
-#   ($\tilde m = 179$), el efecto de diseño es **177.8** y el tamaño
-#   efectivo "tipo muestra independiente" baja a **≈ 1 870**.
-# - **Cómo leer ese 1 870.** No significa que sobren filas (hay 168 044
-#   edificios distintos, muy por encima de 20 000), sino que *la precisión* de
-#   cualquier estimación sobre el estrato está gobernada por los edificios y
-#   las zonas, no por las filas. Dos consecuencias prácticas: (1) la
-#   partición debe mantener juntas las unidades de un mismo edificio y de una
-#   misma zona (cap. 2), y (2) los intervalos de confianza deben remuestrear
-#   bloques, no filas (cap. 10). El cálculo usa el dataset completo solo como
-#   descripción; no alimenta ninguna decisión aprendida.
+#
+# **Dependencia dentro del edificio.** El ICC(1) es **0.991**: dentro de un edificio el estrato prácticamente no varía. Esto quiere decir que cien apartamentos de una misma torre aportan casi la misma información sobre el estrato que uno solo. Es como fotocopiar una hoja 1 000 veces: hay 1 000 hojas, pero una sola página de información. Por eso las filas no son datos independientes, y la muestra vale menos de lo que sugiere su número de filas.
+#
+# *Cómo se mide esa pérdida.* Se usa el efecto de diseño (deff), que dice cuántas veces es menos precisa nuestra muestra que una de observaciones independientes. Un deff de 1 significa que no hay repetición; un deff de 100 significa que haría falta 100 veces más datos para tener la misma precisión. Se aproxima así:
+#
+# $$
+# \text{deff} \approx 1 + (m - 1) \times \text{ICC}
+# $$
+#
+# donde ICC mide qué tanto se parecen entre sí las viviendas de un mismo edificio (0 = nada, 1 = son idénticas) y $m$ es el tamaño medio del edificio **visto desde una vivienda**.
+#
+# *Por qué $m$ no es el promedio por edificio.* Hay dos formas de calcular el "tamaño promedio" de un edificio:
+#
+# - Preguntarle a cada **edificio** cuántas viviendas tiene. La mediana es 1 unidad, porque la mayoría son casas.
+# - Preguntarle a cada **vivienda** cuántas viviendas hay en su edificio, y promediar las respuestas.
+#
+# Un ejemplo: en un barrio con 99 casas y una torre de 901 apartamentos hay 100 edificios y 1 000 viviendas. Por edificio el promedio es 10. Pero 901 de las 1 000 viviendas viven en la torre, así que, preguntando a las viviendas, el promedio es (99 × 1 + 901 × 901) ÷ 1 000 ≈ 812. Es un promedio ponderado por tamaño: los edificios grandes pesan más porque contienen más filas, y las filas son lo que usamos para modelar. Esa segunda forma es la que importa para medir la repetición.
+#
+# *En este catastro.* La mediana es 1 unidad por edificio, pero hay torres de hasta **3 045 unidades**. Visto desde una vivienda, el edificio típico tiene unas 179 unidades ($m = 179$). Con los valores sin redondear, el efecto de diseño es **177.8**, y el tamaño efectivo "tipo muestra independiente" es n ÷ deff = 332 718 ÷ 177.8 ≈ **1 870**.
+#
+# **Cómo leer ese 1 870.** No es un conteo de viviendas, de predios, de edificios ni de combinaciones de características: es una medida de precisión. Significa que las estimaciones sobre el estrato tienen la precisión de unas 1 870 observaciones independientes, no de 332 718. Tampoco significa que sobren o falten filas: hay 168 044 edificios distintos, muy por encima del mínimo de 20 000. Lo que indica es que la precisión de cualquier estimación sobre el estrato está gobernada por los edificios y las zonas, no por las filas. Dos consecuencias prácticas: (1) la partición debe mantener juntas las unidades de un mismo edificio y de una misma zona (cap. 2), para que una torre nunca quede repartida entre entrenamiento y prueba; y (2) los intervalos de confianza deben remuestrear bloques, no filas (cap. 10). El cálculo usa el dataset completo solo como descripción; no alimenta ninguna decisión aprendida.
 # ```
 
 # %% [markdown]
