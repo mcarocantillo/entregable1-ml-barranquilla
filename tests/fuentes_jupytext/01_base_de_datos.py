@@ -87,12 +87,6 @@ pd.set_option("display.max_columns", 40)
 # enfriamiento) usa estos mismos datos con un enfoque **no supervisado**; este
 # entregable es el ejercicio **supervisado** del curso y le aporta a la tesis
 # una base de datos limpia, auditada y con un EDA espacial completo.
-#
-# ```{admonition} Para completar / revisar
-# :class: tip
-# Ajusta la redacción de la pregunta y de la motivación a tu propio estilo y,
-# si puedes, cita la resolución vigente de estratificación de Barranquilla.
-# ```
 
 # %% [markdown]
 # ## 1.2 Justificación, fuente y licencia
