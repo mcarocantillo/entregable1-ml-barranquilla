@@ -4,7 +4,7 @@
 ==============================================================================
 CSV: predios_residenciales_barranquilla.csv | filas tras pasos 1-3 del embudo: 333,871
 Partición del cap. 2: {'train': 219628, 'test': 60111, nan: 54132}
--> Se analiza SOLO TRAIN: 219,628 filas (orden de trabajo del rubric).
+-> Se analiza SOLO TRAIN: 219,628 filas (orden de trabajo de las instrucciones del proyecto).
    Las filas sin coordenadas no están en la partición y quedan fuera.
 
 ==============================================================================

@@ -56,7 +56,7 @@ entregable1_jbook/
 
 ## Importante
 
-- **Orden de trabajo del rubric:** el capítulo 2 reserva el test (bloques
+- **Orden de trabajo de las instrucciones del proyecto:** el capítulo 2 reserva el test (bloques
   espaciales) ANTES del EDA; los capítulos 3–9 solo usan train; el test se usa
   una única vez en el capítulo 10.
 - **Trazabilidad:** cada capítulo del EDA guarda sus decisiones en

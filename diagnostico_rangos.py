@@ -13,7 +13,7 @@ Se apoya en las notas de clase del profesor Lihki Rubio:
     [Q1 - 1.5·IQR, Q3 + 1.5·IQR]) e inspección visual (boxplots).
   - 9.10.4.1.4: % de faltantes por variable y plan de tratamiento (imputar
     con mediana si el % es bajo; eliminar si es muy alto, > 70 %).
-y en el rubric (sección 1, "valores imposibles o inconsistentes"; orden de
+y en las instrucciones del proyecto (sección 1, "valores imposibles o inconsistentes"; orden de
 trabajo: las decisiones aprendidas de los datos se toman solo con train).
 
 Distinción clave que guía el diagnóstico:
@@ -27,7 +27,7 @@ Uso (Google Colab o local):
     python diagnostico_rangos.py RUTA_AL_CSV [RUTA_A_dataset_modelado.parquet]
 
 Si se da el parquet del cap. 2, el diagnóstico se restringe a TRAIN (orden de
-trabajo del rubric). Sin parquet usa todas las filas y lo advierte.
+trabajo de las instrucciones del proyecto). Sin parquet usa todas las filas y lo advierte.
 Escribe el reporte en diagnostico_rangos_reporte.txt (y lo imprime).
 """
 
@@ -114,7 +114,7 @@ if ruta_parquet and ruta_parquet.exists():
     df = df.merge(part, on="id_fila", how="left")
     p(f"Partición del cap. 2: {df['particion'].value_counts(dropna=False).to_dict()}")
     df = df[df["particion"] == "train"].copy()
-    p(f"-> Se analiza SOLO TRAIN: {len(df):,} filas (orden de trabajo del rubric).")
+    p(f"-> Se analiza SOLO TRAIN: {len(df):,} filas (orden de trabajo de las instrucciones del proyecto).")
     p("   Las filas sin coordenadas no están en la partición y quedan fuera.")
 else:
     p("AVISO: sin dataset_modelado.parquet se analizan TODAS las filas (train + test).")
