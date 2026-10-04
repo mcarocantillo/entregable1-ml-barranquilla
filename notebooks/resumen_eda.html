@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Apéndice C. Referencias &#8212; Estrato y catastro en Barranquilla — Entregable 1</title>
+    <title>Resumen ejecutivo del EDA &#8212; Estrato y catastro en Barranquilla — Entregable 1</title>
   
   
   
@@ -61,11 +61,12 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/13_referencias';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/resumen_eda';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="prev" title="Apéndice B. Reproducibilidad" href="12_reproducibilidad.html" />
+    <link rel="next" title="10. Modelo base (sección 3)" href="10_modelo_base.html" />
+    <link rel="prev" title="9. Auditoría de fuga de datos (sección 2.5)" href="09_fuga_de_datos.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="es"/>
   <meta name="docsearch:version" content="" />
@@ -153,6 +154,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -216,14 +221,14 @@
 <li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Resumen ejecutivo del EDA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
 <ul class="nav bd-sidenav">
@@ -231,10 +236,10 @@
 <li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Apéndice C. Referencias</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
 </ul>
 
     </div>
@@ -294,7 +299,7 @@
       
       
       
-      <li><a href="../_sources/notebooks/13_referencias.md" target="_blank"
+      <li><a href="../_sources/notebooks/resumen_eda.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Descargar archivo fuente"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -357,7 +362,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -368,11 +375,22 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Apéndice C. Referencias</h1>
+    <h1>Resumen ejecutivo del EDA</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calidad-de-los-datos">Calidad de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-mas-prometedoras">Variables más prometedoras</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problemas-detectados">Problemas detectados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-preliminares-para-el-preprocesamiento-y-la-validacion">Decisiones preliminares para el preprocesamiento y la validación</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -382,33 +400,174 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="apendice-c-referencias">
-<h1>Apéndice C. Referencias<a class="headerlink" href="#apendice-c-referencias" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="resumen-ejecutivo-del-eda">
+<h1>Resumen ejecutivo del EDA<a class="headerlink" href="#resumen-ejecutivo-del-eda" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<p>Este resumen sintetiza los capítulos 3 a 9, siguiendo la estructura que piden
+las notas de clase para el cierre del EDA (9.10.4.1.5): calidad de los datos,
+variables más prometedoras, problemas detectados y decisiones preliminares.
+Todas las cifras son de <strong>entrenamiento</strong> (el test no se usó en el EDA), salvo
+que se indique lo contrario.</p>
+<section id="calidad-de-los-datos">
+<h2>Calidad de los datos<a class="headerlink" href="#calidad-de-los-datos" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspecto</p></th>
+<th class="head"><p>Hallazgo</p></th>
+<th class="head"><p>Cap.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Tamaño</p></td>
+<td><p>332 718 unidades de vivienda en 168 044 edificios (dataset completo); ~9 500 filas por columna tras one-hot</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Valores faltantes</p></td>
+<td><p>Mínimos: máximo 0.12 % (<code class="docutils literal notranslate"><span class="pre">total_habitaciones</span></code>). No vienen de celdas vacías, sino de las reglas de limpieza (códigos centinela e incoherencias). Mecanismo <strong>MAR</strong> en habitaciones, piso y antigüedad</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>Valores imposibles</p></td>
+<td><p>Años centinela (2500, 1512) y pisos codificados (97–99) pasan a faltante; unidades &lt; 10 m² y registros agregados se excluyen</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Outliers univariados</p></td>
+<td><p>Tukey marca 3–6 % en áreas y conteos, pero son viviendas grandes reales, no errores; la regla es inservible en plantas y altura (IQR = 0)</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>Outliers multivariados</p></td>
+<td><p>0.57 % marcados por Mahalanobis robusta e Isolation Forest a la vez; son combinaciones raras (0 habitaciones, 0 baños) y están sobrerrepresentados en estratos 5–6</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cobertura</p></td>
+<td><p>El 16.2 % de las filas no tiene coordenadas; el 99.5 % de ellas son predios informales y el 96.5 % son estratos 1–2 (V de Cramér = 0.42)</p></td>
+<td><p>3, 8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="variables-mas-prometedoras">
+<h2>Variables más prometedoras<a class="headerlink" href="#variables-mas-prometedoras" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Asociación con el estrato</p></th>
+<th class="head"><p>Cap.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">y_km</span></code> (eje norte-sur)</p></td>
+<td><p>η² = 0.50 (efecto grande); AUC univariado en zonas no vistas = 0.76</p></td>
+<td><p>6, 9</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">total_banios</span></code></p></td>
+<td><p>η² = 0.31; AUC = 0.69</p></td>
+<td><p>6, 9</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dist_centro_km</span></code>, <code class="docutils literal notranslate"><span class="pre">x_km</span></code></p></td>
+<td><p>η² = 0.32 y 0.26</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code></p></td>
+<td><p>η² = 0.21</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">area_construida</span></code></p></td>
+<td><p>η² = 0.18; mediana de 54 m² en estrato 1 frente a 152 m² en estrato 6</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code>, <code class="docutils literal notranslate"><span class="pre">uso</span></code>, <code class="docutils literal notranslate"><span class="pre">tipo_vivienda</span></code></p></td>
+<td><p>V de Cramér = 0.33, 0.24 y 0.22</p></td>
+<td><p>6</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>La <strong>ubicación domina</strong>: el estrato tiene una autocorrelación espacial
+extremadamente fuerte (Moran’s I = 0.913) y su media sube de 1.55 en el sur a
+4.08 en el norte (cap. 4 y 8). En PCA, el eje más asociado con el estrato es
+el de <strong>tipología</strong> (apartamento moderno en altura frente a casa con lote), no
+el de tamaño (cap. 7).</p>
+</section>
+<section id="problemas-detectados">
+<h2>Problemas detectados<a class="headerlink" href="#problemas-detectados" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Anselin, L. (1995). Local indicators of spatial association—LISA. <em>Geographical Analysis</em>, 27(2), 93–115.</p></li>
-<li><p>Benjamini, Y., &amp; Hochberg, Y. (1995). Controlling the false discovery rate. <em>Journal of the Royal Statistical Society B</em>, 57(1), 289–300.</p></li>
-<li><p>Bergsma, W. (2013). A bias-correction for Cramér’s V and Tschuprow’s T. <em>Journal of the Korean Statistical Society</em>, 42(3), 323–328.</p></li>
-<li><p>Breiman, L., Friedman, J. H., Olshen, R. A., &amp; Stone, C. J. (1984). <em>Classification and Regression Trees</em>. Wadsworth.</p></li>
-<li><p>Clark, P. J., &amp; Evans, F. C. (1954). Distance to nearest neighbor as a measure of spatial relationships in populations. <em>Ecology</em>, 35(4), 445–453.</p></li>
-<li><p>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2.ª ed.). Erlbaum.</p></li>
-<li><p>DANE. Estratificación socioeconómica para servicios públicos domiciliarios. https://www.dane.gov.co/index.php/servicios-al-ciudadano/servicios-informacion/estratificacion-socioeconomica</p></li>
-<li><p>De Cock, D. (2011). Ames, Iowa: Alternative to the Boston Housing Data as an end of semester regression project. <em>Journal of Statistics Education</em>, 19(3). https://jse.amstat.org/v19n3/decock.pdf</p></li>
-<li><p>Efron, B. (1979). Bootstrap methods: another look at the jackknife. <em>Annals of Statistics</em>, 7(1), 1–26.</p></li>
-<li><p>Forman, G., &amp; Scholz, M. (2010). Apples-to-apples in cross-validation studies: pitfalls in classifier performance measurement. <em>ACM SIGKDD Explorations Newsletter</em>, 12(1), 49–57.</p></li>
-<li><p>Getis, A., &amp; Ord, J. K. (1992). The analysis of spatial association by use of distance statistics. <em>Geographical Analysis</em>, 24(3), 189–206.</p></li>
-<li><p>Hastie, T., Tibshirani, R., &amp; Friedman, J. (2009). <em>The Elements of Statistical Learning</em> (2.ª ed.). Springer.</p></li>
-<li><p>Holm, S. (1979). A simple sequentially rejective multiple test procedure. <em>Scandinavian Journal of Statistics</em>, 6(2), 65–70.</p></li>
-<li><p>Kish, L. (1965). <em>Survey Sampling</em>. Wiley.</p></li>
-<li><p>Künsch, H. R. (1989). The jackknife and the bootstrap for general stationary observations. <em>Annals of Statistics</em>, 17(3), 1217–1241.</p></li>
-<li><p>Ley 142 de 1994, República de Colombia (régimen de servicios públicos domiciliarios).</p></li>
-<li><p>Moran, P. A. P. (1950). Notes on continuous stochastic phenomena. <em>Biometrika</em>, 37(1/2), 17–23.</p></li>
-<li><p>Ripley, B. D. (1976). The second-order analysis of stationary point processes. <em>Journal of Applied Probability</em>, 13(2), 255–266.</p></li>
-<li><p>Roberts, D. R., et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <em>Ecography</em>, 40(8), 913–929.</p></li>
-<li><p>Rubio, L. Notas de clase de Machine Learning (secciones 9, Evaluación de modelos, y 10, Pipelines). https://lihkir.github.io/MachineLearning/</p></li>
-<li><p>Tomczak, M., &amp; Tomczak, E. (2014). The need to report effect size estimates revisited. <em>Trends in Sport Sciences</em>, 21(1), 19–25.</p></li>
-<li><p>Valavi, R., Elith, J., Lahoz-Monfort, J. J., &amp; Guillera-Arroita, G. (2019). blockCV: An R package for generating spatially or environmentally separated folds for k-fold cross-validation of species distribution models. <em>Methods in Ecology and Evolution</em>, 10(2), 225–232.</p></li>
+<li><p><strong>Desbalance moderado (4.6 : 1).</strong> La clase minoritaria (estrato 6) tiene
+12 390 casos en train: no hace falta sobremuestreo, pero el accuracy no
+sirve como métrica (cap. 4).</p></li>
+<li><p><strong>Dependencia entre filas.</strong> El estrato casi no varía dentro de un edificio
+(ICC = 0.991): el tamaño efectivo es ≈ 1 870, no 332 718 (cap. 1).</p></li>
+<li><p><strong>Dependencia espacial.</strong> Moran’s I = 0.913 y alcance del correlograma de
+2.9 km: una validación aleatoria sería muy optimista (cap. 8).</p></li>
+<li><p><strong>Asimetría fuerte.</strong> Todas las variables físicas tienen |asimetría| &gt; 1
+(terreno: 51.7) (cap. 5).</p></li>
+<li><p><strong>Relaciones no monótonas y que cambian por zona.</strong> El terreno sube y luego
+baja con el estrato, y la correlación área–estrato va de 0.07 a 0.48 según
+la macrozona (cap. 6 y 8.5).</p></li>
+<li><p><strong>Redundancia entre categóricas.</strong> <code class="docutils literal notranslate"><span class="pre">uso</span></code> y <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code> codifican
+ambas el régimen de propiedad horizontal. Entre numéricas <strong>no hay
+multicolinealidad preocupante</strong>: todos los VIF &lt; 3 (5.4 al añadir las
+espaciales) (cap. 6).</p></li>
+<li><p><strong>Variables sin información.</strong> <code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code> y <code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code> son
+degeneradas; <code class="docutils literal notranslate"><span class="pre">altura</span></code> es casi constante (vale 3 en el 99.7 % de las filas)
+(cap. 5).</p></li>
+<li><p><strong>Fuga de datos: no se encontró.</strong> Ninguna variable se acerca a la alerta de
+AUC univariado de 0.95 (máximo 0.76), y train y test no comparten
+edificios, predios ni coordenadas (cap. 9).</p></li>
 </ul>
+</section>
+<section id="decisiones-preliminares-para-el-preprocesamiento-y-la-validacion">
+<h2>Decisiones preliminares para el preprocesamiento y la validación<a class="headerlink" href="#decisiones-preliminares-para-el-preprocesamiento-y-la-validacion" title="Link to this heading">#</a></h2>
+<p>Todas quedan registradas en <code class="docutils literal notranslate"><span class="pre">datos/procesados/decisiones_eda.json</span></code>, y el
+capítulo 10 construye el <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> leyendo ese archivo.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Decisión</p></th>
+<th class="head"><p>Hallazgo que la motiva</p></th>
+<th class="head"><p>Cap.</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Partición por <strong>bloques espaciales de 2 km</strong>, con <strong>buffer de 1 km</strong></p></td>
+<td><p>Moran’s I = 0.913; alcance de 2.9 km; ICC = 0.991</p></td>
+<td><p>2, 8</p></td>
+</tr>
+<tr class="row-odd"><td><p>Métrica principal <strong>F1 macro</strong>, más MAE ordinal, accuracy ±1 y kappa cuadrático</p></td>
+<td><p>Desbalance 4.6 : 1; estrato ordinal</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>Sin sobremuestreo; comparar <code class="docutils literal notranslate"><span class="pre">class_weight=None</span></code> frente a <code class="docutils literal notranslate"><span class="pre">&quot;balanced&quot;</span></code></p></td>
+<td><p>La clase minoritaria tiene 12 390 casos</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Imputación: mediana + indicador de faltante (numéricas); categoría <code class="docutils literal notranslate"><span class="pre">faltante</span></code> (categóricas)</p></td>
+<td><p>Faltantes &lt; 1 %, mecanismo MAR</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">log1p</span></code> en 7 variables; <code class="docutils literal notranslate"><span class="pre">altura</span></code> lineal</p></td>
+<td><p>|asimetría| &gt; 1 que <code class="docutils literal notranslate"><span class="pre">log1p</span></code> reduce</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Winsorización a los percentiles 0.1 y 99.9 de train; no se eliminan outliers</p></td>
+<td><p>Las viviendas grandes son reales y pesan más en los estratos altos</p></td>
+<td><p>3, 7</p></td>
+</tr>
+<tr class="row-even"><td><p>Categorías con &lt; 1 % agrupadas en <code class="docutils literal notranslate"><span class="pre">infrequent</span></code></p></td>
+<td><p>Categorías raras en <code class="docutils literal notranslate"><span class="pre">uso</span></code> y <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code></p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Variables del modelo: 8 numéricas, 3 categóricas (V ≥ 0.1) y 3 espaciales</p></td>
+<td><p>Tamaños de efecto, VIF &lt; 10 y auditoría de fuga</p></td>
+<td><p>6, 8, 9</p></td>
+</tr>
+<tr class="row-even"><td><p>Se excluyen <code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code>, <code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>, identificadores y <code class="docutils literal notranslate"><span class="pre">centroide_fuente</span></code></p></td>
+<td><p>Degeneradas, identificadores o metadatos</p></td>
+<td><p>5, 9</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -442,13 +601,22 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="12_reproducibilidad.html"
+       href="09_fuga_de_datos.html"
        title="página anterior">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">anterior</p>
-        <p class="prev-next-title">Apéndice B. Reproducibilidad</p>
+        <p class="prev-next-title">9. Auditoría de fuga de datos (sección 2.5)</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="10_modelo_base.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">10. Modelo base (sección 3)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -456,6 +624,26 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calidad-de-los-datos">Calidad de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-mas-prometedoras">Variables más prometedoras</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problemas-detectados">Problemas detectados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-preliminares-para-el-preprocesamiento-y-la-validacion">Decisiones preliminares para el preprocesamiento y la validación</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -39,8 +39,9 @@ datos), y cada capítulo indica qué sección del rubric cubre:
 | 7. Multivariado | PCA, outliers multivariados, clustering exploratorio | 2.4 |
 | 8. Espacial | coordenadas, mapas, patrón de puntos, Moran/LISA/Gi*, correlograma, MAUP | 2.7 |
 | 9. Fuga de datos | disponibilidad, identificadores, AUC univariado, entidades repetidas | 2.5 |
+| Resumen ejecutivo del EDA | calidad, variables prometedoras, problemas y decisiones preliminares | 2 (notas 9.10.4.1.5) |
 | 10. Modelo base | Pipeline, líneas base, CV espacial, métricas con IC, residuos, curva de aprendizaje | 2.9, 3 |
-| 11. Conclusiones | hallazgos, limitaciones, próximos pasos | — |
+| 11. Conclusiones | hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según la rúbrica | Figura 1, nota crítica |
 | Apéndices | bitácora de decisiones, reproducibilidad, referencias | Entregables |
 
 Las secciones 2.6 (temporal) y 2.8 (espacio-temporal) **no aplican**: los datos

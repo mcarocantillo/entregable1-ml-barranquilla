@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -228,6 +228,7 @@
 <li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
 <ul class="current nav bd-sidenav">
@@ -534,19 +535,17 @@ cobertura.</p></li>
 </section>
 <section id="veredicto-la-base-de-datos-sirve-para-el-proyecto">
 <h2>11.4 Veredicto: ¿la base de datos sirve para el proyecto?<a class="headerlink" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto" title="Link to this heading">#</a></h2>
-<p>Para cerrar, se revisa si la base cumple lo que necesita el proyecto
-(clasificar el estrato de una vivienda a partir del catastro). Cada criterio
-se contrasta con un score calculado en los capítulos anteriores. Los umbrales
-son los del rubric (mínimo de observaciones), convenciones estadísticas
-conocidas (η² ≥ 0.14 es un efecto grande según Cohen; kappa &gt; 0.80 es un
-acuerdo casi perfecto según Landis y Koch) o los que se fijaron en el EDA
-(alerta de fuga de 0.95, faltantes &lt; 30 %). Los demás (≥ 1 000 casos por
-clase, F1 macro ≥ 0.50) son valores de referencia propuestos para esta
-revisión.</p>
+<p>Para cerrar, se revisa si la base cumple lo que pide el proyecto, contrastando
+cada requisito con un score calculado en los capítulos anteriores. Cada
+criterio indica de dónde sale: la <strong>rúbrica del Entregable 1</strong> (secciones 1,
+2.3, 2.5 y 3, y la Figura 1) o las <strong>notas de clase</strong> del profesor Lihki Rubio
+(sección 9). Donde ninguna fija un número, se usa el umbral que el propio EDA
+declaró antes de modelar.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>#</p></th>
 <th class="head"><p>Criterio</p></th>
+<th class="head"><p>Fuente</p></th>
 <th class="head"><p>Umbral</p></th>
 <th class="head"><p>Score obtenido</p></th>
 <th class="head"><p>Cap.</p></th>
@@ -556,101 +555,147 @@ revisión.</p>
 <tbody>
 <tr class="row-even"><td><p>1</p></td>
 <td><p>Tamaño de la muestra</p></td>
-<td><p>≥ 20 000 observaciones (rubric)</p></td>
+<td><p>Rúbrica 1</p></td>
+<td><p>≥ 20 000 observaciones</p></td>
 <td><p>332 718 viviendas</p></td>
 <td><p>1</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>Unidades independientes</p></td>
-<td><p>≥ 20 000 edificios distintos</p></td>
-<td><p>168 044 edificios</p></td>
+<td><p>Relación n/p</p></td>
+<td><p>Rúbrica 1</p></td>
+<td><p>reportar; n ≫ p</p></td>
+<td><p>~9 500 filas por columna</p></td>
 <td><p>1</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>Casos en las clases minoritarias</p></td>
-<td><p>≥ 1 000 por clase</p></td>
-<td><p>mínimo 13 207 (estrato 6)</p></td>
-<td><p>1</p></td>
+<td><p>Casos de la clase minoritaria</p></td>
+<td><p>Rúbrica 1 y 2.1</p></td>
+<td><p>suficientes sin sobremuestreo</p></td>
+<td><p>12 390 (estrato 6, train); desbalance 4.6 : 1</p></td>
+<td><p>4</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
+<td><p>Entidades independientes</p></td>
+<td><p>Rúbrica 1</p></td>
+<td><p>reportar el tamaño efectivo</p></td>
+<td><p>168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870</p></td>
+<td><p>1</p></td>
+<td><p>Sí, con partición por bloques</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
 <td><p>Valores faltantes</p></td>
+<td><p>Notas 9.10.4.1.2</p></td>
 <td><p>&lt; 30 % por variable</p></td>
-<td><p>máximo 0.12 % (<code class="docutils literal notranslate"><span class="pre">total_habitaciones</span></code>)</p></td>
+<td><p>máximo 0.12 %; mecanismo MAR</p></td>
 <td><p>3</p></td>
 <td><p>Sí</p></td>
 </tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>Cobertura espacial</p></td>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Sesgo de muestreo y representatividad</p></td>
+<td><p>Rúbrica 1</p></td>
 <td><p>sin sesgo de cobertura</p></td>
-<td><p>83.8 % con coordenadas; V de Cramér = 0.42 con el estrato</p></td>
-<td><p>3</p></td>
+<td><p>16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato</p></td>
+<td><p>3, 8</p></td>
 <td><p>Con reservas</p></td>
 </tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>Señal en las predictoras</p></td>
-<td><p>al menos una con efecto grande (η² ≥ 0.14)</p></td>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Asociación predictoras–objetivo (tamaño de efecto)</p></td>
+<td><p>Rúbrica 2.3</p></td>
+<td><p>al menos un efecto grande (η² &gt; 0.14, umbral del cap. 6)</p></td>
 <td><p>η² = 0.50 (<code class="docutils literal notranslate"><span class="pre">y_km</span></code>), 0.31 (baños), 0.21 (piso)</p></td>
 <td><p>6</p></td>
 <td><p>Sí</p></td>
 </tr>
-<tr class="row-even"><td><p>7</p></td>
-<td><p>Ausencia de fuga de datos</p></td>
-<td><p>AUC univariada &lt; 0.95; 0 edificios compartidos</p></td>
-<td><p>AUC máxima 0.76; 0 edificios, predios o coordenadas compartidos</p></td>
-<td><p>9</p></td>
-<td><p>Sí</p></td>
-</tr>
 <tr class="row-odd"><td><p>8</p></td>
-<td><p>El modelo supera al azar</p></td>
-<td><p>IC 95 % de la diferencia de F1 macro excluye 0</p></td>
-<td><p>Δ F1 = +0.375 frente a la clase mayoritaria, IC [0.11, 0.39], p = 0.002</p></td>
-<td><p>10</p></td>
+<td><p>Multicolinealidad</p></td>
+<td><p>Rúbrica 2.3</p></td>
+<td><p>VIF ≤ 10 (regla del cap. 6)</p></td>
+<td><p>VIF &lt; 3 en las físicas; 5.4 con las espaciales</p></td>
+<td><p>6</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-even"><td><p>9</p></td>
-<td><p>Respeta el orden del estrato</p></td>
-<td><p>kappa cuadrático &gt; 0.80</p></td>
-<td><p>κ = 0.81; accuracy ±1 = 0.94; AUC = 0.89</p></td>
-<td><p>10</p></td>
+<td><p>Fuga de datos</p></td>
+<td><p>Rúbrica 2.5</p></td>
+<td><p>AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas</p></td>
+<td><p>AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos</p></td>
+<td><p>9</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-odd"><td><p>10</p></td>
-<td><p>La cantidad de filas no es el límite</p></td>
-<td><p>curva de aprendizaje plana</p></td>
-<td><p>F1 de 0.27 a 0.29 al multiplicar por 20 los datos</p></td>
+<td><p>Comparación con la línea base trivial</p></td>
+<td><p>Rúbrica 3; notas 9.10.4.6.2</p></td>
+<td><p>IC 95 % bootstrap de la diferencia excluye 0</p></td>
+<td><p>Δ F1 macro = +0.375 frente al <code class="docutils literal notranslate"><span class="pre">DummyClassifier</span></code>, IC [0.11, 0.39], p = 0.002</p></td>
 <td><p>10</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-even"><td><p>11</p></td>
-<td><p>Desempeño absoluto en zonas no vistas</p></td>
-<td><p>F1 macro alto (≥ 0.50)</p></td>
-<td><p>0.30 ± 0.09 en CV espacial (0.45 en test)</p></td>
+<td><p>AUC</p></td>
+<td><p>Rúbrica 3; notas 9.4</p></td>
+<td><p>mayor que el azar (0.5)</p></td>
+<td><p>AUC one-vs-rest macro = 0.89 (test)</p></td>
 <td><p>10</p></td>
-<td><p>No todavía</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>¿El problema es trivial?</p></td>
+<td><p>Rúbrica, Figura 1 y nota crítica</p></td>
+<td><p>accuracy &lt; 80–90 %</p></td>
+<td><p>accuracy = 0.46 en CV espacial y 0.60 en test</p></td>
+<td><p>10</p></td>
+<td><p>Sí (no es trivial)</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Tamaño de muestra suficiente</p></td>
+<td><p>Rúbrica 3 (curva de aprendizaje)</p></td>
+<td><p>curva plana al aumentar los datos</p></td>
+<td><p>F1 de 0.27 a 0.29 al multiplicar por 20 los datos</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Residuos sin dependencia espacial</p></td>
+<td><p>Rúbrica 3</p></td>
+<td><p>Moran de residuos cercano a 0</p></td>
+<td><p>Moran = 0.70</p></td>
+<td><p>10</p></td>
+<td><p>Con reservas</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p><strong>Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
-reservas.</strong> Cumple 9 de los 11 criterios. Es grande, tiene casos de sobra en
-todas las clases, casi no tiene faltantes, no presenta fuga de datos, y sus
-variables contienen información real sobre el estrato: un modelo lineal
-sencillo, evaluado en zonas que nunca vio, supera con significancia a la
-línea base y casi siempre se equivoca solo por un estrato (accuracy ±1 =
-0.94).</p>
+reservas.</strong> Cumple 12 de los 14 criterios.</p>
+<ul class="simple">
+<li><p><strong>Base de datos (criterios 1–6).</strong> Es grande, tiene casos de sobra en todas
+las clases y casi no tiene faltantes. Su tamaño efectivo es mucho menor que
+el número de filas, pero eso no la invalida: obliga a partir por bloques y
+a remuestrear bloques, que es lo que hace el libro.</p></li>
+<li><p><strong>EDA (criterios 7–9).</strong> Las predictoras contienen información real sobre
+el estrato (efectos grandes), no son redundantes entre sí y ninguna es un
+proxy del objetivo.</p></li>
+<li><p><strong>Modelo base (criterios 10–13).</strong> El modelo supera con significancia a la
+línea base trivial. La pregunta de control de la Figura 1 de la rúbrica
+(»¿accuracy ≥ 80–90 %?») da <strong>no</strong>: el problema no es trivial, no hay
+señales de fuga y el dataset es suficientemente desafiante para el curso.
+La curva de aprendizaje muestra que la cantidad de datos no es el límite.</p></li>
+</ul>
 <p>Las dos reservas son:</p>
 <ul class="simple">
-<li><p><strong>Cobertura (criterio 5).</strong> La base describe la ciudad formal: el 16.2 %
-de las filas sin coordenadas son casi todas predios informales de estratos
-1 y 2. Las conclusiones no se deben extrapolar a esos asentamientos.</p></li>
-<li><p><strong>Desempeño absoluto (criterio 11).</strong> Un F1 macro de 0.30 en CV espacial es
-modesto. Pero la curva de aprendizaje (criterio 10) muestra que el límite
-no es la cantidad de datos, sino lo que el modelo puede extraer de ellos:
-un modelo lineal sin interacciones y sin variables del entorno. Eso es
-justamente lo que aborda el Entregable 2 (11.3), con la misma base.</p></li>
+<li><p><strong>Representatividad (criterio 6).</strong> La base describe la ciudad formal: las
+filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
+y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
+asentamientos.</p></li>
+<li><p><strong>Residuos con dependencia espacial (criterio 14).</strong> Según la rúbrica, esto
+indica información estructural sin capturar. Es una limitación del modelo
+lineal más que de la base: el modelo capta la tendencia norte-sur, pero no
+los barrios. Lo mismo explica que el F1 macro sea modesto (0.30 en CV
+espacial). Variables de vecindad y modelos más flexibles quedan para el
+Entregable 2 (11.3), con la misma base.</p></li>
 </ul>
 <p>En resumen, la base no necesita más filas ni otra fuente para seguir con el
 proyecto; necesita mejores variables derivadas (vecindad física) y modelos
