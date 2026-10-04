@@ -260,7 +260,7 @@ class BaselineModaZona(ClassifierMixin, BaseEstimator):
     """Línea base espacial para clasificación: la clase más frecuente (y las
     frecuencias de clase) de la ZONA gruesa (celda de tam_km) aprendidas en
     train. Si la zona no existe en train, usa la distribución global.
-    Es el análogo, para clases, de la 'media por zona' que pide el rubric.
+    Es el análogo, para clases, de la 'media por zona' que piden las instrucciones del proyecto.
 
     Parámetros
     ----------

@@ -13,7 +13,7 @@
 # %% [markdown]
 # # 2. Reserva del conjunto de prueba (partición por bloques espaciales)
 #
-# El rubric exige **reservar el conjunto de prueba antes de tomar cualquier
+# Las instrucciones del proyecto exigen **reservar el conjunto de prueba antes de tomar cualquier
 # decisión basada en los datos** (imputación, transformaciones, selección de
 # variables, umbrales de outliers) y que la partición respete la estructura de
 # los datos. Aquí hay tres estructuras que respetar a la vez:

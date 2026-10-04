@@ -13,7 +13,7 @@
 # %% [markdown]
 # # 3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo
 #
-# Completa la parte de **calidad de datos** de la Sección 1 del rubric que sí
+# Completa la parte de **calidad de datos** de la Sección 1 de las instrucciones del proyecto que sí
 # implica decisiones de modelado (cómo imputar, cómo tratar outliers). Por eso
 # se hace **solo con entrenamiento**:
 #
@@ -25,7 +25,7 @@
 # %% tags=["hide-input"]
 # Configuración y carga de SOLO entrenamiento. Desde este capítulo todo lo que
 # pueda convertirse en una decisión de modelado (imputación, outliers) se calcula
-# sin mirar test, para evitar fuga de información (orden de trabajo del rubric).
+# sin mirar test, para evitar fuga de información (orden de trabajo de las instrucciones del proyecto).
 import sys
 import warnings
 from pathlib import Path

@@ -130,27 +130,27 @@
 
 Para cerrar, se revisa si la base cumple lo que pide el proyecto, contrastando
 cada requisito con un score calculado en los capítulos anteriores. Cada
-criterio indica de dónde sale: la **rúbrica del Entregable 1** (secciones 1,
+criterio indica de dónde sale: las **instrucciones del proyecto (Entregable 1)** (secciones 1,
 2.3, 2.5 y 3, y la Figura 1) o las **notas de clase** del profesor Lihki Rubio
 (sección 9). Donde ninguna fija un número, se usa el umbral que el propio EDA
 declaró antes de modelar.
 
 | # | Criterio | Fuente | Umbral | Score obtenido | Cap. | ¿Cumple? |
 |---|---|---|---|---|---|---|
-| 1 | Tamaño de la muestra | Rúbrica 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
-| 2 | Relación n/p (filas por cada columna del modelo; ver 1.6) | Rúbrica 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
-| 3 | Casos de la clase minoritaria | Rúbrica 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
-| 4 | Entidades independientes | Rúbrica 1 | reportar el tamaño efectivo | 168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870 | 1 | Sí, con partición por bloques |
+| 1 | Tamaño de la muestra | Instrucciones 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
+| 2 | Relación n/p (filas por cada columna del modelo; ver 1.6) | Instrucciones 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
+| 3 | Casos de la clase minoritaria | Instrucciones 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
+| 4 | Entidades independientes | Instrucciones 1 | reportar el tamaño efectivo | 168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870 | 1 | Sí, con partición por bloques |
 | 5 | Valores faltantes | Notas 9.10.4.1.2 | < 30 % por variable | máximo 0.12 %; mecanismo MAR | 3 | Sí |
-| 6 | Sesgo de muestreo y representatividad | Rúbrica 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato | 3, 8 | Con reservas |
-| 7 | Asociación predictoras–objetivo (tamaño de efecto) | Rúbrica 2.3 | al menos un efecto grande (η² > 0.14, umbral del cap. 6) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
-| 8 | Multicolinealidad | Rúbrica 2.3 | VIF ≤ 10 (regla del cap. 6) | VIF < 3 en las físicas; 5.4 con las espaciales | 6 | Sí |
-| 9 | Fuga de datos | Rúbrica 2.5 | AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas | AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
-| 10 | Comparación con la línea base trivial | Rúbrica 3; notas 9.10.4.6.2 | IC 95 % bootstrap de la diferencia excluye 0 | Δ F1 macro = +0.375 frente al `DummyClassifier`, IC [0.11, 0.39], p = 0.002 | 10 | Sí |
-| 11 | AUC | Rúbrica 3; notas 9.4 | mayor que el azar (0.5) | AUC one-vs-rest macro = 0.89 (test) | 10 | Sí |
-| 12 | ¿El problema es trivial? | Rúbrica, Figura 1 y nota crítica | accuracy < 80–90 % | accuracy = 0.46 en CV espacial y 0.60 en test | 10 | Sí (no es trivial) |
-| 13 | Tamaño de muestra suficiente | Rúbrica 3 (curva de aprendizaje) | curva plana al aumentar los datos | F1 de 0.27 a 0.29 al multiplicar por 20 los datos | 10 | Sí |
-| 14 | Residuos sin dependencia espacial | Rúbrica 3 | Moran de residuos cercano a 0 | Moran = 0.70 | 10 | Con reservas |
+| 6 | Sesgo de muestreo y representatividad | Instrucciones 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato | 3, 8 | Con reservas |
+| 7 | Asociación predictoras–objetivo (tamaño de efecto) | Instrucciones 2.3 | al menos un efecto grande (η² > 0.14, umbral del cap. 6) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
+| 8 | Multicolinealidad | Instrucciones 2.3 | VIF ≤ 10 (regla del cap. 6) | VIF < 3 en las físicas; 5.4 con las espaciales | 6 | Sí |
+| 9 | Fuga de datos | Instrucciones 2.5 | AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas | AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
+| 10 | Comparación con la línea base trivial | Instrucciones 3; notas 9.10.4.6.2 | IC 95 % bootstrap de la diferencia excluye 0 | Δ F1 macro = +0.375 frente al `DummyClassifier`, IC [0.11, 0.39], p = 0.002 | 10 | Sí |
+| 11 | AUC | Instrucciones 3; notas 9.4 | mayor que el azar (0.5) | AUC one-vs-rest macro = 0.89 (test) | 10 | Sí |
+| 12 | ¿El problema es trivial? | Instrucciones, Figura 1 y nota crítica | accuracy < 80–90 % | accuracy = 0.46 en CV espacial y 0.60 en test | 10 | Sí (no es trivial) |
+| 13 | Tamaño de muestra suficiente | Instrucciones 3 (curva de aprendizaje) | curva plana al aumentar los datos | F1 de 0.27 a 0.29 al multiplicar por 20 los datos | 10 | Sí |
+| 14 | Residuos sin dependencia espacial | Instrucciones 3 | Moran de residuos cercano a 0 | Moran = 0.70 | 10 | Con reservas |
 
 **Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
 reservas.** Cumple 12 de los 14 criterios.
@@ -163,7 +163,7 @@ reservas.** Cumple 12 de los 14 criterios.
   el estrato (efectos grandes), no son redundantes entre sí y ninguna es un
   proxy del objetivo.
 - **Modelo base (criterios 10–13).** El modelo supera con significancia a la
-  línea base trivial. La pregunta de control de la Figura 1 de la rúbrica
+  línea base trivial. La pregunta de control de la Figura 1 de las instrucciones del proyecto
   ("¿accuracy ≥ 80–90 %?") da **no**: el problema no es trivial, no hay
   señales de fuga y el dataset es suficientemente desafiante para el curso.
   La curva de aprendizaje muestra que la cantidad de datos no es el límite.
@@ -174,7 +174,7 @@ Las dos reservas son:
   filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
   y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
   asentamientos.
-- **Residuos con dependencia espacial (criterio 14).** Según la rúbrica, esto
+- **Residuos con dependencia espacial (criterio 14).** Según las instrucciones del proyecto, esto
   indica información estructural sin capturar. Es una limitación del modelo
   lineal más que de la base: el modelo capta la tendencia norte-sur, pero no
   los barrios. Lo mismo explica que el F1 macro sea modesto (0.30 en CV

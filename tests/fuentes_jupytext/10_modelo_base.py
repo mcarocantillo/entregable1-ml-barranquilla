@@ -13,7 +13,7 @@
 # %% [markdown]
 # # 10. Modelo base (sección 3)
 #
-# | Requisito del rubric | Cómo se cumple aquí |
+# | Requisito de las instrucciones | Cómo se cumple aquí |
 # |---|---|
 # | Regresión logística | `LogisticRegression` multinomial con regularización L2 |
 # | Definición del objetivo | `estrato_num` (1–6), clasificación multiclase ordinal (cap. 4) |
@@ -547,7 +547,7 @@ print("Diferencia de F1 macro en test (bootstrap pareado por bloques):")
 comp
 
 # %% [markdown]
-# ```{admonition} Nota crítica del rubric
+# ```{admonition} Nota crítica de las instrucciones del proyecto
 # :class: warning
 # Si el accuracy o el F1 superan 0.80–0.90 hay que sospechar: verificar fuga
 # (cap. 9), comparar con la línea base y confirmar que la validación respeta
@@ -555,7 +555,7 @@ comp
 # ```
 
 # %%
-# Alerta automática del rubric: un accuracy >= 0.80 en este problema sería señal de
+# Alerta automática de las instrucciones del proyecto: un accuracy >= 0.80 en este problema sería señal de
 # fuga (proxies del estrato o vecinos de test en train), no de un buen modelo. Se
 # reporta además la ganancia sobre la Dummy mayoritaria, que es el piso de referencia.
 acc = resultados.loc[PRINCIPAL, "accuracy"]

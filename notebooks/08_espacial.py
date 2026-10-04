@@ -130,7 +130,7 @@ val
 #
 # ### Distancias: proyección local vs. haversine
 #
-# El rubric pide no usar distancia euclidiana sobre grados. Se trabaja con una
+# Las instrucciones del proyecto piden no usar distancia euclidiana sobre grados. Se trabaja con una
 # proyección equirectangular local en km (`x_km`, `y_km`); se verifica su
 # error frente a la distancia haversine:
 

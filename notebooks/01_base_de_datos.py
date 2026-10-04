@@ -15,7 +15,7 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Este capítulo cubre la **Sección 1 del rubric**: problema de investigación,
+# Este capítulo cubre la **Sección 1 de las instrucciones del proyecto**: problema de investigación,
 # justificación y fuente del dataset, diccionario de variables, estructura de
 # los datos, tamaño de muestra y calidad de datos (duplicados, valores
 # imposibles, categorías mal escritas), más las consideraciones éticas.
@@ -71,7 +71,7 @@ pd.set_option("display.max_columns", 40)
 #
 # **Tipo de tarea.** Clasificación supervisada multiclase (6 clases,
 # **ordinales**) con datos que tienen coordenadas pero no tiempo: según la
-# Figura 1 del rubric se sigue la **ruta A (clasificación)** añadiendo la
+# Figura 1 de las instrucciones del proyecto se sigue la **ruta A (clasificación)** añadiendo la
 # sección 2.7 (componente espacial) y una partición por **bloques espaciales**.
 #
 # **Por qué importa.** En Colombia el estrato (Ley 142 de 1994) determina las
@@ -254,8 +254,8 @@ dicc
 # *En este catastro:* n/p ≈ 332 718 ÷ 35 ≈ **9 500 filas por columna**, y el estrato 6 tiene unos 377 casos por columna, muy por encima de 10. No faltan datos para el número de variables.
 
 # %%
-# Tamaño de muestra y relación n/p: verifica el mínimo de 20 000 observaciones del
-# rubric y que haya suficientes filas por parámetro. También cuenta entidades
+# Tamaño de muestra y relación n/p: verifica el mínimo de 20 000 observaciones de
+# las instrucciones del proyecto y que haya suficientes filas por parámetro. También cuenta entidades
 # (predios, edificios), porque las filas de un mismo edificio no son independientes.
 n = len(df)
 p_num = len(C.NUMERICAS) + len(C.ESPACIALES)   # numéricas + coordenadas/distancia
@@ -327,7 +327,7 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 #   **168 044 edificios/lotes**; 278 824 filas (83.8 %) tienen coordenadas. La
 #   relación n/p es de ~9 500 filas por columna tras one-hot (35 columnas): el
 #   problema no es de pocos datos respecto al número de variables, y el mínimo
-#   de 20 000 observaciones del rubric se cumple con holgura.
+#   de 20 000 observaciones de las instrucciones del proyecto se cumple con holgura.
 # - **Clases.** Estrato 1: 32.8 %, 2: 21.8 %, 3: 21.6 %, 4: 14.8 %, 5: 5.1 %,
 #   6: 4.0 %. Las dos clases altas suman menos del 10 %, pero aún tienen más de
 #   13 000 casos cada una (16 843 y 13 207).

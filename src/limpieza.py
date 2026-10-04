@@ -2,7 +2,7 @@
 """
 Carga y limpieza DETERMINISTA del CSV de catastro (antes de la partición).
 
-Regla de oro del rubric (Sección 2, "Orden de trabajo"): toda decisión que
+Regla de oro de las instrucciones del proyecto (Sección 2, "Orden de trabajo"): toda decisión que
 APRENDA algo de los datos (una mediana para imputar, un umbral de outliers
 calculado con cuantiles, un escalado...) se calcula SOLO con el conjunto de
 entrenamiento. Por eso aquí NO se imputa nada.
@@ -89,7 +89,7 @@ def proyectar_km(lat, lon):
     """Proyección equirectangular local centrada en Barranquilla -> (x_km, y_km).
     A la escala de la ciudad (~20 km) el error frente a haversine es < 0.1 %
     (se verifica en el notebook espacial). Es equivalente a trabajar en un CRS
-    proyectado, que es lo que pide el rubric en vez de distancias euclidianas
+    proyectado, que es lo que piden las instrucciones del proyecto en vez de distancias euclidianas
     sobre grados.
 
     Parámetros

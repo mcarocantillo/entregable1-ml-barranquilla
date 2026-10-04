@@ -3,7 +3,7 @@
 Configuración central del Entregable 1: rutas, semillas y constantes.
 
 TODAS las semillas aleatorias del libro salen de aquí (requisito de
-reproducibilidad del rubric: "semillas aleatorias fijadas").
+reproducibilidad de las instrucciones del proyecto: "semillas aleatorias fijadas").
 
 Dónde busca el CSV (en este orden):
   1. La variable de entorno CATASTRO_CSV, si existe.
@@ -290,7 +290,7 @@ def leer_decisiones():
 def guardar_decision(clave, valor, motivo):
     """Guarda una decisión del EDA con su justificación. El notebook del
     modelo base lee este archivo: así cada decisión de preprocesamiento queda
-    rastreada al hallazgo que la motivó (requisito del rubric).
+    rastreada al hallazgo que la motivó (requisito de las instrucciones del proyecto).
 
     Parámetros
     ----------
