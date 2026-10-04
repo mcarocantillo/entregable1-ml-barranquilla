@@ -246,6 +246,17 @@ dicc
 # %% [markdown]
 # ## 1.6 Tamaño de la muestra, relación n/p y entidades independientes
 
+# %% [markdown]
+# **¿Qué es la relación n/p?** Compara cuántos datos hay (**n**, el número de filas u observaciones) con cuántas cosas tiene que aprender el modelo (**p**, el número de variables o columnas que entran al modelo). Se calcula como n ÷ p y se lee como "cuántas filas hay por cada variable".
+#
+# *Por qué importa.* Cada variable agrega al menos un coeficiente que el modelo debe estimar a partir de los datos. Si hay pocas filas por variable, el modelo puede memorizar los datos de entrenamiento en lugar de aprender patrones generales (**sobreajuste**). Un caso extremo: con 35 filas y 35 variables, el modelo puede ajustar perfectamente esas 35 filas, igual que un sistema con tantas ecuaciones como incógnitas tiene solución exacta, pero no aprende nada que sirva para viviendas nuevas. Por eso se busca que n sea **mucho mayor** que p (n ≫ p).
+#
+# *Cómo se cuenta p.* Las variables categóricas no entran como una sola columna: con one-hot, cada categoría se convierte en una columna propia. Por ejemplo, `condicion_predio` se vuelve una columna para NPH, otra para PH_Unidad_Predial, otra para Informal, y así con cada categoría. Por eso p no es el número de variables candidatas (16), sino el número de columnas tras one-hot (≈ 35).
+#
+# *Una referencia práctica.* Para regresión logística se suele pedir al menos 10 casos de la clase menos frecuente por variable (Peduzzi et al., 1996). Además, la regresión logística multinomial con 6 estratos estima un juego de coeficientes por cada clase menos una, así que aprende unos 5 × 35 ≈ 175 coeficientes.
+#
+# *En este catastro.* Con n = 332 718 filas y p ≈ 35 columnas, n/p ≈ **9 500 filas por columna**: aun contando los ≈ 175 coeficientes de la multinomial, hay unas 1 900 filas por coeficiente, y la clase menos frecuente (estrato 6, 13 207 casos) tiene unos 377 casos por columna, muy por encima de 10. Incluso con el tamaño efectivo de ≈ 1 870 que se calcula más abajo (las filas de un mismo edificio repiten información), quedan unas 53 observaciones independientes por columna. El problema **no es de pocos datos respecto al número de variables**.
+
 # %%
 # Tamaño de muestra y relación n/p: verifica el mínimo de 20 000 observaciones del
 # rubric y que haya suficientes filas por parámetro. También cuenta entidades

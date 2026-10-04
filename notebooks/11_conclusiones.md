@@ -138,7 +138,7 @@ declaró antes de modelar.
 | # | Criterio | Fuente | Umbral | Score obtenido | Cap. | ¿Cumple? |
 |---|---|---|---|---|---|---|
 | 1 | Tamaño de la muestra | Rúbrica 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
-| 2 | Relación n/p | Rúbrica 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
+| 2 | Relación n/p (filas por cada columna del modelo; ver 1.6) | Rúbrica 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
 | 3 | Casos de la clase minoritaria | Rúbrica 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
 | 4 | Entidades independientes | Rúbrica 1 | reportar el tamaño efectivo | 168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870 | 1 | Sí, con partición por bloques |
 | 5 | Valores faltantes | Notas 9.10.4.1.2 | < 30 % por variable | máximo 0.12 %; mecanismo MAR | 3 | Sí |
