@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -387,6 +387,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-principales">11.1 Hallazgos principales</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">11.2 Limitaciones</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proximos-pasos-entregable-2">11.3 Próximos pasos (Entregable 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto">11.4 Veredicto: ¿la base de datos sirve para el proyecto?</a></li>
 </ul>
             </nav>
         </div>
@@ -531,6 +532,130 @@ baños y el amontonamiento de años.</p></li>
 cobertura.</p></li>
 </ul>
 </section>
+<section id="veredicto-la-base-de-datos-sirve-para-el-proyecto">
+<h2>11.4 Veredicto: ¿la base de datos sirve para el proyecto?<a class="headerlink" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto" title="Link to this heading">#</a></h2>
+<p>Para cerrar, se revisa si la base cumple lo que necesita el proyecto
+(clasificar el estrato de una vivienda a partir del catastro). Cada criterio
+se contrasta con un score calculado en los capítulos anteriores. Los umbrales
+son los del rubric (mínimo de observaciones), convenciones estadísticas
+conocidas (η² ≥ 0.14 es un efecto grande según Cohen; kappa &gt; 0.80 es un
+acuerdo casi perfecto según Landis y Koch) o los que se fijaron en el EDA
+(alerta de fuga de 0.95, faltantes &lt; 30 %). Los demás (≥ 1 000 casos por
+clase, F1 macro ≥ 0.50) son valores de referencia propuestos para esta
+revisión.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Criterio</p></th>
+<th class="head"><p>Umbral</p></th>
+<th class="head"><p>Score obtenido</p></th>
+<th class="head"><p>Cap.</p></th>
+<th class="head"><p>¿Cumple?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Tamaño de la muestra</p></td>
+<td><p>≥ 20 000 observaciones (rubric)</p></td>
+<td><p>332 718 viviendas</p></td>
+<td><p>1</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Unidades independientes</p></td>
+<td><p>≥ 20 000 edificios distintos</p></td>
+<td><p>168 044 edificios</p></td>
+<td><p>1</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Casos en las clases minoritarias</p></td>
+<td><p>≥ 1 000 por clase</p></td>
+<td><p>mínimo 13 207 (estrato 6)</p></td>
+<td><p>1</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Valores faltantes</p></td>
+<td><p>&lt; 30 % por variable</p></td>
+<td><p>máximo 0.12 % (<code class="docutils literal notranslate"><span class="pre">total_habitaciones</span></code>)</p></td>
+<td><p>3</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Cobertura espacial</p></td>
+<td><p>sin sesgo de cobertura</p></td>
+<td><p>83.8 % con coordenadas; V de Cramér = 0.42 con el estrato</p></td>
+<td><p>3</p></td>
+<td><p>Con reservas</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Señal en las predictoras</p></td>
+<td><p>al menos una con efecto grande (η² ≥ 0.14)</p></td>
+<td><p>η² = 0.50 (<code class="docutils literal notranslate"><span class="pre">y_km</span></code>), 0.31 (baños), 0.21 (piso)</p></td>
+<td><p>6</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Ausencia de fuga de datos</p></td>
+<td><p>AUC univariada &lt; 0.95; 0 edificios compartidos</p></td>
+<td><p>AUC máxima 0.76; 0 edificios, predios o coordenadas compartidos</p></td>
+<td><p>9</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>El modelo supera al azar</p></td>
+<td><p>IC 95 % de la diferencia de F1 macro excluye 0</p></td>
+<td><p>Δ F1 = +0.375 frente a la clase mayoritaria, IC [0.11, 0.39], p = 0.002</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Respeta el orden del estrato</p></td>
+<td><p>kappa cuadrático &gt; 0.80</p></td>
+<td><p>κ = 0.81; accuracy ±1 = 0.94; AUC = 0.89</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>La cantidad de filas no es el límite</p></td>
+<td><p>curva de aprendizaje plana</p></td>
+<td><p>F1 de 0.27 a 0.29 al multiplicar por 20 los datos</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>Desempeño absoluto en zonas no vistas</p></td>
+<td><p>F1 macro alto (≥ 0.50)</p></td>
+<td><p>0.30 ± 0.09 en CV espacial (0.45 en test)</p></td>
+<td><p>10</p></td>
+<td><p>No todavía</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
+reservas.</strong> Cumple 9 de los 11 criterios. Es grande, tiene casos de sobra en
+todas las clases, casi no tiene faltantes, no presenta fuga de datos, y sus
+variables contienen información real sobre el estrato: un modelo lineal
+sencillo, evaluado en zonas que nunca vio, supera con significancia a la
+línea base y casi siempre se equivoca solo por un estrato (accuracy ±1 =
+0.94).</p>
+<p>Las dos reservas son:</p>
+<ul class="simple">
+<li><p><strong>Cobertura (criterio 5).</strong> La base describe la ciudad formal: el 16.2 %
+de las filas sin coordenadas son casi todas predios informales de estratos
+1 y 2. Las conclusiones no se deben extrapolar a esos asentamientos.</p></li>
+<li><p><strong>Desempeño absoluto (criterio 11).</strong> Un F1 macro de 0.30 en CV espacial es
+modesto. Pero la curva de aprendizaje (criterio 10) muestra que el límite
+no es la cantidad de datos, sino lo que el modelo puede extraer de ellos:
+un modelo lineal sin interacciones y sin variables del entorno. Eso es
+justamente lo que aborda el Entregable 2 (11.3), con la misma base.</p></li>
+</ul>
+<p>En resumen, la base no necesita más filas ni otra fuente para seguir con el
+proyecto; necesita mejores variables derivadas (vecindad física) y modelos
+más flexibles.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -602,6 +727,7 @@ cobertura.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-principales">11.1 Hallazgos principales</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">11.2 Limitaciones</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proximos-pasos-entregable-2">11.3 Próximos pasos (Entregable 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto">11.4 Veredicto: ¿la base de datos sirve para el proyecto?</a></li>
 </ul>
   </nav></div>
 
