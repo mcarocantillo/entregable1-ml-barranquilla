@@ -128,48 +128,58 @@
 
 ## 11.4 Veredicto: ¿la base de datos sirve para el proyecto?
 
-Para cerrar, se revisa si la base cumple lo que necesita el proyecto
-(clasificar el estrato de una vivienda a partir del catastro). Cada criterio
-se contrasta con un score calculado en los capítulos anteriores. Los umbrales
-son los del rubric (mínimo de observaciones), convenciones estadísticas
-conocidas (η² ≥ 0.14 es un efecto grande según Cohen; kappa > 0.80 es un
-acuerdo casi perfecto según Landis y Koch) o los que se fijaron en el EDA
-(alerta de fuga de 0.95, faltantes < 30 %). Los demás (≥ 1 000 casos por
-clase, F1 macro ≥ 0.50) son valores de referencia propuestos para esta
-revisión.
+Para cerrar, se revisa si la base cumple lo que pide el proyecto, contrastando
+cada requisito con un score calculado en los capítulos anteriores. Cada
+criterio indica de dónde sale: la **rúbrica del Entregable 1** (secciones 1,
+2.3, 2.5 y 3, y la Figura 1) o las **notas de clase** del profesor Lihki Rubio
+(sección 9). Donde ninguna fija un número, se usa el umbral que el propio EDA
+declaró antes de modelar.
 
-| # | Criterio | Umbral | Score obtenido | Cap. | ¿Cumple? |
-|---|---|---|---|---|---|
-| 1 | Tamaño de la muestra | ≥ 20 000 observaciones (rubric) | 332 718 viviendas | 1 | Sí |
-| 2 | Unidades independientes | ≥ 20 000 edificios distintos | 168 044 edificios | 1 | Sí |
-| 3 | Casos en las clases minoritarias | ≥ 1 000 por clase | mínimo 13 207 (estrato 6) | 1 | Sí |
-| 4 | Valores faltantes | < 30 % por variable | máximo 0.12 % (`total_habitaciones`) | 3 | Sí |
-| 5 | Cobertura espacial | sin sesgo de cobertura | 83.8 % con coordenadas; V de Cramér = 0.42 con el estrato | 3 | Con reservas |
-| 6 | Señal en las predictoras | al menos una con efecto grande (η² ≥ 0.14) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
-| 7 | Ausencia de fuga de datos | AUC univariada < 0.95; 0 edificios compartidos | AUC máxima 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
-| 8 | El modelo supera al azar | IC 95 % de la diferencia de F1 macro excluye 0 | Δ F1 = +0.375 frente a la clase mayoritaria, IC [0.11, 0.39], p = 0.002 | 10 | Sí |
-| 9 | Respeta el orden del estrato | kappa cuadrático > 0.80 | κ = 0.81; accuracy ±1 = 0.94; AUC = 0.89 | 10 | Sí |
-| 10 | La cantidad de filas no es el límite | curva de aprendizaje plana | F1 de 0.27 a 0.29 al multiplicar por 20 los datos | 10 | Sí |
-| 11 | Desempeño absoluto en zonas no vistas | F1 macro alto (≥ 0.50) | 0.30 ± 0.09 en CV espacial (0.45 en test) | 10 | No todavía |
+| # | Criterio | Fuente | Umbral | Score obtenido | Cap. | ¿Cumple? |
+|---|---|---|---|---|---|---|
+| 1 | Tamaño de la muestra | Rúbrica 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
+| 2 | Relación n/p | Rúbrica 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
+| 3 | Casos de la clase minoritaria | Rúbrica 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
+| 4 | Entidades independientes | Rúbrica 1 | reportar el tamaño efectivo | 168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870 | 1 | Sí, con partición por bloques |
+| 5 | Valores faltantes | Notas 9.10.4.1.2 | < 30 % por variable | máximo 0.12 %; mecanismo MAR | 3 | Sí |
+| 6 | Sesgo de muestreo y representatividad | Rúbrica 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato | 3, 8 | Con reservas |
+| 7 | Asociación predictoras–objetivo (tamaño de efecto) | Rúbrica 2.3 | al menos un efecto grande (η² > 0.14, umbral del cap. 6) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
+| 8 | Multicolinealidad | Rúbrica 2.3 | VIF ≤ 10 (regla del cap. 6) | VIF < 3 en las físicas; 5.4 con las espaciales | 6 | Sí |
+| 9 | Fuga de datos | Rúbrica 2.5 | AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas | AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
+| 10 | Comparación con la línea base trivial | Rúbrica 3; notas 9.10.4.6.2 | IC 95 % bootstrap de la diferencia excluye 0 | Δ F1 macro = +0.375 frente al `DummyClassifier`, IC [0.11, 0.39], p = 0.002 | 10 | Sí |
+| 11 | AUC | Rúbrica 3; notas 9.4 | mayor que el azar (0.5) | AUC one-vs-rest macro = 0.89 (test) | 10 | Sí |
+| 12 | ¿El problema es trivial? | Rúbrica, Figura 1 y nota crítica | accuracy < 80–90 % | accuracy = 0.46 en CV espacial y 0.60 en test | 10 | Sí (no es trivial) |
+| 13 | Tamaño de muestra suficiente | Rúbrica 3 (curva de aprendizaje) | curva plana al aumentar los datos | F1 de 0.27 a 0.29 al multiplicar por 20 los datos | 10 | Sí |
+| 14 | Residuos sin dependencia espacial | Rúbrica 3 | Moran de residuos cercano a 0 | Moran = 0.70 | 10 | Con reservas |
 
 **Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
-reservas.** Cumple 9 de los 11 criterios. Es grande, tiene casos de sobra en
-todas las clases, casi no tiene faltantes, no presenta fuga de datos, y sus
-variables contienen información real sobre el estrato: un modelo lineal
-sencillo, evaluado en zonas que nunca vio, supera con significancia a la
-línea base y casi siempre se equivoca solo por un estrato (accuracy ±1 =
-0.94).
+reservas.** Cumple 12 de los 14 criterios.
+
+- **Base de datos (criterios 1–6).** Es grande, tiene casos de sobra en todas
+  las clases y casi no tiene faltantes. Su tamaño efectivo es mucho menor que
+  el número de filas, pero eso no la invalida: obliga a partir por bloques y
+  a remuestrear bloques, que es lo que hace el libro.
+- **EDA (criterios 7–9).** Las predictoras contienen información real sobre
+  el estrato (efectos grandes), no son redundantes entre sí y ninguna es un
+  proxy del objetivo.
+- **Modelo base (criterios 10–13).** El modelo supera con significancia a la
+  línea base trivial. La pregunta de control de la Figura 1 de la rúbrica
+  ("¿accuracy ≥ 80–90 %?") da **no**: el problema no es trivial, no hay
+  señales de fuga y el dataset es suficientemente desafiante para el curso.
+  La curva de aprendizaje muestra que la cantidad de datos no es el límite.
 
 Las dos reservas son:
 
-- **Cobertura (criterio 5).** La base describe la ciudad formal: el 16.2 %
-  de las filas sin coordenadas son casi todas predios informales de estratos
-  1 y 2. Las conclusiones no se deben extrapolar a esos asentamientos.
-- **Desempeño absoluto (criterio 11).** Un F1 macro de 0.30 en CV espacial es
-  modesto. Pero la curva de aprendizaje (criterio 10) muestra que el límite
-  no es la cantidad de datos, sino lo que el modelo puede extraer de ellos:
-  un modelo lineal sin interacciones y sin variables del entorno. Eso es
-  justamente lo que aborda el Entregable 2 (11.3), con la misma base.
+- **Representatividad (criterio 6).** La base describe la ciudad formal: las
+  filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
+  y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
+  asentamientos.
+- **Residuos con dependencia espacial (criterio 14).** Según la rúbrica, esto
+  indica información estructural sin capturar. Es una limitación del modelo
+  lineal más que de la base: el modelo capta la tendencia norte-sur, pero no
+  los barrios. Lo mismo explica que el F1 macro sea modesto (0.30 en CV
+  espacial). Variables de vecindad y modelos más flexibles quedan para el
+  Entregable 2 (11.3), con la misma base.
 
 En resumen, la base no necesita más filas ni otra fuente para seguir con el
 proyecto; necesita mejores variables derivadas (vecindad física) y modelos

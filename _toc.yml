@@ -14,6 +14,7 @@ parts:
       - file: notebooks/07_multivariado
       - file: notebooks/08_espacial
       - file: notebooks/09_fuga_de_datos
+      - file: notebooks/resumen_eda
   - caption: Modelo base
     chapters:
       - file: notebooks/10_modelo_base
