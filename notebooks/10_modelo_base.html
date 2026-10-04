@@ -421,7 +421,7 @@
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Requisito del rubric</p></th>
+<tr class="row-odd"><th class="head"><p>Requisito de las instrucciones</p></th>
 <th class="head"><p>Cómo se cumple aquí</p></th>
 </tr>
 </thead>
@@ -1745,14 +1745,14 @@ favorable.</p>
 </div></div></div>
 </div>
 <div class="warning admonition">
-<p class="admonition-title">Nota crítica del rubric</p>
+<p class="admonition-title">Nota crítica de las instrucciones del proyecto</p>
 <p>Si el accuracy o el F1 superan 0.80–0.90 hay que sospechar: verificar fuga
 (cap. 9), comparar con la línea base y confirmar que la validación respeta
 la estructura espacial. La celda siguiente hace esa verificación automática.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alerta automática del rubric: un accuracy &gt;= 0.80 en este problema sería señal de</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alerta automática de las instrucciones del proyecto: un accuracy &gt;= 0.80 en este problema sería señal de</span>
 <span class="c1"># fuga (proxies del estrato o vecinos de test en train), no de un buen modelo. Se</span>
 <span class="c1"># reporta además la ganancia sobre la Dummy mayoritaria, que es el piso de referencia.</span>
 <span class="n">acc</span> <span class="o">=</span> <span class="n">resultados</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">PRINCIPAL</span><span class="p">,</span> <span class="s2">"accuracy"</span><span class="p">]</span>

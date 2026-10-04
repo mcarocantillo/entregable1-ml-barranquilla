@@ -537,7 +537,7 @@ cobertura.</p></li>
 <h2>11.4 Veredicto: ¿la base de datos sirve para el proyecto?<a class="headerlink" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto" title="Link to this heading">#</a></h2>
 <p>Para cerrar, se revisa si la base cumple lo que pide el proyecto, contrastando
 cada requisito con un score calculado en los capítulos anteriores. Cada
-criterio indica de dónde sale: la <strong>rúbrica del Entregable 1</strong> (secciones 1,
+criterio indica de dónde sale: las <strong>instrucciones del proyecto (Entregable 1)</strong> (secciones 1,
 2.3, 2.5 y 3, y la Figura 1) o las <strong>notas de clase</strong> del profesor Lihki Rubio
 (sección 9). Donde ninguna fija un número, se usa el umbral que el propio EDA
 declaró antes de modelar.</p>
@@ -555,7 +555,7 @@ declaró antes de modelar.</p>
 <tbody>
 <tr class="row-even"><td><p>1</p></td>
 <td><p>Tamaño de la muestra</p></td>
-<td><p>Rúbrica 1</p></td>
+<td><p>Instrucciones 1</p></td>
 <td><p>≥ 20 000 observaciones</p></td>
 <td><p>332 718 viviendas</p></td>
 <td><p>1</p></td>
@@ -563,7 +563,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>Relación n/p (filas por cada columna del modelo; ver 1.6)</p></td>
-<td><p>Rúbrica 1</p></td>
+<td><p>Instrucciones 1</p></td>
 <td><p>reportar; n ≫ p</p></td>
 <td><p>~9 500 filas por columna</p></td>
 <td><p>1</p></td>
@@ -571,7 +571,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
 <td><p>Casos de la clase minoritaria</p></td>
-<td><p>Rúbrica 1 y 2.1</p></td>
+<td><p>Instrucciones 1 y 2.1</p></td>
 <td><p>suficientes sin sobremuestreo</p></td>
 <td><p>12 390 (estrato 6, train); desbalance 4.6 : 1</p></td>
 <td><p>4</p></td>
@@ -579,7 +579,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
 <td><p>Entidades independientes</p></td>
-<td><p>Rúbrica 1</p></td>
+<td><p>Instrucciones 1</p></td>
 <td><p>reportar el tamaño efectivo</p></td>
 <td><p>168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870</p></td>
 <td><p>1</p></td>
@@ -595,7 +595,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
 <td><p>Sesgo de muestreo y representatividad</p></td>
-<td><p>Rúbrica 1</p></td>
+<td><p>Instrucciones 1</p></td>
 <td><p>sin sesgo de cobertura</p></td>
 <td><p>16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato</p></td>
 <td><p>3, 8</p></td>
@@ -603,7 +603,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-even"><td><p>7</p></td>
 <td><p>Asociación predictoras–objetivo (tamaño de efecto)</p></td>
-<td><p>Rúbrica 2.3</p></td>
+<td><p>Instrucciones 2.3</p></td>
 <td><p>al menos un efecto grande (η² &gt; 0.14, umbral del cap. 6)</p></td>
 <td><p>η² = 0.50 (<code class="docutils literal notranslate"><span class="pre">y_km</span></code>), 0.31 (baños), 0.21 (piso)</p></td>
 <td><p>6</p></td>
@@ -611,7 +611,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>8</p></td>
 <td><p>Multicolinealidad</p></td>
-<td><p>Rúbrica 2.3</p></td>
+<td><p>Instrucciones 2.3</p></td>
 <td><p>VIF ≤ 10 (regla del cap. 6)</p></td>
 <td><p>VIF &lt; 3 en las físicas; 5.4 con las espaciales</p></td>
 <td><p>6</p></td>
@@ -619,7 +619,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-even"><td><p>9</p></td>
 <td><p>Fuga de datos</p></td>
-<td><p>Rúbrica 2.5</p></td>
+<td><p>Instrucciones 2.5</p></td>
 <td><p>AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas</p></td>
 <td><p>AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos</p></td>
 <td><p>9</p></td>
@@ -627,7 +627,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>10</p></td>
 <td><p>Comparación con la línea base trivial</p></td>
-<td><p>Rúbrica 3; notas 9.10.4.6.2</p></td>
+<td><p>Instrucciones 3; notas 9.10.4.6.2</p></td>
 <td><p>IC 95 % bootstrap de la diferencia excluye 0</p></td>
 <td><p>Δ F1 macro = +0.375 frente al <code class="docutils literal notranslate"><span class="pre">DummyClassifier</span></code>, IC [0.11, 0.39], p = 0.002</p></td>
 <td><p>10</p></td>
@@ -635,7 +635,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-even"><td><p>11</p></td>
 <td><p>AUC</p></td>
-<td><p>Rúbrica 3; notas 9.4</p></td>
+<td><p>Instrucciones 3; notas 9.4</p></td>
 <td><p>mayor que el azar (0.5)</p></td>
 <td><p>AUC one-vs-rest macro = 0.89 (test)</p></td>
 <td><p>10</p></td>
@@ -643,7 +643,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>¿El problema es trivial?</p></td>
-<td><p>Rúbrica, Figura 1 y nota crítica</p></td>
+<td><p>Instrucciones, Figura 1 y nota crítica</p></td>
 <td><p>accuracy &lt; 80–90 %</p></td>
 <td><p>accuracy = 0.46 en CV espacial y 0.60 en test</p></td>
 <td><p>10</p></td>
@@ -651,7 +651,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-even"><td><p>13</p></td>
 <td><p>Tamaño de muestra suficiente</p></td>
-<td><p>Rúbrica 3 (curva de aprendizaje)</p></td>
+<td><p>Instrucciones 3 (curva de aprendizaje)</p></td>
 <td><p>curva plana al aumentar los datos</p></td>
 <td><p>F1 de 0.27 a 0.29 al multiplicar por 20 los datos</p></td>
 <td><p>10</p></td>
@@ -659,7 +659,7 @@ declaró antes de modelar.</p>
 </tr>
 <tr class="row-odd"><td><p>14</p></td>
 <td><p>Residuos sin dependencia espacial</p></td>
-<td><p>Rúbrica 3</p></td>
+<td><p>Instrucciones 3</p></td>
 <td><p>Moran de residuos cercano a 0</p></td>
 <td><p>Moran = 0.70</p></td>
 <td><p>10</p></td>
@@ -679,7 +679,7 @@ a remuestrear bloques, que es lo que hace el libro.</p></li>
 el estrato (efectos grandes), no son redundantes entre sí y ninguna es un
 proxy del objetivo.</p></li>
 <li><p><strong>Modelo base (criterios 10–13).</strong> El modelo supera con significancia a la
-línea base trivial. La pregunta de control de la Figura 1 de la rúbrica
+línea base trivial. La pregunta de control de la Figura 1 de las instrucciones del proyecto
 (»¿accuracy ≥ 80–90 %?») da <strong>no</strong>: el problema no es trivial, no hay
 señales de fuga y el dataset es suficientemente desafiante para el curso.
 La curva de aprendizaje muestra que la cantidad de datos no es el límite.</p></li>
@@ -690,7 +690,7 @@ La curva de aprendizaje muestra que la cantidad de datos no es el límite.</p></
 filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
 y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
 asentamientos.</p></li>
-<li><p><strong>Residuos con dependencia espacial (criterio 14).</strong> Según la rúbrica, esto
+<li><p><strong>Residuos con dependencia espacial (criterio 14).</strong> Según las instrucciones del proyecto, esto
 indica información estructural sin capturar. Es una limitación del modelo
 lineal más que de la base: el modelo capta la tendencia norte-sur, pero no
 los barrios. Lo mismo explica que el F1 macro sea modesto (0.30 en CV

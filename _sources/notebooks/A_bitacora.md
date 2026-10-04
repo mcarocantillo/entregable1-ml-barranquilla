@@ -53,7 +53,7 @@ automáticas de cada capítulo.
   alcance como registros agregados (paso 2c del embudo). Precedentes: De Cock
   (2011) y valoración catastral masiva (boxplots + Moran local).
 - **Cambio metodológico (28-sep, noche):** antes se imputaba con la mediana de
-  TODO el dataset dentro de `limpieza.py`. El rubric exige que toda decisión que
+  TODO el dataset dentro de `limpieza.py`. Las instrucciones del proyecto exigen que toda decisión que
   aprende de los datos se calcule **solo con train**. Ahora `limpieza.py` solo
   convierte los valores imposibles en NaN (+ bandera) y la mediana se aprende
   dentro del `Pipeline` en cada fold. Mismo criterio del profesor Lihki (imputar con
@@ -186,9 +186,9 @@ conservan como registro del proceso. Las vigentes están en A.10.
   0.71. Lección metodológica: la CV espacial es sensible a la asignación de
   bloques a folds; diferencias de ≈0.01 entre modelos no se interpretan.
 
-- **Alcance del clustering:** el K-Means del cap. 7 es exploratorio (rubric
-  2.4, "si procede") y DBSCAN (cap. 8) describe el patrón de puntos
-  (rubric 2.7, obligatorio). Ninguno alimenta al modelo. El clustering de
+- **Alcance del clustering:** el K-Means del cap. 7 es exploratorio (instrucciones
+  del proyecto, 2.4, "si procede") y DBSCAN (cap. 8) describe el patrón de puntos
+  (instrucciones del proyecto, 2.7, obligatorio). Ninguno alimenta al modelo. El clustering de
   tipologías constructivas es objeto de otro trabajo (tesis).
 
 ## A.10 Revisión de rangos y ejecución final (30-sep-2026)

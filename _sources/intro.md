@@ -24,11 +24,11 @@ estimado (F1 0.60).
 
 ## Cómo está organizado este libro
 
-El orden de los capítulos sigue el **orden de trabajo** que exige el rubric
+El orden de los capítulos sigue el **orden de trabajo** que exigen las instrucciones del proyecto
 (reservar el conjunto de prueba antes de cualquier decisión basada en los
-datos), y cada capítulo indica qué sección del rubric cubre:
+datos), y cada capítulo indica qué sección de las instrucciones del proyecto cubre:
 
-| Capítulo | Contenido | Sección del rubric |
+| Capítulo | Contenido | Sección de las instrucciones |
 |---|---|---|
 | 1. Base de datos | problema, fuente, licencia, diccionario, estructura, tamaño, duplicados, valores imposibles, ética | 1 |
 | 2. Partición | reserva del conjunto de prueba por bloques espaciales | 2 (orden de trabajo), 3 |
@@ -41,7 +41,7 @@ datos), y cada capítulo indica qué sección del rubric cubre:
 | 9. Fuga de datos | disponibilidad, identificadores, AUC univariado, entidades repetidas | 2.5 |
 | Resumen ejecutivo del EDA | calidad, variables prometedoras, problemas y decisiones preliminares | 2 (notas 9.10.4.1.5) |
 | 10. Modelo base | Pipeline, líneas base, CV espacial, métricas con IC, residuos, curva de aprendizaje | 2.9, 3 |
-| 11. Conclusiones | hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según la rúbrica | Figura 1, nota crítica |
+| 11. Conclusiones | hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según las instrucciones del proyecto | Figura 1, nota crítica |
 | Apéndices | bitácora de decisiones, reproducibilidad, referencias | Entregables |
 
 Las secciones 2.6 (temporal) y 2.8 (espacio-temporal) **no aplican**: los datos
