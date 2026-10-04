@@ -125,3 +125,52 @@
   baños y el amontonamiento de años.
 - Ubicar los predios informales con otra fuente para reducir el sesgo de
   cobertura.
+
+## 11.4 Veredicto: ¿la base de datos sirve para el proyecto?
+
+Para cerrar, se revisa si la base cumple lo que necesita el proyecto
+(clasificar el estrato de una vivienda a partir del catastro). Cada criterio
+se contrasta con un score calculado en los capítulos anteriores. Los umbrales
+son los del rubric (mínimo de observaciones), convenciones estadísticas
+conocidas (η² ≥ 0.14 es un efecto grande según Cohen; kappa > 0.80 es un
+acuerdo casi perfecto según Landis y Koch) o los que se fijaron en el EDA
+(alerta de fuga de 0.95, faltantes < 30 %). Los demás (≥ 1 000 casos por
+clase, F1 macro ≥ 0.50) son valores de referencia propuestos para esta
+revisión.
+
+| # | Criterio | Umbral | Score obtenido | Cap. | ¿Cumple? |
+|---|---|---|---|---|---|
+| 1 | Tamaño de la muestra | ≥ 20 000 observaciones (rubric) | 332 718 viviendas | 1 | Sí |
+| 2 | Unidades independientes | ≥ 20 000 edificios distintos | 168 044 edificios | 1 | Sí |
+| 3 | Casos en las clases minoritarias | ≥ 1 000 por clase | mínimo 13 207 (estrato 6) | 1 | Sí |
+| 4 | Valores faltantes | < 30 % por variable | máximo 0.12 % (`total_habitaciones`) | 3 | Sí |
+| 5 | Cobertura espacial | sin sesgo de cobertura | 83.8 % con coordenadas; V de Cramér = 0.42 con el estrato | 3 | Con reservas |
+| 6 | Señal en las predictoras | al menos una con efecto grande (η² ≥ 0.14) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
+| 7 | Ausencia de fuga de datos | AUC univariada < 0.95; 0 edificios compartidos | AUC máxima 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
+| 8 | El modelo supera al azar | IC 95 % de la diferencia de F1 macro excluye 0 | Δ F1 = +0.375 frente a la clase mayoritaria, IC [0.11, 0.39], p = 0.002 | 10 | Sí |
+| 9 | Respeta el orden del estrato | kappa cuadrático > 0.80 | κ = 0.81; accuracy ±1 = 0.94; AUC = 0.89 | 10 | Sí |
+| 10 | La cantidad de filas no es el límite | curva de aprendizaje plana | F1 de 0.27 a 0.29 al multiplicar por 20 los datos | 10 | Sí |
+| 11 | Desempeño absoluto en zonas no vistas | F1 macro alto (≥ 0.50) | 0.30 ± 0.09 en CV espacial (0.45 en test) | 10 | No todavía |
+
+**Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
+reservas.** Cumple 9 de los 11 criterios. Es grande, tiene casos de sobra en
+todas las clases, casi no tiene faltantes, no presenta fuga de datos, y sus
+variables contienen información real sobre el estrato: un modelo lineal
+sencillo, evaluado en zonas que nunca vio, supera con significancia a la
+línea base y casi siempre se equivoca solo por un estrato (accuracy ±1 =
+0.94).
+
+Las dos reservas son:
+
+- **Cobertura (criterio 5).** La base describe la ciudad formal: el 16.2 %
+  de las filas sin coordenadas son casi todas predios informales de estratos
+  1 y 2. Las conclusiones no se deben extrapolar a esos asentamientos.
+- **Desempeño absoluto (criterio 11).** Un F1 macro de 0.30 en CV espacial es
+  modesto. Pero la curva de aprendizaje (criterio 10) muestra que el límite
+  no es la cantidad de datos, sino lo que el modelo puede extraer de ellos:
+  un modelo lineal sin interacciones y sin variables del entorno. Eso es
+  justamente lo que aborda el Entregable 2 (11.3), con la misma base.
+
+En resumen, la base no necesita más filas ni otra fuente para seguir con el
+proyecto; necesita mejores variables derivadas (vecindad física) y modelos
+más flexibles.
