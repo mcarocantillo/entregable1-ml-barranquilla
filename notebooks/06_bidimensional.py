@@ -441,7 +441,7 @@ familia.sort_values("p")
 #   0.59–0.63) pero sube mucho al terreno (0.40). Hay que leer la MI con
 #   cautela: coordenadas y terreno se repiten exactamente en todas las unidades
 #   de un edificio, y como el estrato casi no varía dentro del edificio
-#   (ICC = 0.991), el estimador de MI por vecinos premia variables que
+#   (ICC = 0.992), el estimador de MI por vecinos premia variables que
 #   "identifican el edificio", más que relaciones generalizables.
 # - **Categóricas.** `condicion_predio` (V = 0.33, moderada), `uso` (0.24) y
 #   `tipo_vivienda` (0.22) superan el umbral de 0.1; `destinacion_economica`

@@ -283,22 +283,28 @@ casos.index = [C.NOMBRES_CLASES[i] for i in casos.index]  # etiquetas legibles (
 casos
 
 # %% [markdown]
-# **Tamaño efectivo (descriptivo).** Las unidades de un mismo edificio
+# **Tamaño efectivo (descriptivo).** Las unidades de un mismo predio matriz
 # comparten estrato casi siempre, así que no son observaciones independientes.
-# Se estima la correlación intraclase (ICC(1), ANOVA de una vía con el edificio
+# Se estima la correlación intraclase (ICC(1), ANOVA de una vía con el predio matriz
 # como grupo, tratando el estrato como numérico) y el **efecto de diseño de
 # Kish**: $\text{deff} = 1 + (\tilde m - 1)\,\text{ICC}$, con
 # $\tilde m = \sum_j m_j^2 / N$ (tamaño medio de grupo ponderado, adecuado
-# cuando los edificios tienen tamaños muy desiguales) y
+# cuando los grupos tienen tamaños muy desiguales) y
 # $n_\text{ef} = n/\text{deff}$. Es una descripción del dataset completo: no
 # alimenta ninguna decisión de modelado.
+# 
+# **Qué es el grupo.** Se usa el **predio matriz**: los 22 primeros dígitos del número predial (terreno y condición de propiedad). Puede ser una casa, un edificio o un conjunto residencial completo: el mayor tiene 1 860 apartamentos en 93 torres. Hay una excepción: cuando la condición de propiedad es 5 (*mejoras en terreno ajeno*), el catastro registra en un mismo lote matriz muchas viviendas informales independientes, así que cada mejora cuenta como su propio grupo. Sin esta corrección, el «edificio» más grande sería un lote del suroccidente de la ciudad con 3 045 viviendas informales, y el tamaño efectivo quedaría subestimado (≈ 1 870 en vez de ≈ 2 300).
 
 # %%
 # ICC(1) y efecto de diseño de Kish: miden cuánto se parecen en estrato las unidades
-# de un mismo edificio y cuántas observaciones "independientes" equivalen a las filas.
+# de un mismo predio matriz y cuántas observaciones "independientes" equivalen a las filas.
 # Es solo descriptivo (dataset completo); no alimenta ninguna decisión aprendida.
-g = df.groupby("npn_edificio")[C.OBJETIVO]   # el edificio es el grupo del ANOVA
-m = g.size()                                 # m_j: unidades por edificio
+# Grupo = predio matriz (22 primeros dígitos del NPN). Las mejoras en terreno ajeno
+# (dígito 22 = "5") son viviendas informales independientes: cada una es su propio grupo.
+npn_txt = df["numero_predial_nacional"]
+grupo = npn_txt.str[:22].where(npn_txt.str[21] != "5", npn_txt)
+g = df.groupby(grupo)[C.OBJETIVO]            # el predio matriz es el grupo del ANOVA
+m = g.size()                                 # m_j: unidades por grupo
 k, N = len(m), m.sum()                       # k grupos, N observaciones
 media_total = df[C.OBJETIVO].mean()
 # Sumas de cuadrados entre grupos (SSB) y dentro de grupos (SSW) del ANOVA de una vía.
@@ -309,12 +315,12 @@ msb, msw = ssb / (k - 1), ssw / (N - k)      # cuadrados medios con sus grados d
 m0 = (N - (m ** 2).sum() / N) / (k - 1)
 icc = (msb - msw) / (msb + (m0 - 1) * msw)
 # Tamaño medio ponderado Σm²/N: da más peso a las torres grandes, que son las que
-# más inflan la varianza cuando los edificios tienen tamaños muy desiguales.
+# más inflan la varianza cuando los grupos tienen tamaños muy desiguales.
 m_pond = (m ** 2).sum() / N
 deff = 1 + (m_pond - 1) * icc                # efecto de diseño de Kish
-print(f"Unidades por edificio: media {m.mean():.2f}, mediana {m.median():.0f}, máximo {m.max()}, "
+print(f"Unidades por predio matriz: media {m.mean():.2f}, mediana {m.median():.0f}, máximo {m.max()}, "
       f"media ponderada Σm²/N {m_pond:.2f}")
-print(f"ICC(1) del estrato dentro de edificio: {icc:.3f}")
+print(f"ICC(1) del estrato dentro del predio matriz: {icc:.3f}")
 # Tamaño efectivo n_ef = N / deff: filas equivalentes si fueran independientes.
 print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0f} "
       f"(frente a {N:,} filas)")
@@ -324,7 +330,7 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 # :class: note
 # - **Tamaño bruto.** Tras el embudo quedan **332 718 unidades de vivienda**
 #   (87.0 % de las 382 597 filas descargadas), en **320 792 predios** y
-#   **168 044 edificios/lotes**; 278 824 filas (83.8 %) tienen coordenadas. La
+#   **168 044 predios matriz** (edificios, conjuntos o lotes); 278 824 filas (83.8 %) tienen coordenadas. La
 #   relación n/p es de ~9 500 filas por columna tras one-hot (35 columnas): el
 #   problema no es de pocos datos respecto al número de variables, y el mínimo
 #   de 20 000 observaciones de las instrucciones del proyecto se cumple con holgura.
@@ -332,7 +338,7 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 #   6: 4.0 %. Las dos clases altas suman menos del 10 %, pero aún tienen más de
 #   13 000 casos cada una (16 843 y 13 207).
 #
-# **Dependencia dentro del edificio.** El ICC(1) es **0.991**: dentro de un edificio el estrato prácticamente no varía. Esto quiere decir que cien apartamentos de una misma torre aportan casi la misma información sobre el estrato que uno solo. Es como fotocopiar una hoja 1 000 veces: hay 1 000 hojas, pero una sola página de información. Por eso las filas no son datos independientes, y la muestra vale menos de lo que sugiere su número de filas.
+# **Dependencia dentro del predio matriz.** El ICC(1) es **0.992**: dentro de un edificio o conjunto el estrato prácticamente no varía. Esto quiere decir que cien apartamentos de una misma torre aportan casi la misma información sobre el estrato que uno solo. Es como fotocopiar una hoja 1 000 veces: hay 1 000 hojas, pero una sola página de información. Por eso las filas no son datos independientes, y la muestra vale menos de lo que sugiere su número de filas.
 #
 # *Cómo se mide esa pérdida.* Se usa el efecto de diseño (deff), que dice cuántas veces es menos precisa nuestra muestra que una de observaciones independientes. Un deff de 1 significa que no hay repetición; un deff de 100 significa que haría falta 100 veces más datos para tener la misma precisión. Se aproxima así:
 #
@@ -340,7 +346,7 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 # \text{deff} \approx 1 + (m - 1) \times \text{ICC}
 # $$
 #
-# donde ICC mide qué tanto se parecen entre sí las viviendas de un mismo edificio (0 = nada, 1 = son idénticas) y $m$ es el tamaño medio del edificio **visto desde una vivienda**.
+# donde ICC mide qué tanto se parecen entre sí las viviendas de un mismo predio matriz (0 = nada, 1 = son idénticas) y $m$ es el tamaño medio del grupo **visto desde una vivienda**.
 #
 # *Por qué $m$ no es el promedio por edificio.* Hay dos formas de calcular el "tamaño promedio" de un edificio:
 #
@@ -349,9 +355,9 @@ print(f"Efecto de diseño: {deff:.2f}  ->  tamaño efectivo aprox. {N / deff:,.0
 #
 # Un ejemplo: en un barrio con 99 casas y una torre de 901 apartamentos hay 100 edificios y 1 000 viviendas. Por edificio el promedio es 10. Pero 901 de las 1 000 viviendas viven en la torre, así que, preguntando a las viviendas, el promedio es (99 × 1 + 901 × 901) ÷ 1 000 ≈ 812. Es un promedio ponderado por tamaño: los edificios grandes pesan más porque contienen más filas, y las filas son lo que usamos para modelar. Esa segunda forma es la que importa para medir la repetición.
 #
-# *En este catastro.* La mediana es 1 unidad por edificio, pero hay torres de hasta **3 045 unidades**. Visto desde una vivienda, el edificio típico tiene unas 179 unidades ($m = 179$). Con los valores sin redondear, el efecto de diseño es **177.8**, y el tamaño efectivo "tipo muestra independiente" es n ÷ deff = 332 718 ÷ 177.8 ≈ **1 870**.
+# *En este catastro.* La mediana es 1 unidad por grupo, pero hay conjuntos de hasta **1 860 unidades** (93 torres en un mismo predio matriz). Visto desde una vivienda, el grupo típico tiene unas 145 unidades ($m = 145$). Con los valores sin redondear, el efecto de diseño es **144.3**, y el tamaño efectivo "tipo muestra independiente" es n ÷ deff = 332 718 ÷ 144.3 ≈ **2 300**.
 #
-# **Cómo leer ese 1 870.** No es un conteo de viviendas, de predios, de edificios ni de combinaciones de características: es una medida de precisión. Significa que las estimaciones sobre el estrato tienen la precisión de unas 1 870 observaciones independientes, no de 332 718. Tampoco significa que sobren o falten filas: hay 168 044 edificios distintos, muy por encima del mínimo de 20 000. Lo que indica es que la precisión de cualquier estimación sobre el estrato está gobernada por los edificios y las zonas, no por las filas. Dos consecuencias prácticas: (1) la partición debe mantener juntas las unidades de un mismo edificio y de una misma zona (cap. 2), para que una torre nunca quede repartida entre entrenamiento y prueba; y (2) los intervalos de confianza deben remuestrear bloques, no filas (cap. 10). El cálculo usa el dataset completo solo como descripción; no alimenta ninguna decisión aprendida.
+# **Cómo leer ese 2 300.** No es un conteo de viviendas, de predios, de edificios ni de combinaciones de características: es una medida de precisión. Significa que las estimaciones sobre el estrato tienen la precisión de unas 2 300 observaciones independientes, no de 332 718. Tampoco significa que sobren o falten filas: hay 168 044 predios matriz distintos, muy por encima del mínimo de 20 000. Lo que indica es que la precisión de cualquier estimación sobre el estrato está gobernada por los edificios, los conjuntos y las zonas, no por las filas. Dos consecuencias prácticas: (1) la partición debe mantener juntas las unidades de un mismo edificio y de una misma zona (cap. 2), para que una torre nunca quede repartida entre entrenamiento y prueba; y (2) los intervalos de confianza deben remuestrear bloques, no filas (cap. 10). El cálculo usa el dataset completo solo como descripción; no alimenta ninguna decisión aprendida.
 # ```
 
 # %% [markdown]
@@ -656,7 +662,7 @@ for col in ["estrato", "condicion_predio", "tipo_planta", "destinacion_economica
 #   (−36 497 garajes/depósitos, −11 sin área, −1 044 unidades de menos de
 #   10 m², −234 registros agregados, −12 093 sin estrato residencial), muy por
 #   encima del mínimo de 20 000. La precisión, sin embargo, está gobernada
-#   por los edificios (ICC = 0.991; tamaño efectivo ≈ 1 870).
+#   por los edificios y conjuntos (ICC = 0.992; tamaño efectivo ≈ 2 300).
 # - No hay duplicados exactos; las unidades repetidas (6.8 % por NPN, 38.4 %
 #   casi-duplicados) son viviendas reales y se manejan agrupando por
 #   edificio/bloque al partir.

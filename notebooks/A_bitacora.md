@@ -240,7 +240,19 @@ conservan como registro del proceso. Las vigentes están en A.10.
   la ejecución final; `datos/dominios_arcgis.json` se reconstruyó con los
   alias y el dominio de `tipo_vivienda` de la descarga original (28-sep).
 
-## A.11 Pendientes
+## A.11 Corrección del grupo del ICC (9-oct-2026)
+
+- **Problema:** el ICC y el efecto de diseño agrupaban por los 22 primeros dígitos del NPN. Con condición de
+  propiedad 5 (*mejoras en terreno ajeno*) ese prefijo reúne viviendas informales independientes: el mayor
+  «edificio» (3 045 unidades, sector 11, manzana 0615, sin coordenadas) era un lote del suroccidente.
+- **Corrección:** cada mejora cuenta como su propio grupo; el resto sigue agrupado por predio matriz.
+- **Antes:** m̃ = 179.36; ICC = 0.991; deff = 177.76; n efectivo ≈ 1 872 (máximo 3 045).
+- **Después:** 182 524 grupos; m̃ = 145.42; ICC = 0.992; deff = 144.27; n efectivo ≈ 2 306 (máximo 1 860,
+  un conjunto de 93 torres). Solo con coordenadas: n efectivo ≈ 1 623. Las conclusiones no cambian.
+- Cifras verificadas reproduciendo la limpieza en Python puro (se obtuvieron de nuevo las cifras anteriores
+  con la definición vieja). La partición y el modelo no usan este agrupamiento.
+
+## A.12 Pendientes
 
 - (Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
   textos, conclusiones y resumen.

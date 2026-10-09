@@ -12,7 +12,7 @@ que se indique lo contrario.
 
 | Aspecto | Hallazgo | Cap. |
 |---|---|---|
-| Tamaño | 332 718 unidades de vivienda en 168 044 edificios (dataset completo); ~9 500 filas por columna tras one-hot | 1 |
+| Tamaño | 332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (dataset completo); ~9 500 filas por columna tras one-hot | 1 |
 | Valores faltantes | Mínimos: máximo 0.12 % (`total_habitaciones`). No vienen de celdas vacías, sino de las reglas de limpieza (códigos centinela e incoherencias). Mecanismo **MAR** en habitaciones, piso y antigüedad | 3 |
 | Valores imposibles | Años centinela (2500, 1512) y pisos codificados (97–99) pasan a faltante; unidades < 10 m² y registros agregados se excluyen | 1 |
 | Outliers univariados | Tukey marca 3–6 % en áreas y conteos, pero son viviendas grandes reales, no errores; la regla es inservible en plantas y altura (IQR = 0) | 3 |
@@ -42,7 +42,7 @@ el de tamaño (cap. 7).
   12 390 casos en train: no hace falta sobremuestreo, pero el accuracy no
   sirve como métrica (cap. 4).
 - **Dependencia entre filas.** El estrato casi no varía dentro de un edificio
-  (ICC = 0.991): el tamaño efectivo es ≈ 1 870, no 332 718 (cap. 1).
+  o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718 (cap. 1).
 - **Dependencia espacial.** Moran's I = 0.913 y alcance del correlograma de
   2.9 km: una validación aleatoria sería muy optimista (cap. 8).
 - **Asimetría fuerte.** Todas las variables físicas tienen |asimetría| > 1
@@ -68,7 +68,7 @@ capítulo 10 construye el `Pipeline` leyendo ese archivo.
 
 | Decisión | Hallazgo que la motiva | Cap. |
 |---|---|---|
-| Partición por **bloques espaciales de 2 km**, con **buffer de 1 km** | Moran's I = 0.913; alcance de 2.9 km; ICC = 0.991 | 2, 8 |
+| Partición por **bloques espaciales de 2 km**, con **buffer de 1 km** | Moran's I = 0.913; alcance de 2.9 km; ICC = 0.992 | 2, 8 |
 | Métrica principal **F1 macro**, más MAE ordinal, accuracy ±1 y kappa cuadrático | Desbalance 4.6 : 1; estrato ordinal | 4 |
 | Sin sobremuestreo; comparar `class_weight=None` frente a `"balanced"` | La clase minoritaria tiene 12 390 casos | 4 |
 | Imputación: mediana + indicador de faltante (numéricas); categoría `faltante` (categóricas) | Faltantes < 1 %, mecanismo MAR | 3 |
