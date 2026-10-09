@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -419,7 +419,7 @@ que se indique lo contrario.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Tamaño</p></td>
-<td><p>332 718 unidades de vivienda en 168 044 edificios (dataset completo); ~9 500 filas por columna tras one-hot</p></td>
+<td><p>332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (dataset completo); ~9 500 filas por columna tras one-hot</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p>Valores faltantes</p></td>
@@ -496,7 +496,7 @@ el de tamaño (cap. 7).</p>
 12 390 casos en train: no hace falta sobremuestreo, pero el accuracy no
 sirve como métrica (cap. 4).</p></li>
 <li><p><strong>Dependencia entre filas.</strong> El estrato casi no varía dentro de un edificio
-(ICC = 0.991): el tamaño efectivo es ≈ 1 870, no 332 718 (cap. 1).</p></li>
+o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718 (cap. 1).</p></li>
 <li><p><strong>Dependencia espacial.</strong> Moran’s I = 0.913 y alcance del correlograma de
 2.9 km: una validación aleatoria sería muy optimista (cap. 8).</p></li>
 <li><p><strong>Asimetría fuerte.</strong> Todas las variables físicas tienen |asimetría| &gt; 1
@@ -529,7 +529,7 @@ capítulo 10 construye el <code class="docutils literal notranslate"><span class
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Partición por <strong>bloques espaciales de 2 km</strong>, con <strong>buffer de 1 km</strong></p></td>
-<td><p>Moran’s I = 0.913; alcance de 2.9 km; ICC = 0.991</p></td>
+<td><p>Moran’s I = 0.913; alcance de 2.9 km; ICC = 0.992</p></td>
 <td><p>2, 8</p></td>
 </tr>
 <tr class="row-odd"><td><p>Métrica principal <strong>F1 macro</strong>, más MAE ordinal, accuracy ±1 y kappa cuadrático</p></td>

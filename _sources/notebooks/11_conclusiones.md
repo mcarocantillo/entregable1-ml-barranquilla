@@ -7,7 +7,7 @@
 1. **Base de datos.** El catastro abierto de Barranquilla permitió construir
    una base de **332 718 unidades de vivienda** con estrato residencial válido
    (87.0 % de las 382 597 filas descargadas), en 320 792 predios y 168 044
-   edificios. Durante la construcción se corrigió un error de uniones
+   predios matriz (edificios, conjuntos o lotes). Durante la construcción se corrigió un error de uniones
    muchos-a-muchos que duplicaba ~29 % de las filas. La limpieza distingue
    tres tipos de problema. (i) **Códigos centinela**: año de construcción
    2500 y 1512, y pisos 97–99; se tratan como faltantes. (ii) **Filas que no
@@ -20,9 +20,9 @@
    usa para **describir** outliers (cap. 3), no para limpiar: en variables de
    cola larga marca miles de viviendas reales.
 2. **Estructura de dependencia.** El estrato casi no varía dentro de un
-   edificio (ICC = 0.991), y hay torres de hasta 3 045 unidades: la
-   información sobre el estrato está gobernada por edificios y zonas, no por
-   filas (tamaño efectivo ≈ 1 870). Esto obliga a partir los datos por grupos
+   edificio o conjunto (ICC = 0.992), y hay conjuntos de hasta 1 860 unidades: la
+   información sobre el estrato está gobernada por edificios, conjuntos y zonas, no por
+   filas (tamaño efectivo ≈ 2 300). Esto obliga a partir los datos por grupos
    espaciales y a medir la incertidumbre remuestreando bloques.
 3. **Objetivo.** El estrato está moderadamente desbalanceado (4.6:1 en
    train), es ordinal y tiene una **autocorrelación espacial extremadamente
@@ -140,7 +140,7 @@ declaró antes de modelar.
 | 1 | Tamaño de la muestra | Instrucciones 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
 | 2 | Relación n/p (filas por cada columna del modelo; ver 1.6) | Instrucciones 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
 | 3 | Casos de la clase minoritaria | Instrucciones 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
-| 4 | Entidades independientes | Instrucciones 1 | reportar el tamaño efectivo | 168 044 edificios; ICC = 0.991; tamaño efectivo ≈ 1 870 | 1 | Sí, con partición por bloques |
+| 4 | Entidades independientes | Instrucciones 1 | reportar el tamaño efectivo | 168 044 predios matriz; ICC = 0.992; tamaño efectivo ≈ 2 300 | 1 | Sí, con partición por bloques |
 | 5 | Valores faltantes | Notas 9.10.4.1.2 | < 30 % por variable | máximo 0.12 %; mecanismo MAR | 3 | Sí |
 | 6 | Sesgo de muestreo y representatividad | Instrucciones 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato | 3, 8 | Con reservas |
 | 7 | Asociación predictoras–objetivo (tamaño de efecto) | Instrucciones 2.3 | al menos un efecto grande (η² > 0.14, umbral del cap. 6) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |

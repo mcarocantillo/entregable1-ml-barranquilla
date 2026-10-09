@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -395,7 +395,8 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-8-modelo-base">A.8 Modelo base</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre">A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026">A.10 Revisión de rangos y ejecución final (30-sep-2026)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-pendientes">A.11 Pendientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-correccion-del-grupo-del-icc-9-oct-2026">A.11 Corrección del grupo del ICC (9-oct-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-12-pendientes">A.12 Pendientes</a></li>
 </ul>
             </nav>
         </div>
@@ -669,8 +670,22 @@ la ejecución final; <code class="docutils literal notranslate"><span class="pre
 alias y el dominio de <code class="docutils literal notranslate"><span class="pre">tipo_vivienda</span></code> de la descarga original (28-sep).</p></li>
 </ul>
 </section>
-<section id="a-11-pendientes">
-<h2>A.11 Pendientes<a class="headerlink" href="#a-11-pendientes" title="Link to this heading">#</a></h2>
+<section id="a-11-correccion-del-grupo-del-icc-9-oct-2026">
+<h2>A.11 Corrección del grupo del ICC (9-oct-2026)<a class="headerlink" href="#a-11-correccion-del-grupo-del-icc-9-oct-2026" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Problema:</strong> el ICC y el efecto de diseño agrupaban por los 22 primeros dígitos del NPN. Con condición de
+propiedad 5 (<em>mejoras en terreno ajeno</em>) ese prefijo reúne viviendas informales independientes: el mayor
+«edificio» (3 045 unidades, sector 11, manzana 0615, sin coordenadas) era un lote del suroccidente.</p></li>
+<li><p><strong>Corrección:</strong> cada mejora cuenta como su propio grupo; el resto sigue agrupado por predio matriz.</p></li>
+<li><p><strong>Antes:</strong> m̃ = 179.36; ICC = 0.991; deff = 177.76; n efectivo ≈ 1 872 (máximo 3 045).</p></li>
+<li><p><strong>Después:</strong> 182 524 grupos; m̃ = 145.42; ICC = 0.992; deff = 144.27; n efectivo ≈ 2 306 (máximo 1 860,
+un conjunto de 93 torres). Solo con coordenadas: n efectivo ≈ 1 623. Las conclusiones no cambian.</p></li>
+<li><p>Cifras verificadas reproduciendo la limpieza en Python puro (se obtuvieron de nuevo las cifras anteriores
+con la definición vieja). La partición y el modelo no usan este agrupamiento.</p></li>
+</ul>
+</section>
+<section id="a-12-pendientes">
+<h2>A.12 Pendientes<a class="headerlink" href="#a-12-pendientes" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>(Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
 textos, conclusiones y resumen.</p></li>
@@ -759,7 +774,8 @@ del lote) y si 0 habitaciones es un valor válido.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-8-modelo-base">A.8 Modelo base</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-9-historial-de-ejecuciones-con-los-datos-reales-28-a-30-de-septiembre">A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-10-revision-de-rangos-y-ejecucion-final-30-sep-2026">A.10 Revisión de rangos y ejecución final (30-sep-2026)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-pendientes">A.11 Pendientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-11-correccion-del-grupo-del-icc-9-oct-2026">A.11 Corrección del grupo del ICC (9-oct-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-12-pendientes">A.12 Pendientes</a></li>
 </ul>
   </nav></div>
 
