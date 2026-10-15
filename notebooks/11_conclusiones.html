@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -504,6 +504,19 @@ desactualizadas. El año de construcción aparece amontonado en ciertos
 valores (1986 concentra el 12 % de train en el diagnóstico de rangos), y hay
 viviendas con 0 habitaciones o 0 baños que no se pudieron verificar contra
 el diccionario oficial; se conservaron.</p></li>
+<li><p><strong>Significado de <code class="docutils literal notranslate"><span class="pre">anio_construccion</span></code> (revisión posterior, octubre de 2026):</strong>
+el campo parece registrar el año de la última incorporación o actualización
+de la construcción en el catastro, no su fecha original. Solo 1.442 casas de
+toda la ciudad tienen años anteriores a 1975, lo que no es compatible con
+barrios antiguos como El Prado, Barrio Abajo o el Centro. Además, 15.376
+apartamentos de estratos 1 y 2, en 24 lotes de bloques de 5 pisos con
+tipología de vivienda de interés prioritario, registran años entre 1932 y
+1972, con un solo año por lote. Como el filtro de plausibilidad aceptaba
+años desde 1900, esas unidades entraron al modelo con 54 a 94 años de
+<code class="docutils literal notranslate"><span class="pre">antiguedad</span></code>. La variable debe leerse como «años desde el registro
+catastral» y no como edad física del edificio. Queda pendiente confirmar su
+definición con la Gerencia de Gestión Catastral. El detalle está en el
+<a class="reference external" href="https://mcarocantillo.github.io/tesis-datos-barranquilla/11_coherencia.html">sitio de datos de la tesis</a>.</p></li>
 <li><p><strong>Modelo lineal:</strong> no captura interacciones ni heterogeneidad espacial; la
 multinomial ignora el orden de las clases, y las probabilidades no están
 bien calibradas (ECE = 0.14).</p></li>

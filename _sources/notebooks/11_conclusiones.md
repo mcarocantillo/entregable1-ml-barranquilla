@@ -100,6 +100,19 @@
   valores (1986 concentra el 12 % de train en el diagnóstico de rangos), y hay
   viviendas con 0 habitaciones o 0 baños que no se pudieron verificar contra
   el diccionario oficial; se conservaron.
+- **Significado de `anio_construccion` (revisión posterior, octubre de 2026):**
+  el campo parece registrar el año de la última incorporación o actualización
+  de la construcción en el catastro, no su fecha original. Solo 1.442 casas de
+  toda la ciudad tienen años anteriores a 1975, lo que no es compatible con
+  barrios antiguos como El Prado, Barrio Abajo o el Centro. Además, 15.376
+  apartamentos de estratos 1 y 2, en 24 lotes de bloques de 5 pisos con
+  tipología de vivienda de interés prioritario, registran años entre 1932 y
+  1972, con un solo año por lote. Como el filtro de plausibilidad aceptaba
+  años desde 1900, esas unidades entraron al modelo con 54 a 94 años de
+  `antiguedad`. La variable debe leerse como «años desde el registro
+  catastral» y no como edad física del edificio. Queda pendiente confirmar su
+  definición con la Gerencia de Gestión Catastral. El detalle está en el
+  [sitio de datos de la tesis](https://mcarocantillo.github.io/tesis-datos-barranquilla/11_coherencia.html).
 - **Modelo lineal:** no captura interacciones ni heterogeneidad espacial; la
   multinomial ignora el orden de las clases, y las probabilidades no están
   bien calibradas (ECE = 0.14).
