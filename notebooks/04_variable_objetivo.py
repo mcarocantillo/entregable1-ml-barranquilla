@@ -15,8 +15,26 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Variable objetivo: `estrato_num` (1 a 6), categórica **ordinal**. Todo el
-# análisis usa **solo entrenamiento**.
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿cómo se reparte el estrato entre las
+# viviendas, y qué implica eso para medir el desempeño del modelo?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento**.
+#
+# **Conceptos nuevos:** razón de desbalance, entropía normalizada y métricas
+# ordinales (MAE ordinal, accuracy ±1, kappa cuadrático).
+#
+# **Sale de aquí:** la métrica principal (F1 macro), las métricas ordinales y
+# la decisión de no sobremuestrear.
+# ```
+#
+# Variable objetivo: `estrato_num` (1 a 6), categórica **ordinal**.
+#
+# *Nota sobre las cifras.* Las proporciones de este capítulo son de
+# **entrenamiento** y no coinciden con las del capítulo 1: el entrenamiento
+# excluye las viviendas sin coordenadas (sección 1.7, casi todas de estratos 1
+# y 2) y las zonas reservadas para prueba (capítulo 2).
 
 # %% tags=["hide-input"]
 # Configuración y carga de SOLO entrenamiento: el análisis del objetivo alimenta
@@ -48,6 +66,14 @@ train = P.cargar_particion(solo="train")   # filas con particion == "train"
 
 # %% [markdown]
 # ## 4.1 Frecuencia de cada clase y desbalance
+#
+# Se resumen con dos números:
+#
+# - **Razón de desbalance:** casos de la clase más frecuente ÷ casos de la
+#   menos frecuente. *Ejemplo:* 50 000 frente a 10 000 da 5 : 1.
+# - **Entropía normalizada:** mide qué tan pareja es la distribución, de 0
+#   (todas las viviendas en un solo estrato) a 1 (los seis estratos con el
+#   mismo número de viviendas, 16.7 % cada uno).
 
 # %%
 # Frecuencia de cada estrato en train y medidas de desbalance. Definen si hace falta
@@ -108,8 +134,16 @@ plt.show()
 #
 # Confundir un estrato 5 con un 6 no es tan grave como confundir un 1 con un
 # 6. Las métricas estándar de clasificación tratan ambos errores igual; por eso
-# se añaden métricas ordinales: **MAE en la escala de estratos**, **accuracy
-# ±1** y **kappa de Cohen con pesos cuadráticos**.
+# se añaden tres métricas ordinales:
+#
+# | Métrica | Qué mide | Ejemplo con 4 viviendas: reales (1, 2, 5, 6), predichas (1, 3, 5, 3) |
+# |---|---|---|
+# | **MAE ordinal** | cuántos estratos se equivoca el modelo en promedio | errores 0, 1, 0, 3 → MAE = 4 ÷ 4 = **1.0** |
+# | **Accuracy ±1** | % de viviendas con un error de a lo sumo un estrato | 3 de 4 → **75 %** (la de estrato 6 predicha como 3 falla por 3) |
+# | **Kappa cuadrático** | acuerdo entre real y predicho descontando el azar, castigando con el cuadrado de la distancia | 1 = acuerdo perfecto, 0 = no mejor que el azar |
+#
+# En el ejemplo, el accuracy usual sería 2 de 4 (50 %), y no distinguiría
+# entre fallar por 1 estrato y fallar por 3.
 
 # %% [markdown]
 # ## 4.3 Comportamiento en el espacio
@@ -121,7 +155,7 @@ plt.show()
 # Mapas del estrato en train. Izquierda: cada punto es una unidad (muestra de
 # 50 000 con semilla fija para dibujar rápido). Derecha: estrato promedio por
 # celda de 500 m, que agrega los puntos (menos ruido y sin exponer predios
-# individuales, consideración ética 1.8) y deja ver el gradiente sur-norte.
+# individuales, consideración ética 1.11) y deja ver el gradiente sur-norte.
 m = train.sample(min(50_000, len(train)), random_state=C.SEED)
 fig, axes = plt.subplots(1, 2, figsize=(16, 7.5))
 sc = axes[0].scatter(m["x_km"], m["y_km"], c=m[C.OBJETIVO], cmap="viridis", s=1.2, alpha=0.7, rasterized=True)

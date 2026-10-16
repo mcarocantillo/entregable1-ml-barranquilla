@@ -15,11 +15,36 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Para cada variable: tipo y cardinalidad, estadísticos (media, mediana,
-# desviación, percentiles), distribución, asimetría y curtosis, normalidad,
-# outliers, y para las categóricas frecuencias, categorías raras y su
-# tratamiento. Las lecturas de asimetría y curtosis siguen las tablas de las
-# notas de clase (9.1.1):
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿cómo es cada variable por separado, y hay que
+# transformarla o agruparla antes de modelar?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento**.
+#
+# **Conceptos nuevos:** cardinalidad, asimetría, curtosis, pruebas de
+# normalidad, transformación `log1p` y categorías raras.
+#
+# **Sale de aquí:** qué variables se transforman con `log1p` y qué
+# categorías se agrupan.
+# ```
+#
+# "Unidimensional" significa que cada variable se mira **sola**, sin
+# relacionarla todavía con el estrato ni con otras variables (eso es el
+# capítulo 6). Para cada variable: tipo y cardinalidad (número de valores
+# distintos), estadísticos (media, mediana, desviación, percentiles),
+# distribución, asimetría y curtosis, normalidad, outliers, y para las
+# categóricas frecuencias, categorías raras y su tratamiento.
+#
+# **Asimetría y curtosis, con un ejemplo.** La **asimetría** mide si la
+# distribución tiene una cola más larga hacia un lado. El área construida es
+# el caso típico de **asimetría a la derecha**: la mayoría de las viviendas
+# mide entre 50 y 100 m², pero unas pocas pasan de 500 m² y "estiran" la
+# cola. En ese caso la media queda por encima de la mediana, porque las casas
+# grandes la arrastran. La **curtosis** (de Fisher, que vale 0 en la
+# distribución normal) mide qué tan pesadas son las colas: una curtosis alta
+# indica que los valores extremos son mucho más frecuentes que en una
+# normal. Las lecturas siguen las tablas de las notas de clase (9.1.1):
 #
 # | \|asimetría\| | lectura | | \|curtosis\| (Fisher) | lectura |
 # |---|---|---|---|---|
@@ -153,6 +178,12 @@ E.pruebas_normalidad(train, nums, n=5000, seed=C.SEED)
 # %% [markdown]
 # ## 5.5 ¿Hace falta transformar?
 #
+# `log1p(x)` = log(1 + x). Comprime los valores grandes mucho más que los
+# pequeños, así que "acerca" la cola larga al resto. *Ejemplo:* 50 m², 100 m²
+# y 1 000 m² pasan a 3.9, 4.6 y 6.9: la casa de 1 000 m², que estaba 10 veces
+# más lejos que la de 100, queda a solo 2.3 unidades. Se usa log(1 + x) y no
+# log(x) porque está definido en cero (hay viviendas con 0 baños).
+#
 # Regla usada: se aplica `log1p` a las variables **no negativas** con
 # |asimetría| > 1 **siempre que la transformación la reduzca**.
 
@@ -194,10 +225,11 @@ C.guardar_decision("num_lineal", num_lineal, "Variables sin asimetría fuerte o 
 #   reales **prácticamente no hay ceros** (0.0 % de train en todas las
 #   condiciones de predio): las unidades PH también tienen área de terreno
 #   positiva. Lo más probable es que a cada unidad PH se le
-#   asigne su cuota del lote común (según el coeficiente de copropiedad), lo
-#   que encaja con la correlación de Spearman fuertemente negativa entre
-#   terreno y piso de ubicación (−0.695, cap. 6). Consecuencia práctica: no hace falta un indicador de "terreno
-#   = 0" ni tratar el cero aparte en la transformación log1p.
+#   asigne su cuota del lote común (según el coeficiente de copropiedad). El
+#   capítulo 6 lo confirma: el terreno disminuye con el piso de ubicación
+#   (correlación de Spearman de −0.695). Consecuencia práctica: no hace falta
+#   un indicador de "terreno = 0" ni tratar el cero aparte en la
+#   transformación log1p.
 # - **Unidades de `altura`:** si la razón altura / número de plantas ronda 3,
 #   la altura está en metros (≈ 3 m por piso).
 
@@ -292,10 +324,12 @@ plt.show()
 #   **99.99 %** de train (29 filas en otras 7 categorías) y `tipo_planta` es
 #   **constante** ("Piso" en el 100 %; las otras 2 categorías del crudo
 #   desaparecen con las exclusiones del embudo del cap. 1, que saca garajes y
-#   depósitos). Ninguna de las dos puede discriminar el estrato: en el cap. 6
-#   `destinacion_economica` tiene V de Cramér = 0 (p = 0.47) y `tipo_planta`,
-#   por ser constante, ni siquiera entra en la prueba. Ambas **se excluyen**
-#   del modelo (cap. 9).
+#   depósitos). Una variable que casi no cambia no puede distinguir un
+#   estrato de otro: si el 99.99 % de las viviendas dice "Habitacional", esa
+#   columna no informa nada. El capítulo 6 lo confirma
+#   (`destinacion_economica` tiene V de Cramér = 0, y `tipo_planta`, por ser
+#   constante, ni siquiera entra en la prueba), y ambas se excluyen en la
+#   lista final de variables (capítulo 9.4).
 # - **Decisión:** agrupar las categorías con < 1 % (línea roja) en una
 #   categoría `infrequent` con `OneHotEncoder(min_frequency=0.01)`, que calcula
 #   las frecuencias **solo en train**.
@@ -334,8 +368,8 @@ C.guardar_decision("onehot_min_frecuencia", 0.01,
 #   −10.0 → −16.9).
 # - `altura` es **casi constante**: vale 3 (metros por planta) en el 99.7 %
 #   de las filas (su IQR es 0, así que sus 683 outliers de Tukey son
-#   exactamente los valores distintos de 3). Aportará muy poco (cap. 6:
-#   η² = 0.005).
+#   exactamente los valores distintos de 3), así que se espera que aporte muy
+#   poco; el capítulo 6 lo confirma (η² = 0.005).
 # - Las pruebas de normalidad rechazan en todas (esperable con n grande); no es
 #   un problema para la regresión logística, que no supone normalidad de las
 #   predictoras. La transformación busca reducir la influencia de las colas,

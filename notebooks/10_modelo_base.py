@@ -15,6 +15,32 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿qué tan bien predice el estrato una regresión
+# logística construida con las decisiones del análisis exploratorio, y supera
+# a las reglas triviales?
+#
+# **Datos:** entrenamiento tras el buffer de 1 km (**138 239 viviendas**)
+# para ajustar el modelo final, y el conjunto de **prueba (59 954)**, que se
+# abre aquí por primera y única vez.
+#
+# **Recorrido:** se preparan los datos y el buffer (10.1); se eligen los
+# hiperparámetros con validación cruzada espacial y se compara con las líneas
+# base (10.2); se revisa si más datos ayudarían (10.3); se evalúa una sola
+# vez en prueba, con intervalos de confianza (10.4); se buscan patrones
+# espaciales en los errores (10.5) y se interpretan los coeficientes (10.6).
+#
+# **Conceptos que se usan** (ver la Guía de lectura): validación cruzada,
+# línea base, Pipeline, regularización, F1 macro, bootstrap por bloques y
+# calibración.
+# ```
+#
+# Se comparan **dos modelos**: **A**, solo con variables físicas de la
+# vivienda, y **B**, con variables físicas **y** de ubicación (`x_km`,
+# `y_km`, `dist_centro_km`). La comparación responde cuánto aporta la
+# ubicación.
+#
 # | Requisito de las instrucciones | Cómo se cumple aquí |
 # |---|---|
 # | Regresión logística | `LogisticRegression` multinomial con regularización L2 |
@@ -860,6 +886,16 @@ plt.show()
 # muestra $\beta_{6} - \beta_{1}$: el cambio en el log-odds de ser estrato 6
 # frente a estrato 1 por cada desviación estándar (o por pertenecer a la
 # categoría, en las one-hot).
+#
+# *Cómo leer un coeficiente, con un ejemplo.* Los **odds** de ser estrato 6
+# frente a estrato 1 son el cociente de sus probabilidades: si una vivienda
+# tiene 10 % de probabilidad de ser estrato 6 y 40 % de ser estrato 1, sus
+# odds son 0.10 ÷ 0.40 = 0.25. El coeficiente trabaja en logaritmo de esos
+# odds (log-odds). Un $\beta_6 - \beta_1 = 2$ significa que, al subir la
+# variable una desviación estándar (dejando las demás fijas), los odds se
+# multiplican por $e^2 \approx 7.4$: es la **razón de odds (OR)**. En el
+# ejemplo, pasarían de 0.25 a 1.85. Un coeficiente negativo indica que la
+# variable empuja hacia el estrato 1.
 #
 # Cautelas de lectura: (i) en las variables con log1p, "una DE" es una DE del
 # valor winsorizado y transformado; (ii) `x_km`, `y_km` y `dist_centro_km`

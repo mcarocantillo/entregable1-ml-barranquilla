@@ -7,7 +7,11 @@
 1. **Base de datos.** El catastro abierto de Barranquilla permitió construir
    una base de **332 718 unidades de vivienda** con estrato residencial válido
    (87.0 % de las 382 597 filas descargadas), en 320 792 predios y 168 044
-   predios matriz (edificios, conjuntos o lotes). Durante la construcción se corrigió un error de uniones
+   predios matriz (edificios, conjuntos o lotes). De ellas, **278 824 (83.8 %)
+   tienen coordenadas** y son el universo con el que se parte y se modela;
+   las 53 894 restantes son casi todas mejoras en terreno ajeno de estratos 1
+   y 2, y por eso el capítulo 1 reporta las cifras clave en los dos universos
+   (sección 1.7). Durante la construcción se corrigió un error de uniones
    muchos-a-muchos que duplicaba ~29 % de las filas. La limpieza distingue
    tres tipos de problema. (i) **Códigos centinela**: año de construcción
    2500 y 1512, y pisos 97–99; se tratan como faltantes. (ii) **Filas que no
@@ -22,8 +26,9 @@
 2. **Estructura de dependencia.** El estrato casi no varía dentro de un
    edificio o conjunto (ICC = 0.992), y hay conjuntos de hasta 1 860 unidades: la
    información sobre el estrato está gobernada por edificios, conjuntos y zonas, no por
-   filas (tamaño efectivo ≈ 2 300). Esto obliga a partir los datos por grupos
-   espaciales y a medir la incertidumbre remuestreando bloques.
+   filas (tamaño efectivo ≈ 2 300 con todas las filas y ≈ 1 620 con las que
+   tienen coordenadas). Esto obliga a partir los datos por grupos espaciales y
+   a medir la incertidumbre remuestreando bloques.
 3. **Objetivo.** El estrato está moderadamente desbalanceado (4.6:1 en
    train), es ordinal y tiene una **autocorrelación espacial extremadamente
    fuerte** (Moran's I = 0.913 a nivel de edificio; casi la mitad de los
@@ -80,9 +85,10 @@
 
 ## 11.2 Limitaciones
 
-- **Cobertura:** el 16.2 % de las filas (predios informales, 96.5 % en estratos
-  1–2) no tiene coordenadas y queda fuera del modelo; las conclusiones
-  aplican a la ciudad formal.
+- **Cobertura:** el 16.2 % de las filas (casi todas mejoras en terreno ajeno,
+  96.5 % en estratos 1–2) no tiene coordenadas y queda fuera del modelo; las
+  conclusiones aplican a la ciudad formal. Quitar esas filas baja el estrato 1
+  de 32.8 % a 26.3 % (sección 1.7.2).
 - **Pocos bloques de test:** el test quedó con 7 bloques, con poco estrato 6
   (1.3 % frente a 5.7 % en train). Los intervalos son muy anchos y la cifra de
   test es una realización favorable; la estimación más representativa es la
@@ -117,7 +123,7 @@
   multinomial ignora el orden de las clases, y las probabilidades no están
   bien calibradas (ECE = 0.14).
 - **Riesgos éticos:** reidentificación por NPN + coordenadas y uso
-  discriminatorio del estrato (capítulo 1.8).
+  discriminatorio del estrato (sección 1.11).
 
 ## 11.3 Próximos pasos (Entregable 2)
 
@@ -136,8 +142,11 @@
   evaluación (notas de clase 9.1.11).
 - Verificar con el diccionario del catastro los ceros de habitaciones y
   baños y el amontonamiento de años.
-- Ubicar los predios informales con otra fuente para reducir el sesgo de
-  cobertura.
+- Ubicar las viviendas sin coordenadas con el centroide de su manzana
+  (primeros 17 dígitos del NPN): el 92.7 % es recuperable y el universo de
+  modelado pasaría del 83.8 % al 98.8 % de las viviendas (sección 1.7.3).
+  Habría que repetir la partición y el análisis espacial, cuidando que todas
+  las viviendas de una manzana quedan en un mismo punto.
 
 ## 11.4 Veredicto: ¿la base de datos sirve para el proyecto?
 
@@ -150,12 +159,12 @@ declaró antes de modelar.
 
 | # | Criterio | Fuente | Umbral | Score obtenido | Cap. | ¿Cumple? |
 |---|---|---|---|---|---|---|
-| 1 | Tamaño de la muestra | Instrucciones 1 | ≥ 20 000 observaciones | 332 718 viviendas | 1 | Sí |
-| 2 | Relación n/p (filas por cada columna del modelo; ver 1.6) | Instrucciones 1 | reportar; n ≫ p | ~9 500 filas por columna | 1 | Sí |
+| 1 | Tamaño de la muestra | Instrucciones 1 | ≥ 20 000 observaciones | 332 718 viviendas (278 824 con coordenadas) | 1 | Sí |
+| 2 | Relación n/p (filas por cada columna del modelo; ver 1.8) | Instrucciones 1 | reportar; n ≫ p | ~9 500 filas por columna (~8 000 con coordenadas) | 1 | Sí |
 | 3 | Casos de la clase minoritaria | Instrucciones 1 y 2.1 | suficientes sin sobremuestreo | 12 390 (estrato 6, train); desbalance 4.6 : 1 | 4 | Sí |
-| 4 | Entidades independientes | Instrucciones 1 | reportar el tamaño efectivo | 168 044 predios matriz; ICC = 0.992; tamaño efectivo ≈ 2 300 | 1 | Sí, con partición por bloques |
+| 4 | Entidades independientes | Instrucciones 1 | reportar el tamaño efectivo | 168 044 predios matriz (132 276 con coordenadas); ICC = 0.992; tamaño efectivo ≈ 2 300 (≈ 1 620 con coordenadas) | 1 | Sí, con partición por bloques |
 | 5 | Valores faltantes | Notas 9.10.4.1.2 | < 30 % por variable | máximo 0.12 %; mecanismo MAR | 3 | Sí |
-| 6 | Sesgo de muestreo y representatividad | Instrucciones 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato | 3, 8 | Con reservas |
+| 6 | Sesgo de muestreo y representatividad | Instrucciones 1 | sin sesgo de cobertura | 16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato; 92.7 % recuperable por manzana | 1, 3, 8 | Con reservas |
 | 7 | Asociación predictoras–objetivo (tamaño de efecto) | Instrucciones 2.3 | al menos un efecto grande (η² > 0.14, umbral del cap. 6) | η² = 0.50 (`y_km`), 0.31 (baños), 0.21 (piso) | 6 | Sí |
 | 8 | Multicolinealidad | Instrucciones 2.3 | VIF ≤ 10 (regla del cap. 6) | VIF < 3 en las físicas; 5.4 con las espaciales | 6 | Sí |
 | 9 | Fuga de datos | Instrucciones 2.5 | AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas | AUC máximo 0.76; 0 edificios, predios o coordenadas compartidos | 9 | Sí |
@@ -186,7 +195,8 @@ Las dos reservas son:
 - **Representatividad (criterio 6).** La base describe la ciudad formal: las
   filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
   y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
-  asentamientos.
+  asentamientos. La reserva tiene un remedio concreto: ubicarlas con el
+  centroide de su manzana (11.3).
 - **Residuos con dependencia espacial (criterio 14).** Según las instrucciones del proyecto, esto
   indica información estructural sin capturar. Es una limitación del modelo
   lineal más que de la base: el modelo capta la tendencia norte-sur, pero no

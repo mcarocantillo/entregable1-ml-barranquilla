@@ -12,12 +12,12 @@ que se indique lo contrario.
 
 | Aspecto | Hallazgo | Cap. |
 |---|---|---|
-| Tamaño | 332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (dataset completo); ~9 500 filas por columna tras one-hot | 1 |
+| Tamaño | 332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (todas las filas limpias); 278 824 con coordenadas, que son el universo de modelado; ~8 000–9 500 filas por columna tras one-hot | 1 |
 | Valores faltantes | Mínimos: máximo 0.12 % (`total_habitaciones`). No vienen de celdas vacías, sino de las reglas de limpieza (códigos centinela e incoherencias). Mecanismo **MAR** en habitaciones, piso y antigüedad | 3 |
 | Valores imposibles | Años centinela (2500, 1512) y pisos codificados (97–99) pasan a faltante; unidades < 10 m² y registros agregados se excluyen | 1 |
 | Outliers univariados | Tukey marca 3–6 % en áreas y conteos, pero son viviendas grandes reales, no errores; la regla es inservible en plantas y altura (IQR = 0) | 3 |
 | Outliers multivariados | 0.57 % marcados por Mahalanobis robusta e Isolation Forest a la vez; son combinaciones raras (0 habitaciones, 0 baños) y están sobrerrepresentados en estratos 5–6 | 7 |
-| Cobertura | El 16.2 % de las filas no tiene coordenadas; el 99.5 % de ellas son predios informales y el 96.5 % son estratos 1–2 (V de Cramér = 0.42) | 3, 8 |
+| Cobertura | El 16.2 % de las filas no tiene coordenadas; el 99.5 % de ellas son predios informales y el 96.5 % son estratos 1–2 (V de Cramér = 0.42). Quitarlas baja el estrato 1 de 32.8 % a 26.3 % | 1, 3, 8 |
 
 ## Variables más prometedoras
 
@@ -42,7 +42,8 @@ el de tamaño (cap. 7).
   12 390 casos en train: no hace falta sobremuestreo, pero el accuracy no
   sirve como métrica (cap. 4).
 - **Dependencia entre filas.** El estrato casi no varía dentro de un edificio
-  o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718 (cap. 1).
+  o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718
+  (≈ 1 620 en el universo con coordenadas; sección 1.9).
 - **Dependencia espacial.** Moran's I = 0.913 y alcance del correlograma de
   2.9 km: una validación aleatoria sería muy optimista (cap. 8).
 - **Asimetría fuerte.** Todas las variables físicas tienen |asimetría| > 1

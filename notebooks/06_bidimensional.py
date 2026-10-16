@@ -15,8 +15,25 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Estructura (misma lógica que las notas de clase 9.10.4.1.3, generalizada de
-# un objetivo binario a 6 clases ordinales):
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿qué variables se relacionan con el estrato, con
+# qué fuerza, y cuáles dicen lo mismo entre sí?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento**.
+#
+# **Conceptos nuevos:** correlación de Pearson y de Spearman, prueba de
+# Kruskal-Wallis y su tamaño de efecto η², información mutua, VIF y
+# corrección de Holm. Cada uno se explica con un ejemplo en su sección.
+#
+# **Sale de aquí:** la selección preliminar de variables y el chequeo de
+# multicolinealidad.
+# ```
+#
+# "Bidimensional" significa que las variables se miran **de a pares**: cada
+# predictora frente al estrato (¿sirve para predecir?) y las predictoras entre
+# sí (¿dicen lo mismo?). La estructura sigue la lógica de las notas de clase
+# 9.10.4.1.3, generalizada de un objetivo binario a 6 clases ordinales:
 #
 # | Par de variables | Gráfico | Prueba / medida | Tamaño de efecto |
 # |---|---|---|---|
@@ -77,6 +94,16 @@ num_log = dec.get("num_log", {}).get("valor", [])
 
 # %% [markdown]
 # ## 6.1 Numéricas vs. numéricas
+#
+# **Pearson frente a Spearman.** La correlación de **Pearson** mide qué tan
+# bien una **recta** describe la relación entre dos variables. La de
+# **Spearman** hace lo mismo, pero con las **posiciones** (rangos) de los
+# valores en lugar de los valores, así que capta cualquier relación
+# **monótona** (que siempre sube o siempre baja), aunque no sea recta, y es
+# poco sensible a valores extremos. *Ejemplo:* si el área se duplicara con
+# cada habitación adicional, la relación sería curva; Spearman daría 1
+# (siempre sube) y Pearson algo menos. Cuando los dos coeficientes difieren
+# mucho (más de 0.2), la relación no es lineal o está dominada por outliers.
 
 # %% tags=["hide-input"]
 # Figura: hexbin de cuatro pares numéricos con sentido físico (área frente a
@@ -145,6 +172,15 @@ dif.head(12)  # los 12 pares con mayor discrepancia entre ambos coeficientes
 
 # %% [markdown]
 # ## 6.2 Numéricas vs. objetivo
+#
+# **Kruskal-Wallis y η²_H.** La pregunta es: ¿la variable toma valores
+# distintos según el estrato? La prueba de **Kruskal-Wallis** compara las seis
+# distribuciones (una por estrato) usando rangos, sin suponer normalidad (las
+# variables son muy asimétricas, capítulo 5). Su tamaño de efecto **η²_H**
+# dice qué fracción de la variación de la variable se explica por el estrato.
+# *Ejemplo:* si los baños fueran 1 en todos los estratos 1–3 y 3 en todos los
+# estratos 4–6, el estrato explicaría casi toda la variación (η² cercano a 1);
+# si cada estrato tuviera la misma mezcla de baños, η² sería 0.
 
 # %% tags=["hide-input"]
 # Figura: violines de cada numérica por estrato (escala log1p si aplica). Se ve
@@ -198,6 +234,14 @@ kw
 
 # %% [markdown]
 # ## 6.3 Categóricas vs. objetivo
+#
+# Se usa la prueba χ² con la **V de Cramér** como tamaño de efecto (0 =
+# independencia, 1 = asociación perfecta; se explicó en el capítulo 3.3).
+# *Ejemplo:* si todas las viviendas `PH_Unidad_Predial` fueran de estrato 5 o
+# 6 y todas las `Informal` de estrato 1, la V sería cercana a 1; si cada
+# régimen tuviera la misma mezcla de estratos, sería 0. En las barras
+# apiladas, una variable sin relación con el estrato mostraría barras todas
+# iguales.
 
 # %% tags=["hide-input"]
 # Figura: barras apiladas al 100 % con la composición de estratos dentro de
@@ -292,8 +336,13 @@ cat_num.pivot(index="numérica", columns="categórica", values="eta2_H").style.b
 # %% [markdown]
 # ## 6.6 Predictoras vs. objetivo: información mutua
 #
-# La información mutua (MI) capta relaciones **no lineales y no monótonas** que
-# Spearman o η² pueden subestimar. Se reporta también MI / H(estrato): la
+# La información mutua (MI) responde: *¿cuánto se reduce la incertidumbre
+# sobre el estrato si conozco esta variable?* Capta relaciones **no lineales y
+# no monótonas** que Spearman o η² pueden subestimar. *Ejemplo:* si el
+# estrato fuera alto en el centro y bajo tanto al oriente como al occidente
+# (forma de U), la correlación con la coordenada este-oeste sería cercana a
+# 0, pero la MI sería alta, porque conocer la coordenada sí ayuda a adivinar
+# el estrato. Se reporta también MI / H(estrato): la
 # fracción de la incertidumbre del estrato que reduce conocer la variable. Por
 # costo computacional (estimador por k vecinos) se calcula sobre una muestra
 # estratificada de train.
@@ -344,7 +393,13 @@ rank
 # %% [markdown]
 # ## 6.8 Multicolinealidad (VIF)
 #
-# VIF_j = 1 / (1 − R²_j), con R²_j de regresar la variable j sobre las demás.
+# Hay **multicolinealidad** cuando una predictora se puede reconstruir casi
+# perfectamente con las demás; en ese caso los coeficientes del modelo se
+# vuelven inestables y difíciles de interpretar. El **VIF** (factor de
+# inflación de la varianza) lo mide: se intenta predecir cada variable con
+# todas las demás y se calcula VIF_j = 1 / (1 − R²_j), con R²_j el ajuste de
+# esa regresión. *Ejemplo:* si las demás variables explican el 90 % de la
+# variación del área construida (R² = 0.9), su VIF es 1 / 0.1 = 10.
 # Se calcula con las numéricas en la escala en que entrarán al modelo (log1p
 # para las asimétricas) e imputadas con la mediana de train. Umbrales usuales:
 # < 5 aceptable, 5–10 vigilar, > 10 multicolinealidad alta.
@@ -397,6 +452,14 @@ C.guardar_decision("excluir_multicolinealidad", eliminadas,
 
 # %% [markdown]
 # ## 6.9 Todas las pruebas con corrección por comparaciones múltiples
+#
+# Cada prueba tiene un 5 % de probabilidad de dar un falso positivo. Si se
+# hacen 20 pruebas, es casi seguro que alguna salga "significativa" por puro
+# azar. Las correcciones ajustan los p-valores para controlar ese riesgo:
+# **Holm** controla la probabilidad de cometer *al menos un* falso positivo
+# en toda la familia de pruebas, y **Benjamini-Hochberg** controla la
+# *proporción* de falsos positivos entre las pruebas declaradas
+# significativas (es menos estricta).
 
 # %%
 # Corrección global: se reúnen en una sola familia todas las pruebas contra el
@@ -441,7 +504,7 @@ familia.sort_values("p")
 #   0.59–0.63) pero sube mucho al terreno (0.40). Hay que leer la MI con
 #   cautela: coordenadas y terreno se repiten exactamente en todas las unidades
 #   de un edificio, y como el estrato casi no varía dentro del edificio
-#   (ICC = 0.992), el estimador de MI por vecinos premia variables que
+#   (ICC = 0.992, sección 1.9), el estimador de MI por vecinos premia variables que
 #   "identifican el edificio", más que relaciones generalizables.
 # - **Categóricas.** `condicion_predio` (V = 0.33, moderada), `uso` (0.24) y
 #   `tipo_vivienda` (0.22) superan el umbral de 0.1; `destinacion_economica`
@@ -457,7 +520,7 @@ familia.sort_values("p")
 #   con n ≈ 220 000 casi todo es "significativo", por eso las decisiones se
 #   toman con los **tamaños de efecto**, no con los p-valores. Además, la
 #   dependencia entre unidades de un mismo edificio hace que estos p-valores
-#   sean optimistas (el n efectivo es mucho menor, cap. 1).
+#   sean optimistas (el tamaño efectivo es mucho menor, sección 1.9).
 # - **Selección preliminar:** las 8 numéricas (ninguna eliminada por VIF), las
 #   3 categóricas con V ≥ 0.1 y las 3 espaciales (justificadas en el cap. 8).
 #   `altura` se conserva por ahora, aunque aporta muy poco. La lista final se

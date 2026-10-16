@@ -15,13 +15,30 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Obligatorio porque el dataset tiene latitud/longitud. Cubre: validación de
-# coordenadas, mapas, patrón de puntos y cobertura, autocorrelación espacial
-# (Moran global, LISA, Getis-Ord Gi*, correlograma/semivariograma),
-# heterogeneidad espacial, distancias, efecto de escala (MAUP), ingeniería de
-# características espaciales y consecuencias para el modelado.
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿cómo se distribuye el estrato en el espacio, y
+# qué obliga eso a hacer en la validación y en el modelo?
 #
-# Todo con **train**. Implementación propia con numpy/scipy/scikit-learn en
+# **Datos:** las **218 870 viviendas de entrenamiento**, salvo en la
+# sección 8.3, que usa solo las **ubicaciones** de todo el universo de
+# modelado (se explica allí por qué).
+#
+# **Conceptos nuevos:** índice de Clark-Evans, función de Ripley, índice de
+# Moran (global y local, LISA), Getis-Ord Gi*, correlograma, heterogeneidad
+# espacial y MAUP.
+#
+# **Sale de aquí:** el tamaño del **buffer** (1 km) que separa
+# entrenamiento y prueba, y las variables espaciales del modelo.
+# ```
+#
+# Obligatorio porque el dataset tiene latitud/longitud. El recorrido va de lo
+# más simple a lo más elaborado: primero se verifica que las coordenadas
+# estén bien (8.1) y se mira el mapa (8.2); luego se describe dónde hay
+# viviendas (8.3) y cuánto se parecen los vecinos en estrato (8.4); después
+# se revisa si la relación entre variables y estrato cambia por zonas (8.5) y
+# si los resultados dependen de la escala (8.6). Se cierra con las variables
+# espaciales del modelo (8.7) y las consecuencias para el modelado (8.8). Implementación propia con numpy/scipy/scikit-learn en
 # `src/espacial.py` (sin geopandas/pysal, para no depender de librerías
 # geoespaciales pesadas cuya instalación varía según la versión de Python);
 # las fórmulas son las estándar (Moran 1950; Anselin 1995; Getis & Ord 1992;
@@ -253,8 +270,13 @@ plt.show()
 # Clark-Evans, la función de Ripley y el mapa de cobertura. Nada de esta
 # sección alimenta decisiones del modelo.
 #
-# **Índice del vecino más cercano (Clark-Evans):** R < 1 agrupado, R ≈ 1
-# aleatorio, R > 1 regular.
+# **Índice del vecino más cercano (Clark-Evans):** compara la distancia
+# promedio de cada punto a su vecino más cercano con la que se esperaría si
+# los puntos estuvieran repartidos completamente al azar con la misma
+# densidad. *Ejemplo:* si en promedio el vecino más cercano está a 10 m, pero
+# al azar estaría a 20 m, R = 10 ÷ 20 = 0.5: los puntos están más juntos de
+# lo que el azar produciría. R < 1 agrupado, R ≈ 1 aleatorio, R > 1 regular
+# (como los árboles de una plantación).
 
 # %%
 # Índice de Clark-Evans: compara la distancia media al vecino más cercano observada
@@ -442,7 +464,19 @@ plt.show()
 # %% [markdown]
 # ## 8.4 Autocorrelación espacial
 #
-# **Matriz de pesos.** Se usan los **k = 8 vecinos más cercanos**,
+# **El índice de Moran, con un ejemplo.** El índice de Moran (I) mide si los
+# valores de un lugar se parecen a los de sus vecinos. Para cada edificio se
+# compara su estrato (por encima o por debajo de la media de la ciudad) con
+# el estrato promedio de sus vecinos. Si los edificios de estrato alto suelen
+# tener vecinos de estrato alto y los de estrato bajo, vecinos de estrato
+# bajo, I es positivo y cercano a 1. Si los vecinos fueran como sacados al
+# azar, I sería cercano a 0. Un I negativo indicaría un patrón de tablero de
+# ajedrez (alto rodeado de bajo). La significancia se evalúa con
+# **permutaciones**: se reparten los estratos al azar entre los edificios 999
+# veces y se ve si el I observado es mayor que todos los del azar.
+#
+# **Matriz de pesos.** Para calcular Moran hay que definir quién es "vecino"
+# de quién. Se usan los **k = 8 vecinos más cercanos**,
 # fila-estandarizada. Justificación: la densidad de predios es muy desigual
 # (centro denso, periferia dispersa); con una banda de distancia fija, en la
 # periferia habría puntos sin vecinos y en el centro puntos con cientos. Con
@@ -511,6 +545,22 @@ moran
 # ```
 #
 # ### Indicadores locales (LISA) y hotspots (Getis-Ord Gi*)
+#
+# El Moran global resume toda la ciudad en un número. Los indicadores
+# **locales** dicen **dónde** está el patrón. El **LISA** (Moran local)
+# clasifica cada edificio significativo en uno de cuatro cuadrantes:
+#
+# | Cuadrante | Significado | Ejemplo |
+# |---|---|---|
+# | **HH** (alto-alto) | estrato alto rodeado de estrato alto | un conjunto del norte rodeado de conjuntos de estrato 5–6 |
+# | **LL** (bajo-bajo) | estrato bajo rodeado de estrato bajo | una casa del suroccidente rodeada de casas de estrato 1 |
+# | **HL** (alto-bajo) | estrato alto rodeado de estrato bajo | un conjunto cerrado de estrato 4 en medio de un barrio de estrato 1 |
+# | **LH** (bajo-alto) | estrato bajo rodeado de estrato alto | una casa de estrato 2 en medio de torres de estrato 6 |
+#
+# HH y LL son **clusters**; HL y LH son **outliers espaciales**. El
+# **Getis-Ord Gi\*** responde algo parecido: si la zona alrededor de cada
+# edificio tiene estratos significativamente altos (*hotspot*) o bajos
+# (*coldspot*).
 
 # %%
 # Indicadores LOCALES: Moran global resume toda la ciudad en un número; LISA y Gi*
@@ -596,6 +646,14 @@ print(f"Significativos a 5%: sin ajuste {100 * (lis['p'] < 0.05).mean():.1f}% | 
 # submuestra de 4 000). Muestran **hasta qué distancia** dos edificios siguen
 # pareciéndose en estrato: ese **alcance** es la referencia para el tamaño del
 # buffer de la validación espacial.
+#
+# *Cómo se construye.* Se toman todos los pares de edificios y se agrupan por
+# distancia: los que están a 0–250 m, a 250–500 m, etc. En cada banda se
+# calcula qué tanto se parecen los dos edificios del par. Es de esperar que
+# dos edificios a 100 m se parezcan mucho y dos a 10 km casi nada; el
+# **alcance** es la distancia a la que el parecido se vuelve débil (aquí se
+# fija el corte en un Moran de 0.3). La **semivarianza** es la misma idea al
+# revés: mide cuánto **difieren** los pares, y crece con la distancia.
 
 # %%
 # Correlograma (Moran's I por banda de distancia) y semivariograma empírico del

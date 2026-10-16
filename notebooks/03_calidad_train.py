@@ -15,14 +15,32 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Completa la parte de **calidad de datos** de la Sección 1 de las instrucciones del proyecto que sí
-# implica decisiones de modelado (cómo imputar, cómo tratar outliers). Por eso
-# se hace **solo con entrenamiento**:
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿cómo tratar los datos faltantes y los valores
+# extremos, y a quién deja fuera el modelo?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento** (capítulo 2). A
+# partir de aquí y hasta el capítulo 9 no se mira el conjunto de prueba.
+#
+# **Conceptos nuevos:** mecanismos de faltantes (MCAR, MAR, MNAR), diferencia
+# de medias estandarizada (SMD), AUC, regla de Tukey y winsorización.
+#
+# **Sale de aquí:** cómo imputar los faltantes, cómo limitar los extremos y
+# la medida del sesgo de cobertura.
+# ```
+#
+# El capítulo 1 ya contó los faltantes y anuló los valores imposibles con
+# reglas fijas. Lo que falta de la parte de **calidad de datos** de la
+# Sección 1 de las instrucciones del proyecto son las preguntas que **sí**
+# llevan a decisiones de modelado (con qué valor rellenar un faltante, hasta
+# dónde recortar un extremo). Esas decisiones aprenden de los datos, y por eso
+# se toman **solo con entrenamiento**:
 #
 # - Valores faltantes: **patrón** (matriz de nulos) y **mecanismo**
-#   (MCAR / MAR / MNAR) con evidencia.
-# - Outliers univariados: detección (IQR de Tukey) y tratamiento.
-# - Sesgo de muestreo y representatividad: quién queda fuera del modelo.
+#   (MCAR / MAR / MNAR) con evidencia (3.1).
+# - Outliers univariados: detección (regla de Tukey) y tratamiento (3.2).
+# - Sesgo de muestreo y representatividad: quién queda fuera del modelo (3.3).
 
 # %% tags=["hide-input"]
 # Configuración y carga de SOLO entrenamiento. Desde este capítulo todo lo que
@@ -116,6 +134,22 @@ plt.show()
 # %% [markdown]
 # ### Mecanismo (MCAR / MAR / MNAR)
 #
+# No basta con saber **cuántos** datos faltan; importa **por qué** faltan,
+# porque de eso depende si rellenarlos introduce sesgo. Hay tres casos
+# clásicos (Rubin, 1976), que se entienden mejor con un ejemplo sobre el año
+# de construcción:
+#
+# | Mecanismo | Significado | Ejemplo |
+# |---|---|---|
+# | **MCAR** (completamente al azar) | faltar no depende de nada | un funcionario olvida digitar el año en fichas elegidas al azar |
+# | **MAR** (al azar, dado lo observado) | faltar depende de otras variables que sí vemos | el año falta más en cierto sector de la ciudad, y el sector sí está en los datos |
+# | **MNAR** (no al azar) | faltar depende del propio valor que falta | el año falta más justo en las casas muy antiguas, porque nadie lo sabe |
+#
+# Con MCAR, rellenar con la mediana no sesga nada. Con MAR, las otras
+# variables ayudan a corregir. MNAR no se puede detectar con los datos (habría
+# que conocer el valor que falta) y solo se argumenta con conocimiento del
+# dominio.
+#
 # Con cientos de miles de filas la prueba de Little rechaza MCAR ante
 # cualquier diferencia mínima, así que se usan tres evidencias complementarias
 # y se interpreta la **magnitud**:
@@ -123,12 +157,19 @@ plt.show()
 # 1. **Faltante vs. estrato:** chi² y V de Cramér entre el indicador de nulo y
 #    el objetivo. V ≈ 0 es compatible con MCAR respecto al objetivo.
 # 2. **Registros completos vs. incompletos:** diferencia de medias estandarizada
-#    (SMD) en las demás variables. |SMD| < 0.1 se considera despreciable.
-# 3. **¿Se puede predecir el faltante?** Regresión logística del indicador de
-#    nulo con las variables observadas (AUC por validación cruzada). AUC ≈ 0.5
-#    → MCAR plausible; AUC claramente > 0.5 → el faltante depende de variables
-#    observadas (**MAR**). MNAR (depende del propio valor no observado) no se
-#    puede probar con los datos: se argumenta con conocimiento del dominio.
+#    (SMD) en las demás variables: la diferencia de medias entre las filas con
+#    y sin el dato, dividida por la desviación estándar. *Ejemplo:* si las
+#    viviendas sin año miden en promedio 90 m² y las demás 80 m², con una
+#    desviación de 50 m², la SMD es (90 − 80) ÷ 50 = 0.2. |SMD| < 0.1 se
+#    considera despreciable.
+# 3. **¿Se puede predecir el faltante?** Se entrena una regresión logística
+#    que intenta adivinar, con las variables observadas, si a una fila le
+#    falta el dato. Su acierto se mide con el **AUC**: la probabilidad de que,
+#    al tomar una fila con faltante y otra sin él, el modelo le dé más
+#    probabilidad de faltante a la primera. AUC ≈ 0.5 es adivinar a ciegas
+#    (MCAR plausible); AUC claramente > 0.5 indica que el faltante depende de
+#    variables observadas (**MAR**). MNAR no se puede probar con los datos: se
+#    argumenta con conocimiento del dominio.
 
 # %%
 # Diagnóstico del mecanismo de faltantes con tres evidencias por variable:
@@ -252,9 +293,16 @@ C.guardar_decision(
 #
 # Los valores **imposibles** ya se convirtieron en NaN (capítulo 1). Lo que
 # queda son valores **extremos pero plausibles**: una casa de 8 baños, un lote
-# muy grande. Se cuantifican con la regla de Tukey
-# $[Q_1 - 1.5\,IQR,\ Q_3 + 1.5\,IQR]$ y con un criterio más estricto
-# ($3\,IQR$, "outliers lejanos").
+# muy grande. Se cuantifican con la **regla de Tukey**, que se basa en los
+# cuartiles: $Q_1$ deja por debajo el 25 % de los datos, $Q_3$ el 75 %, y el
+# rango intercuartílico es $IQR = Q_3 - Q_1$. Es outlier todo valor fuera de
+# $[Q_1 - 1.5\,IQR,\ Q_3 + 1.5\,IQR]$, y "outlier lejano" todo valor fuera
+# de $[Q_1 - 3\,IQR,\ Q_3 + 3\,IQR]$.
+#
+# *Ejemplo:* si el área construida tiene $Q_1 = 50$ m² y $Q_3 = 100$ m², el
+# $IQR$ es 50 m² y el límite superior de Tukey es 100 + 1.5 × 50 = 175 m².
+# Una casa de 200 m² sería "outlier", aunque en el norte de la ciudad es
+# perfectamente normal. Por eso la regla aquí **describe**, no limpia.
 
 # %%
 # Outliers univariados con la regla de Tukey (1.5·IQR) y con el criterio de
@@ -319,13 +367,16 @@ plt.show()
 # - En `planta_ubicacion`, los códigos 97–99 ya se trataron como faltantes
 #   (cap. 1, techo del rango en 60): el p99.9 queda en 20 y el máximo en 41,
 #   un piso real de las torres más altas, no un código.
-# - **Decisión:** no se elimina ninguna fila por ser outlier estadístico, porque
-#   el área construida crece con el estrato (mediana de 54 m² en estrato 1
-#   frente a 152 m² en estrato 6, cap. 6): las viviendas más grandes pesan más
-#   en las clases altas, que ya son minoritarias. Su influencia en el modelo
-#   lineal se reduce con (i) `log1p`
-#   en las variables muy asimétricas (cap. 5) y (ii) **winsorización** a los
-#   percentiles 0.1 y 99.9 **aprendidos en train** dentro del Pipeline.
+# - **Decisión:** no se elimina ninguna fila por ser outlier estadístico,
+#   porque el área construida crece con el estrato (el capítulo 6 lo mide: la
+#   mediana pasa de 54 m² en estrato 1 a 152 m² en estrato 6). Las viviendas
+#   más grandes pesan más en las clases altas, que ya son minoritarias, y
+#   eliminarlas les quitaría ejemplos. Su influencia en el modelo lineal se
+#   reduce de dos formas: (i) con `log1p` en las variables muy asimétricas
+#   (capítulo 5) y (ii) con **winsorización** a los percentiles 0.1 y 99.9
+#   **aprendidos en train** dentro del Pipeline. Winsorizar es recortar sin
+#   borrar: un valor por encima del percentil 99.9 (por ejemplo, 692 m² de
+#   área construida) se reemplaza por ese percentil, y la fila se conserva.
 # - Los outliers **multivariados** (combinaciones raras) se revisan en el
 #   capítulo 7.
 # ```
@@ -341,10 +392,18 @@ C.guardar_decision("winsorizacion_cuantiles", [0.001, 0.999],
 # %% [markdown]
 # ## 3.3 Sesgo de muestreo y representatividad
 #
-# ¿A quién deja fuera el modelo? Se comparan las filas **con** coordenadas
-# (población de modelado) contra las filas **sin** coordenadas, que no se
-# pudieron ubicar (predios informales, capítulo 1). Para no mirar el conjunto
-# de prueba, la comparación usa solo train frente a las filas no ubicables.
+# ¿A quién deja fuera el modelo? En la sección 1.7 se decidió modelar solo
+# con las viviendas que tienen coordenadas. Aquí se mide el costo de esa
+# decisión: se comparan las filas **con** coordenadas (población de
+# modelado) contra las **53 894 sin coordenadas**, casi todas mejoras en
+# terreno ajeno. Para no mirar el conjunto de prueba, la comparación usa solo
+# train frente a las filas no ubicables.
+#
+# La fuerza de la diferencia se mide con la **V de Cramér**, una medida de
+# asociación entre dos variables categóricas que va de 0 (las proporciones de
+# estrato son iguales en los dos grupos) a 1 (conocer el grupo determina el
+# estrato). Como guía: menos de 0.1 es despreciable, 0.1–0.3 débil, 0.3–0.5
+# moderada y más de 0.5 fuerte.
 
 # %%
 # Sesgo de cobertura: compara la distribución del estrato en la población modelada
@@ -393,15 +452,19 @@ plt.show()
 # - El sesgo de cobertura es **fuerte**: de las filas sin coordenadas, el
 #   **66.3 % son estrato 1 y el 30.2 % estrato 2** (96.5 % en los dos estratos
 #   más bajos), frente a 25.5 % y 19.9 % en la población modelada. La V de
-#   Cramér entre "tener o no coordenadas" y el estrato es **0.42**, una
-#   asociación grande.
+#   Cramér entre "tener o no coordenadas" y el estrato es **0.42**: una
+#   asociación moderada en la escala de arriba, cerca del límite de "fuerte"
+#   (0.5). Para comparar, ninguna predictora categórica del capítulo 6 supera
+#   0.33 con el estrato.
 # - La razón es estructural: el **99.5 %** de las filas sin coordenadas son
 #   predios `Informal` (sin lote propio ni edificio matriz de donde tomar un
 #   centroide). En train, lo informal pesa solo 7.6 %.
 # - Consecuencia: el modelo representa la **ciudad formal**. Aprenderá del
 #   estrato 1 sobre todo su versión formal, y sus métricas no deben
 #   extrapolarse a asentamientos informales. Se declara como limitación en las
-#   conclusiones. Mejora futura: ubicar estos predios con otra fuente
-#   (cartografía de manzanas o geocodificación de direcciones) o con el código
-#   de sector/barrio del NPN.
+#   conclusiones (11.2).
+# - Mejora evaluada en la sección 1.7.3: el 92.7 % de estas viviendas comparte
+#   manzana (primeros 17 dígitos del NPN) con viviendas ubicadas, así que se
+#   podrían ubicar con el centroide de su manzana. Queda como primer paso del
+#   Entregable 2 (11.3).
 # ```
