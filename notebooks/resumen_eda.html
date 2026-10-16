@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -419,7 +423,7 @@ que se indique lo contrario.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Tamaño</p></td>
-<td><p>332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (dataset completo); ~9 500 filas por columna tras one-hot</p></td>
+<td><p>332 718 unidades de vivienda en 168 044 predios matriz: edificios, conjuntos o lotes (todas las filas limpias); 278 824 con coordenadas, que son el universo de modelado; ~8 000–9 500 filas por columna tras one-hot</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p>Valores faltantes</p></td>
@@ -439,8 +443,8 @@ que se indique lo contrario.</p>
 <td><p>7</p></td>
 </tr>
 <tr class="row-odd"><td><p>Cobertura</p></td>
-<td><p>El 16.2 % de las filas no tiene coordenadas; el 99.5 % de ellas son predios informales y el 96.5 % son estratos 1–2 (V de Cramér = 0.42)</p></td>
-<td><p>3, 8</p></td>
+<td><p>El 16.2 % de las filas no tiene coordenadas; el 99.5 % de ellas son predios informales y el 96.5 % son estratos 1–2 (V de Cramér = 0.42). Quitarlas baja el estrato 1 de 32.8 % a 26.3 %</p></td>
+<td><p>1, 3, 8</p></td>
 </tr>
 </tbody>
 </table>
@@ -496,7 +500,8 @@ el de tamaño (cap. 7).</p>
 12 390 casos en train: no hace falta sobremuestreo, pero el accuracy no
 sirve como métrica (cap. 4).</p></li>
 <li><p><strong>Dependencia entre filas.</strong> El estrato casi no varía dentro de un edificio
-o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718 (cap. 1).</p></li>
+o conjunto (ICC = 0.992): el tamaño efectivo es ≈ 2 300, no 332 718
+(≈ 1 620 en el universo con coordenadas; sección 1.9).</p></li>
 <li><p><strong>Dependencia espacial.</strong> Moran’s I = 0.913 y alcance del correlograma de
 2.9 km: una validación aleatoria sería muy optimista (cap. 8).</p></li>
 <li><p><strong>Asimetría fuerte.</strong> Todas las variables físicas tienen |asimetría| &gt; 1

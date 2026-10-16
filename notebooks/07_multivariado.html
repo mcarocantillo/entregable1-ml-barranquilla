@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -405,16 +409,30 @@
   <section class="tex2jax_ignore mathjax_ignore" id="analisis-multivariado-seccion-2-4">
 <h1>7. Análisis multivariado (sección 2.4)<a class="headerlink" href="#analisis-multivariado-seccion-2-4" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> mirando todas las variables físicas <strong>a la
+vez</strong>, ¿qué estructura tienen las viviendas, hay combinaciones raras y se
+forman grupos naturales?</p>
+<p><strong>Datos:</strong> las <strong>218 870 viviendas de entrenamiento</strong> (algunas técnicas
+usan una submuestra por costo de cómputo).</p>
+<p><strong>Conceptos nuevos:</strong> PCA, outliers multivariados (Mahalanobis robusta,
+Isolation Forest), K-Means con coeficiente de silueta y t-SNE.</p>
+<p><strong>Sale de aquí:</strong> la decisión de conservar los outliers multivariados y una
+primera señal de que las variables físicas, solas, no bastan.</p>
+</div>
 <ul class="simple">
-<li><p>Reducción de dimensionalidad exploratoria (<strong>PCA</strong>; t-SNE solo como
+<li><p>Reducción de dimensionalidad exploratoria (<strong>PCA</strong>, 7.1; t-SNE solo como
 herramienta visual, no inferencial).</p></li>
 <li><p>Outliers <strong>multivariados</strong> (distancia de Mahalanobis robusta e Isolation
-Forest).</p></li>
+Forest, 7.2).</p></li>
 <li><p>Estructura de grupos o subpoblaciones (clustering exploratorio con
-K-Means).</p></li>
+K-Means, 7.3).</p></li>
 </ul>
 <p>Se usan las variables físicas numéricas en la escala en que entrarían al
-modelo (log1p en las asimétricas, estandarizadas). Todo con <strong>train</strong>.</p>
+modelo (log1p en las asimétricas, estandarizadas: a cada variable se le
+resta su media y se divide por su desviación estándar, para que todas
+queden en la misma escala y ninguna domine solo por sus unidades).</p>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -490,6 +508,15 @@ modelo (log1p en las asimétricas, estandarizadas). Todo con <strong>train</stro
 </div>
 <section id="pca-varianza-explicada-y-estructura">
 <h2>7.1 PCA: varianza explicada y estructura<a class="headerlink" href="#pca-varianza-explicada-y-estructura" title="Link to this heading">#</a></h2>
+<p>El <strong>análisis de componentes principales (PCA)</strong> busca nuevas variables,
+llamadas <strong>componentes</strong>, que resumen a las originales. Cada componente es
+una combinación de las variables originales; la primera (PC1) es la que
+recoge la mayor parte de la variación, la segunda (PC2) la mayor parte de
+lo que queda, y así sucesivamente. <em>Ejemplo:</em> área construida,
+habitaciones y baños suelen subir juntos; PCA puede resumirlos en un solo
+eje de «tamaño de la vivienda». Las <strong>cargas</strong> dicen cuánto pesa cada
+variable original en cada componente, y la <strong>varianza explicada</strong> cuánta
+información conserva cada componente.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PCA con todas las componentes para ver cómo se reparte la varianza y cuántas</span>
@@ -626,7 +653,7 @@ Dimensionalidad efectiva (participation ratio): 5.41 de 8 variables
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/375b9b9c2d88982ab898e7389c8f704c9d9133b6e4dd4b2fcc9ab1f85bb04b80.png" src="../_images/375b9b9c2d88982ab898e7389c8f704c9d9133b6e4dd4b2fcc9ab1f85bb04b80.png" />
+<img alt="../_images/b11ac87dbd1ce915afbf467444f3811d616da0272b21092d06984eb2e172229a.png" src="../_images/b11ac87dbd1ce915afbf467444f3811d616da0272b21092d06984eb2e172229a.png" />
 </div>
 </div>
 <div class="cell tag_hide-input docutils container">
@@ -666,7 +693,7 @@ Dimensionalidad efectiva (participation ratio): 5.41 de 8 variables
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/2135821138ea6a4c593aa3c3096ccd9e4e9e28061eda1fc9de1f7fec58b85890.png" src="../_images/2135821138ea6a4c593aa3c3096ccd9e4e9e28061eda1fc9de1f7fec58b85890.png" />
+<img alt="../_images/464da48c2260dadc5426e07fc4bd58b9a94a6908de048bd65bf67a023d8e7939.png" src="../_images/464da48c2260dadc5426e07fc4bd58b9a94a6908de048bd65bf67a023d8e7939.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -747,7 +774,15 @@ es enorme.</p></li>
 </section>
 <section id="outliers-multivariados">
 <h2>7.2 Outliers multivariados<a class="headerlink" href="#outliers-multivariados" title="Link to this heading">#</a></h2>
-<p><strong>Mahalanobis robusta:</strong> la distancia de Mahalanobis clásica usa la media y
+<p>Un <strong>outlier multivariado</strong> es una vivienda cuyos valores son normales uno
+por uno, pero raros en <strong>combinación</strong>. <em>Ejemplo:</em> 200 m² construidos es
+normal y 1 habitación también, pero una vivienda de 200 m² con una sola
+habitación es una combinación poco común. La regla de Tukey del capítulo 3
+no la detecta, porque mira cada variable por separado.</p>
+<p><strong>Mahalanobis robusta:</strong> la distancia de Mahalanobis mide qué tan lejos
+está una vivienda del centro de los datos, teniendo en cuenta que las
+variables están correlacionadas (alejarse en área <em>y</em> en habitaciones a la
+vez es menos raro que alejarse solo en una). La versión clásica usa la media y
 la covarianza, que los propios outliers distorsionan; por eso se estima con
 el <strong>determinante de covarianza mínima</strong> (MCD) sobre una submuestra y se
 marca como outlier a quien supera el cuantil 0.999 de una χ² con p grados de
@@ -1014,7 +1049,7 @@ terreno</strong> (frente a 3, 1, 76 y 71 en el resto). Parecen lotes con
 construcciones menores o unidades sin espacios habitables registrados
 (p. ej. en obra o con ficha incompleta). Las reglas de limpieza del cap. 1
 no los tocan: los ceros en habitaciones y baños quedaron como limitación
-abierta (cap. 1.7.3).</p></li>
+abierta (sección 1.5.4).</p></li>
 <li><p>Están <strong>sobre-representados en estratos altos</strong>: el 25.3 % son estratos
 5–6, frente al 11.7 % del resto (y solo 11.0 % son estrato 1 frente a
 25.6 %). Eliminarlos quitaría justo casos de las clases minoritarias.</p></li>
@@ -1048,8 +1083,12 @@ winsorización dentro del Pipeline.</p></li>
 </section>
 <section id="subpoblaciones-clustering-exploratorio">
 <h2>7.3 Subpoblaciones: clustering exploratorio<a class="headerlink" href="#subpoblaciones-clustering-exploratorio" title="Link to this heading">#</a></h2>
-<p>K-Means sobre las variables estandarizadas (submuestra de 30 000), eligiendo
-k con el coeficiente de silueta. El objetivo <strong>no</strong> es modelar (eso es la
+<p><strong>K-Means</strong> divide las viviendas en k grupos de manera que cada vivienda
+quede cerca del centro (centroide) de su grupo. El número de grupos k se
+elige con el <strong>coeficiente de silueta</strong>, que compara, para cada vivienda,
+qué tan cerca está de su propio grupo frente al grupo vecino: vale cerca de
+1 si los grupos están bien separados y cerca de 0 si se solapan. Se aplica
+sobre las variables estandarizadas (submuestra de 30 000). El objetivo <strong>no</strong> es modelar (eso es la
 tesis) sino ver si hay grupos naturales y cómo se relacionan con el estrato.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1254,7 +1293,7 @@ tesis) sino ver si hay grupos naturales y cómo se relacionan con el estrato.</p
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/a7141628ce7ec5b61882db7ad9932d9185a6da7ccbf51d593cbf54add60a1193.png" src="../_images/a7141628ce7ec5b61882db7ad9932d9185a6da7ccbf51d593cbf54add60a1193.png" />
+<img alt="../_images/2a6ef86a533a1401d21468d8c8a050dfdff6d765fd73f4a37cc30df64c882087.png" src="../_images/2a6ef86a533a1401d21468d8c8a050dfdff6d765fd73f4a37cc30df64c882087.png" />
 </div>
 </div>
 <section id="t-sne-solo-visual">
@@ -1292,7 +1331,7 @@ tamaños de grupos</strong>: no se interpreta cuantitativamente.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/3472bf859a9e29bd6e2c9ceba73cf244de52ab7a61faa83e460e0393551217b4.png" src="../_images/3472bf859a9e29bd6e2c9ceba73cf244de52ab7a61faa83e460e0393551217b4.png" />
+<img alt="../_images/671b3092b0d8735b53becbb7387b7c0b94361fffcdfa5d9b9445b5fcefcdc459.png" src="../_images/671b3092b0d8735b53becbb7387b7c0b94361fffcdfa5d9b9445b5fcefcdc459.png" />
 </div>
 </div>
 <div class="note admonition">

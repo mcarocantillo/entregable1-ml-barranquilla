@@ -6,7 +6,8 @@ Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (
 ```{admonition} Resumen
 :class: tip
 A partir del servicio abierto de catastro de Barranquilla se construye una
-base de **332 718 unidades de vivienda** con estrato residencial válido. Se
+base de **332 718 unidades de vivienda** con estrato residencial válido, de
+las cuales **278 824 tienen coordenadas** y forman el universo de modelado. Se
 realiza un análisis exploratorio uni, bi, multivariado y espacial, y se entrena
 una regresión logística multinomial para predecir el estrato socioeconómico
 (1–6), comparada con líneas base triviales y espaciales bajo validación por
@@ -30,7 +31,8 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 
 | Capítulo | Contenido | Sección de las instrucciones |
 |---|---|---|
-| 1. Base de datos | problema, fuente, licencia, diccionario, estructura, tamaño, duplicados, valores imposibles, ética | 1 |
+| Guía de lectura | conceptos clave con ejemplos y recorrido de los datos (de 382 597 filas al modelo) | — |
+| 1. Base de datos | problema, fuente, estructura del catastro (vivienda, predio, predio matriz), limpieza, calidad, filas sin coordenadas (dos universos), tamaño efectivo, ética | 1 |
 | 2. Partición | reserva del conjunto de prueba por bloques espaciales | 2 (orden de trabajo), 3 |
 | 3. Calidad en train | faltantes (patrón y mecanismo), outliers, sesgo de cobertura | 1 (calidad), 2.9 |
 | 4. Variable objetivo | clases, desbalance, comportamiento espacial, implicaciones | 2.1 |
@@ -45,7 +47,15 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 | Apéndices | bitácora de decisiones, reproducibilidad, referencias | Entregables |
 
 Las secciones 2.6 (temporal) y 2.8 (espacio-temporal) **no aplican**: los datos
-son una foto del catastro sin marca de tiempo por observación (capítulo 1.5).
+son una foto del catastro sin marca de tiempo por observación (sección 1.3).
+
+## Cómo leer este libro
+
+Si el vocabulario de *machine learning* no es familiar, conviene empezar por
+la **Guía de lectura**: explica con ejemplos los conceptos que se repiten
+(entrenamiento y prueba, fuga de información, validación cruzada, bloques
+espaciales, F1 macro…) y resume cuántas filas usa cada etapa. Cada capítulo
+abre con un cuadro **"Qué hace este capítulo"** y cierra con sus decisiones.
 
 ## Trazabilidad EDA → modelo
 

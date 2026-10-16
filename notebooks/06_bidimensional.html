@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -409,8 +413,21 @@
   <section class="tex2jax_ignore mathjax_ignore" id="analisis-bidimensional-seccion-2-3">
 <h1>6. Análisis bidimensional (sección 2.3)<a class="headerlink" href="#analisis-bidimensional-seccion-2-3" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
-<p>Estructura (misma lógica que las notas de clase 9.10.4.1.3, generalizada de
-un objetivo binario a 6 clases ordinales):</p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿qué variables se relacionan con el estrato, con
+qué fuerza, y cuáles dicen lo mismo entre sí?</p>
+<p><strong>Datos:</strong> las <strong>218 870 viviendas de entrenamiento</strong>.</p>
+<p><strong>Conceptos nuevos:</strong> correlación de Pearson y de Spearman, prueba de
+Kruskal-Wallis y su tamaño de efecto η², información mutua, VIF y
+corrección de Holm. Cada uno se explica con un ejemplo en su sección.</p>
+<p><strong>Sale de aquí:</strong> la selección preliminar de variables y el chequeo de
+multicolinealidad.</p>
+</div>
+<p>«Bidimensional» significa que las variables se miran <strong>de a pares</strong>: cada
+predictora frente al estrato (¿sirve para predecir?) y las predictoras entre
+sí (¿dicen lo mismo?). La estructura sigue la lógica de las notas de clase
+9.10.4.1.3, generalizada de un objetivo binario a 6 clases ordinales:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Par de variables</p></th>
@@ -512,6 +529,15 @@ en los tamaños de efecto</strong>, no en la significancia.</p>
 </div>
 <section id="numericas-vs-numericas">
 <h2>6.1 Numéricas vs. numéricas<a class="headerlink" href="#numericas-vs-numericas" title="Link to this heading">#</a></h2>
+<p><strong>Pearson frente a Spearman.</strong> La correlación de <strong>Pearson</strong> mide qué tan
+bien una <strong>recta</strong> describe la relación entre dos variables. La de
+<strong>Spearman</strong> hace lo mismo, pero con las <strong>posiciones</strong> (rangos) de los
+valores en lugar de los valores, así que capta cualquier relación
+<strong>monótona</strong> (que siempre sube o siempre baja), aunque no sea recta, y es
+poco sensible a valores extremos. <em>Ejemplo:</em> si el área se duplicara con
+cada habitación adicional, la relación sería curva; Spearman daría 1
+(siempre sube) y Pearson algo menos. Cuando los dos coeficientes difieren
+mucho (más de 0.2), la relación no es lineal o está dominada por outliers.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -544,7 +570,7 @@ en los tamaños de efecto</strong>, no en la significancia.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/05aa8d6f7017d86f1765f322c866020ab25ac15596c53080653076f5fabdb8f6.png" src="../_images/05aa8d6f7017d86f1765f322c866020ab25ac15596c53080653076f5fabdb8f6.png" />
+<img alt="../_images/b6973fe180abf8a486d0f0e25d3ef73fbf59bf339c50f013f8b57a5cf2a233e4.png" src="../_images/b6973fe180abf8a486d0f0e25d3ef73fbf59bf339c50f013f8b57a5cf2a233e4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -568,7 +594,7 @@ en los tamaños de efecto</strong>, no en la significancia.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/15988e74ce4b2461d308675dc97fea9cc9171accf82f1036473d6f5a9e019b45.png" src="../_images/15988e74ce4b2461d308675dc97fea9cc9171accf82f1036473d6f5a9e019b45.png" />
+<img alt="../_images/0e9763afebc790324520db8c3a6234076de475967123592a644dc55e8f7f0ce1.png" src="../_images/0e9763afebc790324520db8c3a6234076de475967123592a644dc55e8f7f0ce1.png" />
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -737,6 +763,14 @@ en aproximadamente lineales.</p></li>
 </section>
 <section id="numericas-vs-objetivo">
 <h2>6.2 Numéricas vs. objetivo<a class="headerlink" href="#numericas-vs-objetivo" title="Link to this heading">#</a></h2>
+<p><strong>Kruskal-Wallis y η²_H.</strong> La pregunta es: ¿la variable toma valores
+distintos según el estrato? La prueba de <strong>Kruskal-Wallis</strong> compara las seis
+distribuciones (una por estrato) usando rangos, sin suponer normalidad (las
+variables son muy asimétricas, capítulo 5). Su tamaño de efecto <strong>η²_H</strong>
+dice qué fracción de la variación de la variable se explica por el estrato.
+<em>Ejemplo:</em> si los baños fueran 1 en todos los estratos 1–3 y 3 en todos los
+estratos 4–6, el estrato explicaría casi toda la variación (η² cercano a 1);
+si cada estrato tuviera la misma mezcla de baños, η² sería 0.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -773,7 +807,7 @@ en aproximadamente lineales.</p></li>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/fbc968770ea2435cdce1e5ace3dbb70cfe1d4e519d7ceaf3bab347bf8c3606de.png" src="../_images/fbc968770ea2435cdce1e5ace3dbb70cfe1d4e519d7ceaf3bab347bf8c3606de.png" />
+<img alt="../_images/59f0377f861e2ba27121baeea1aa478c47aaf7278516452a917f9a17626a1e06.png" src="../_images/59f0377f861e2ba27121baeea1aa478c47aaf7278516452a917f9a17626a1e06.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1035,6 +1069,13 @@ estrato muestran si la relación es monótona.</p>
 </section>
 <section id="categoricas-vs-objetivo">
 <h2>6.3 Categóricas vs. objetivo<a class="headerlink" href="#categoricas-vs-objetivo" title="Link to this heading">#</a></h2>
+<p>Se usa la prueba χ² con la <strong>V de Cramér</strong> como tamaño de efecto (0 =
+independencia, 1 = asociación perfecta; se explicó en el capítulo 3.3).
+<em>Ejemplo:</em> si todas las viviendas <code class="docutils literal notranslate"><span class="pre">PH_Unidad_Predial</span></code> fueran de estrato 5 o
+6 y todas las <code class="docutils literal notranslate"><span class="pre">Informal</span></code> de estrato 1, la V sería cercana a 1; si cada
+régimen tuviera la misma mezcla de estratos, sería 0. En las barras
+apiladas, una variable sin relación con el estrato mostraría barras todas
+iguales.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -1065,7 +1106,7 @@ estrato muestran si la relación es monótona.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/deeee01af9edf1f74bcd571bb454d18423e8dbc252f6c97cd83ee21af7389834.png" src="../_images/deeee01af9edf1f74bcd571bb454d18423e8dbc252f6c97cd83ee21af7389834.png" />
+<img alt="../_images/635f4d80e0104571eb03aad296747fae0f0c4961dd79b5134cde54a60b0848ce.png" src="../_images/635f4d80e0104571eb03aad296747fae0f0c4961dd79b5134cde54a60b0848ce.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1196,7 +1237,7 @@ estrato muestran si la relación es monótona.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/82fee6f894e51fa405a52f3f2536bc3940dab36e03d6e97710f8489df1284ffb.png" src="../_images/82fee6f894e51fa405a52f3f2536bc3940dab36e03d6e97710f8489df1284ffb.png" />
+<img alt="../_images/e41a444ef7b9f6b9f7aa8077b803f0ea1d1088e7e3c5090d657693830fe18bda.png" src="../_images/e41a444ef7b9f6b9f7aa8077b803f0ea1d1088e7e3c5090d657693830fe18bda.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1320,103 +1361,103 @@ estrato muestran si la relación es monótona.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
-#T_ebdaf_row0_col0, #T_ebdaf_row0_col1, #T_ebdaf_row0_col3, #T_ebdaf_row6_col2, #T_ebdaf_row7_col1 {
+#T_718fc_row0_col0, #T_718fc_row0_col1, #T_718fc_row0_col3, #T_718fc_row6_col2, #T_718fc_row7_col1 {
   background-color: #f7fcf5;
   color: #000000;
 }
-#T_ebdaf_row0_col2 {
+#T_718fc_row0_col2 {
   background-color: #208843;
   color: #f1f1f1;
 }
-#T_ebdaf_row1_col0 {
+#T_718fc_row1_col0 {
   background-color: #e9f7e5;
   color: #000000;
 }
-#T_ebdaf_row1_col1 {
+#T_718fc_row1_col1 {
   background-color: #c3e7bc;
   color: #000000;
 }
-#T_ebdaf_row1_col2 {
+#T_718fc_row1_col2 {
   background-color: #d4eece;
   color: #000000;
 }
-#T_ebdaf_row1_col3, #T_ebdaf_row6_col0, #T_ebdaf_row7_col2 {
+#T_718fc_row1_col3, #T_718fc_row6_col0, #T_718fc_row7_col2 {
   background-color: #ebf7e7;
   color: #000000;
 }
-#T_ebdaf_row2_col0, #T_ebdaf_row2_col1, #T_ebdaf_row2_col2, #T_ebdaf_row4_col3 {
+#T_718fc_row2_col0, #T_718fc_row2_col1, #T_718fc_row2_col2, #T_718fc_row4_col3 {
   background-color: #00441b;
   color: #f1f1f1;
 }
-#T_ebdaf_row2_col3 {
+#T_718fc_row2_col3 {
   background-color: #005a24;
   color: #f1f1f1;
 }
-#T_ebdaf_row3_col0 {
+#T_718fc_row3_col0 {
   background-color: #dbf1d5;
   color: #000000;
 }
-#T_ebdaf_row3_col1, #T_ebdaf_row7_col3 {
+#T_718fc_row3_col1, #T_718fc_row7_col3 {
   background-color: #e8f6e3;
   color: #000000;
 }
-#T_ebdaf_row3_col2 {
+#T_718fc_row3_col2 {
   background-color: #005c25;
   color: #f1f1f1;
 }
-#T_ebdaf_row3_col3 {
+#T_718fc_row3_col3 {
   background-color: #e7f6e3;
   color: #000000;
 }
-#T_ebdaf_row4_col0 {
+#T_718fc_row4_col0 {
   background-color: #005321;
   color: #f1f1f1;
 }
-#T_ebdaf_row4_col1 {
+#T_718fc_row4_col1 {
   background-color: #eff9ec;
   color: #000000;
 }
-#T_ebdaf_row4_col2 {
+#T_718fc_row4_col2 {
   background-color: #46ae60;
   color: #f1f1f1;
 }
-#T_ebdaf_row5_col0 {
+#T_718fc_row5_col0 {
   background-color: #b7e2b1;
   color: #000000;
 }
-#T_ebdaf_row5_col1 {
+#T_718fc_row5_col1 {
   background-color: #d6efd0;
   color: #000000;
 }
-#T_ebdaf_row5_col2 {
+#T_718fc_row5_col2 {
   background-color: #f2faef;
   color: #000000;
 }
-#T_ebdaf_row5_col3 {
+#T_718fc_row5_col3 {
   background-color: #c9eac2;
   color: #000000;
 }
-#T_ebdaf_row6_col1 {
+#T_718fc_row6_col1 {
   background-color: #d9f0d3;
   color: #000000;
 }
-#T_ebdaf_row6_col3 {
+#T_718fc_row6_col3 {
   background-color: #f6fcf4;
   color: #000000;
 }
-#T_ebdaf_row7_col0 {
+#T_718fc_row7_col0 {
   background-color: #f5fbf3;
   color: #000000;
 }
 </style>
-<table id="T_ebdaf">
+<table id="T_718fc">
   <thead>
     <tr>
       <th class="index_name level0" >categórica</th>
-      <th id="T_ebdaf_level0_col0" class="col_heading level0 col0" >condicion_predio</th>
-      <th id="T_ebdaf_level0_col1" class="col_heading level0 col1" >destinacion_economica</th>
-      <th id="T_ebdaf_level0_col2" class="col_heading level0 col2" >tipo_vivienda</th>
-      <th id="T_ebdaf_level0_col3" class="col_heading level0 col3" >uso</th>
+      <th id="T_718fc_level0_col0" class="col_heading level0 col0" >condicion_predio</th>
+      <th id="T_718fc_level0_col1" class="col_heading level0 col1" >destinacion_economica</th>
+      <th id="T_718fc_level0_col2" class="col_heading level0 col2" >tipo_vivienda</th>
+      <th id="T_718fc_level0_col3" class="col_heading level0 col3" >uso</th>
     </tr>
     <tr>
       <th class="index_name level0" >numérica</th>
@@ -1428,60 +1469,60 @@ estrato muestran si la relación es monótona.</p>
   </thead>
   <tbody>
     <tr>
-      <th id="T_ebdaf_level0_row0" class="row_heading level0 row0" >altura</th>
-      <td id="T_ebdaf_row0_col0" class="data row0 col0" >0.003</td>
-      <td id="T_ebdaf_row0_col1" class="data row0 col1" >0.000</td>
-      <td id="T_ebdaf_row0_col2" class="data row0 col2" >0.103</td>
-      <td id="T_ebdaf_row0_col3" class="data row0 col3" >0.004</td>
+      <th id="T_718fc_level0_row0" class="row_heading level0 row0" >altura</th>
+      <td id="T_718fc_row0_col0" class="data row0 col0" >0.003</td>
+      <td id="T_718fc_row0_col1" class="data row0 col1" >0.000</td>
+      <td id="T_718fc_row0_col2" class="data row0 col2" >0.103</td>
+      <td id="T_718fc_row0_col3" class="data row0 col3" >0.004</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row1" class="row_heading level0 row1" >antiguedad</th>
-      <td id="T_ebdaf_row1_col0" class="data row1 col0" >0.054</td>
-      <td id="T_ebdaf_row1_col1" class="data row1 col1" >0.000</td>
-      <td id="T_ebdaf_row1_col2" class="data row1 col2" >0.041</td>
-      <td id="T_ebdaf_row1_col3" class="data row1 col3" >0.062</td>
+      <th id="T_718fc_level0_row1" class="row_heading level0 row1" >antiguedad</th>
+      <td id="T_718fc_row1_col0" class="data row1 col0" >0.054</td>
+      <td id="T_718fc_row1_col1" class="data row1 col1" >0.000</td>
+      <td id="T_718fc_row1_col2" class="data row1 col2" >0.041</td>
+      <td id="T_718fc_row1_col3" class="data row1 col3" >0.062</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row2" class="row_heading level0 row2" >area_catastral_terreno</th>
-      <td id="T_ebdaf_row2_col0" class="data row2 col0" >0.549</td>
-      <td id="T_ebdaf_row2_col1" class="data row2 col1" >0.000</td>
-      <td id="T_ebdaf_row2_col2" class="data row2 col2" >0.129</td>
-      <td id="T_ebdaf_row2_col3" class="data row2 col3" >0.616</td>
+      <th id="T_718fc_level0_row2" class="row_heading level0 row2" >area_catastral_terreno</th>
+      <td id="T_718fc_row2_col0" class="data row2 col0" >0.549</td>
+      <td id="T_718fc_row2_col1" class="data row2 col1" >0.000</td>
+      <td id="T_718fc_row2_col2" class="data row2 col2" >0.129</td>
+      <td id="T_718fc_row2_col3" class="data row2 col3" >0.616</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row3" class="row_heading level0 row3" >area_construida</th>
-      <td id="T_ebdaf_row3_col0" class="data row3 col0" >0.096</td>
-      <td id="T_ebdaf_row3_col1" class="data row3 col1" >0.000</td>
-      <td id="T_ebdaf_row3_col2" class="data row3 col2" >0.121</td>
-      <td id="T_ebdaf_row3_col3" class="data row3 col3" >0.078</td>
+      <th id="T_718fc_level0_row3" class="row_heading level0 row3" >area_construida</th>
+      <td id="T_718fc_row3_col0" class="data row3 col0" >0.096</td>
+      <td id="T_718fc_row3_col1" class="data row3 col1" >0.000</td>
+      <td id="T_718fc_row3_col2" class="data row3 col2" >0.121</td>
+      <td id="T_718fc_row3_col3" class="data row3 col3" >0.078</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row4" class="row_heading level0 row4" >planta_ubicacion</th>
-      <td id="T_ebdaf_row4_col0" class="data row4 col0" >0.522</td>
-      <td id="T_ebdaf_row4_col1" class="data row4 col1" >0.000</td>
-      <td id="T_ebdaf_row4_col2" class="data row4 col2" >0.087</td>
-      <td id="T_ebdaf_row4_col3" class="data row4 col3" >0.660</td>
+      <th id="T_718fc_level0_row4" class="row_heading level0 row4" >planta_ubicacion</th>
+      <td id="T_718fc_row4_col0" class="data row4 col0" >0.522</td>
+      <td id="T_718fc_row4_col1" class="data row4 col1" >0.000</td>
+      <td id="T_718fc_row4_col2" class="data row4 col2" >0.087</td>
+      <td id="T_718fc_row4_col3" class="data row4 col3" >0.660</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row5" class="row_heading level0 row5" >total_banios</th>
-      <td id="T_ebdaf_row5_col0" class="data row5 col0" >0.168</td>
-      <td id="T_ebdaf_row5_col1" class="data row5 col1" >0.000</td>
-      <td id="T_ebdaf_row5_col2" class="data row5 col2" >0.024</td>
-      <td id="T_ebdaf_row5_col3" class="data row5 col3" >0.165</td>
+      <th id="T_718fc_level0_row5" class="row_heading level0 row5" >total_banios</th>
+      <td id="T_718fc_row5_col0" class="data row5 col0" >0.168</td>
+      <td id="T_718fc_row5_col1" class="data row5 col1" >0.000</td>
+      <td id="T_718fc_row5_col2" class="data row5 col2" >0.024</td>
+      <td id="T_718fc_row5_col3" class="data row5 col3" >0.165</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row6" class="row_heading level0 row6" >total_habitaciones</th>
-      <td id="T_ebdaf_row6_col0" class="data row6 col0" >0.049</td>
-      <td id="T_ebdaf_row6_col1" class="data row6 col1" >0.000</td>
-      <td id="T_ebdaf_row6_col2" class="data row6 col2" >0.020</td>
-      <td id="T_ebdaf_row6_col3" class="data row6 col3" >0.011</td>
+      <th id="T_718fc_level0_row6" class="row_heading level0 row6" >total_habitaciones</th>
+      <td id="T_718fc_row6_col0" class="data row6 col0" >0.049</td>
+      <td id="T_718fc_row6_col1" class="data row6 col1" >0.000</td>
+      <td id="T_718fc_row6_col2" class="data row6 col2" >0.020</td>
+      <td id="T_718fc_row6_col3" class="data row6 col3" >0.011</td>
     </tr>
     <tr>
-      <th id="T_ebdaf_level0_row7" class="row_heading level0 row7" >total_plantas</th>
-      <td id="T_ebdaf_row7_col0" class="data row7 col0" >0.009</td>
-      <td id="T_ebdaf_row7_col1" class="data row7 col1" >0.000</td>
-      <td id="T_ebdaf_row7_col2" class="data row7 col2" >0.029</td>
-      <td id="T_ebdaf_row7_col3" class="data row7 col3" >0.075</td>
+      <th id="T_718fc_level0_row7" class="row_heading level0 row7" >total_plantas</th>
+      <td id="T_718fc_row7_col0" class="data row7 col0" >0.009</td>
+      <td id="T_718fc_row7_col1" class="data row7 col1" >0.000</td>
+      <td id="T_718fc_row7_col2" class="data row7 col2" >0.029</td>
+      <td id="T_718fc_row7_col3" class="data row7 col3" >0.075</td>
     </tr>
   </tbody>
 </table>
@@ -1490,8 +1531,13 @@ estrato muestran si la relación es monótona.</p>
 </section>
 <section id="predictoras-vs-objetivo-informacion-mutua">
 <h2>6.6 Predictoras vs. objetivo: información mutua<a class="headerlink" href="#predictoras-vs-objetivo-informacion-mutua" title="Link to this heading">#</a></h2>
-<p>La información mutua (MI) capta relaciones <strong>no lineales y no monótonas</strong> que
-Spearman o η² pueden subestimar. Se reporta también MI / H(estrato): la
+<p>La información mutua (MI) responde: <em>¿cuánto se reduce la incertidumbre
+sobre el estrato si conozco esta variable?</em> Capta relaciones <strong>no lineales y
+no monótonas</strong> que Spearman o η² pueden subestimar. <em>Ejemplo:</em> si el
+estrato fuera alto en el centro y bajo tanto al oriente como al occidente
+(forma de U), la correlación con la coordenada este-oeste sería cercana a
+0, pero la MI sería alta, porque conocer la coordenada sí ayuda a adivinar
+el estrato. Se reporta también MI / H(estrato): la
 fracción de la incertidumbre del estrato que reduce conocer la variable. Por
 costo computacional (estimador por k vecinos) se calcula sobre una muestra
 estratificada de train.</p>
@@ -1817,7 +1863,13 @@ estratificada de train.</p>
 </section>
 <section id="multicolinealidad-vif">
 <h2>6.8 Multicolinealidad (VIF)<a class="headerlink" href="#multicolinealidad-vif" title="Link to this heading">#</a></h2>
-<p>VIF_j = 1 / (1 − R²_j), con R²_j de regresar la variable j sobre las demás.
+<p>Hay <strong>multicolinealidad</strong> cuando una predictora se puede reconstruir casi
+perfectamente con las demás; en ese caso los coeficientes del modelo se
+vuelven inestables y difíciles de interpretar. El <strong>VIF</strong> (factor de
+inflación de la varianza) lo mide: se intenta predecir cada variable con
+todas las demás y se calcula VIF_j = 1 / (1 − R²_j), con R²_j el ajuste de
+esa regresión. <em>Ejemplo:</em> si las demás variables explican el 90 % de la
+variación del área construida (R² = 0.9), su VIF es 1 / 0.1 = 10.
 Se calcula con las numéricas en la escala en que entrarán al modelo (log1p
 para las asimétricas) e imputadas con la mediana de train. Umbrales usuales:
 &lt; 5 aceptable, 5–10 vigilar, &gt; 10 multicolinealidad alta.</p>
@@ -2021,6 +2073,13 @@ variables con VIF &gt; 10, la que tenga <strong>menor asociación con el estrato
 </section>
 <section id="todas-las-pruebas-con-correccion-por-comparaciones-multiples">
 <h2>6.9 Todas las pruebas con corrección por comparaciones múltiples<a class="headerlink" href="#todas-las-pruebas-con-correccion-por-comparaciones-multiples" title="Link to this heading">#</a></h2>
+<p>Cada prueba tiene un 5 % de probabilidad de dar un falso positivo. Si se
+hacen 20 pruebas, es casi seguro que alguna salga «significativa» por puro
+azar. Las correcciones ajustan los p-valores para controlar ese riesgo:
+<strong>Holm</strong> controla la probabilidad de cometer <em>al menos un</em> falso positivo
+en toda la familia de pruebas, y <strong>Benjamini-Hochberg</strong> controla la
+<em>proporción</em> de falsos positivos entre las pruebas declaradas
+significativas (es menos estricta).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Corrección global: se reúnen en una sola familia todas las pruebas contra el</span>
@@ -2270,7 +2329,7 @@ términos lineales no captura bien estas formas en U.</p></li>
 0.59–0.63) pero sube mucho al terreno (0.40). Hay que leer la MI con
 cautela: coordenadas y terreno se repiten exactamente en todas las unidades
 de un edificio, y como el estrato casi no varía dentro del edificio
-(ICC = 0.992), el estimador de MI por vecinos premia variables que
+(ICC = 0.992, sección 1.9), el estimador de MI por vecinos premia variables que
 «identifican el edificio», más que relaciones generalizables.</p></li>
 <li><p><strong>Categóricas.</strong> <code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code> (V = 0.33, moderada), <code class="docutils literal notranslate"><span class="pre">uso</span></code> (0.24) y
 <code class="docutils literal notranslate"><span class="pre">tipo_vivienda</span></code> (0.22) superan el umbral de 0.1; <code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code>
@@ -2286,7 +2345,7 @@ las espaciales, por su relación geométrica.</p></li>
 con n ≈ 220 000 casi todo es «significativo», por eso las decisiones se
 toman con los <strong>tamaños de efecto</strong>, no con los p-valores. Además, la
 dependencia entre unidades de un mismo edificio hace que estos p-valores
-sean optimistas (el n efectivo es mucho menor, cap. 1).</p></li>
+sean optimistas (el tamaño efectivo es mucho menor, sección 1.9).</p></li>
 <li><p><strong>Selección preliminar:</strong> las 8 numéricas (ninguna eliminada por VIF), las
 3 categóricas con V ≥ 0.1 y las 3 espaciales (justificadas en el cap. 8).
 <code class="docutils literal notranslate"><span class="pre">altura</span></code> se conserva por ahora, aunque aporta muy poco. La lista final se

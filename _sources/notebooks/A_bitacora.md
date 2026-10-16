@@ -252,7 +252,35 @@ conservan como registro del proceso. Las vigentes están en A.10.
 - Cifras verificadas reproduciendo la limpieza en Python puro (se obtuvieron de nuevo las cifras anteriores
   con la definición vieja). La partición y el modelo no usan este agrupamiento.
 
-## A.12 Pendientes
+## A.12 Dos universos de datos y reorganización del libro (16-oct-2026)
+
+- **Pregunta:** varias estadísticas del capítulo 1 (clases, tamaño, ICC) se
+  calculaban con las 332 718 filas limpias, mientras que todo lo demás usa las
+  278 824 con coordenadas. ¿Con cuál universo reportar?
+- **Hallazgo:** las 53 894 filas sin coordenadas son casi todas mejoras en
+  terreno ajeno (condición 5) de estratos 1 y 2: la cobertura de coordenadas
+  es 67.2 % en el estrato 1 y ≥ 97.7 % en los estratos 3–6. Quitarlas baja el
+  estrato 1 de 32.8 % a 26.3 %. No faltan al azar.
+- **Decisión:** se reportan los dos universos. El capítulo 1 describe la base
+  con las 332 718 filas y muestra al lado las cifras con coordenadas (clases,
+  duplicados, faltantes, n/p, ICC); desde el capítulo 2 se modela con las
+  278 824. Nueva sección 1.7.
+- **Alternativa evaluada, no aplicada:** el 92.7 % de las filas sin
+  coordenadas (49 981) comparte manzana (17 primeros dígitos del NPN) con
+  viviendas ubicadas, con una dispersión típica de manzana de ~30 m. Con el
+  centroide de la manzana el universo de modelado pasaría al 98.8 %. Se deja
+  para el Entregable 2 porque cambia la partición y todos los resultados.
+- **Reorganización:** nueva Guía de lectura (conceptos con ejemplos y
+  recorrido de los datos); el capítulo 1 se reordenó para explicar la
+  estructura del NPN y del predio matriz antes de la limpieza, y cada regla
+  junto al embudo; cada capítulo abre con un cuadro "Qué hace este capítulo"
+  y explica sus métodos con ejemplos antes de usarlos.
+- **Reejecución:** el libro completo se volvió a ejecutar (Python 3.13,
+  scikit-learn 1.9). La partición y las cifras del EDA y del modelo se
+  reproducen; solo cambian en la cuarta cifra decimal algunos Moran (p. ej.
+  0.2183 → 0.2179 en área construida).
+
+## A.13 Pendientes
 
 - (Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
   textos, conclusiones y resumen.

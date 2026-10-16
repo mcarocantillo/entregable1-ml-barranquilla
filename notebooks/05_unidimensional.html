@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -407,11 +411,31 @@
   <section class="tex2jax_ignore mathjax_ignore" id="analisis-unidimensional-seccion-2-2">
 <h1>5. Análisis unidimensional (sección 2.2)<a class="headerlink" href="#analisis-unidimensional-seccion-2-2" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
-<p>Para cada variable: tipo y cardinalidad, estadísticos (media, mediana,
-desviación, percentiles), distribución, asimetría y curtosis, normalidad,
-outliers, y para las categóricas frecuencias, categorías raras y su
-tratamiento. Las lecturas de asimetría y curtosis siguen las tablas de las
-notas de clase (9.1.1):</p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿cómo es cada variable por separado, y hay que
+transformarla o agruparla antes de modelar?</p>
+<p><strong>Datos:</strong> las <strong>218 870 viviendas de entrenamiento</strong>.</p>
+<p><strong>Conceptos nuevos:</strong> cardinalidad, asimetría, curtosis, pruebas de
+normalidad, transformación <code class="docutils literal notranslate"><span class="pre">log1p</span></code> y categorías raras.</p>
+<p><strong>Sale de aquí:</strong> qué variables se transforman con <code class="docutils literal notranslate"><span class="pre">log1p</span></code> y qué
+categorías se agrupan.</p>
+</div>
+<p>«Unidimensional» significa que cada variable se mira <strong>sola</strong>, sin
+relacionarla todavía con el estrato ni con otras variables (eso es el
+capítulo 6). Para cada variable: tipo y cardinalidad (número de valores
+distintos), estadísticos (media, mediana, desviación, percentiles),
+distribución, asimetría y curtosis, normalidad, outliers, y para las
+categóricas frecuencias, categorías raras y su tratamiento.</p>
+<p><strong>Asimetría y curtosis, con un ejemplo.</strong> La <strong>asimetría</strong> mide si la
+distribución tiene una cola más larga hacia un lado. El área construida es
+el caso típico de <strong>asimetría a la derecha</strong>: la mayoría de las viviendas
+mide entre 50 y 100 m², pero unas pocas pasan de 500 m² y «estiran» la
+cola. En ese caso la media queda por encima de la mediana, porque las casas
+grandes la arrastran. La <strong>curtosis</strong> (de Fisher, que vale 0 en la
+distribución normal) mide qué tan pesadas son las colas: una curtosis alta
+indica que los valores extremos son mucho más frecuentes que en una
+normal. Las lecturas siguen las tablas de las notas de clase (9.1.1):</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>|asimetría|</p></th>
@@ -1073,7 +1097,7 @@ aplastada contra el cero).</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/fbb4f1c957b0503419965030d284303e17a0b2e5df8a9cd5f46cd640fc0fa0b1.png" src="../_images/fbb4f1c957b0503419965030d284303e17a0b2e5df8a9cd5f46cd640fc0fa0b1.png" />
+<img alt="../_images/56f03b496f0984070dd8eb261e42e3e1ae58ae75556297b3cd96b6dca9ae41d3.png" src="../_images/56f03b496f0984070dd8eb261e42e3e1ae58ae75556297b3cd96b6dca9ae41d3.png" />
 </div>
 </div>
 </section>
@@ -1214,6 +1238,11 @@ pocos puntos, lo que motiva la transformación log.</p>
 </section>
 <section id="hace-falta-transformar">
 <h2>5.5 ¿Hace falta transformar?<a class="headerlink" href="#hace-falta-transformar" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">log1p(x)</span></code> = log(1 + x). Comprime los valores grandes mucho más que los
+pequeños, así que «acerca» la cola larga al resto. <em>Ejemplo:</em> 50 m², 100 m²
+y 1 000 m² pasan a 3.9, 4.6 y 6.9: la casa de 1 000 m², que estaba 10 veces
+más lejos que la de 100, queda a solo 2.3 unidades. Se usa log(1 + x) y no
+log(x) porque está definido en cero (hay viviendas con 0 baños).</p>
 <p>Regla usada: se aplica <code class="docutils literal notranslate"><span class="pre">log1p</span></code> a las variables <strong>no negativas</strong> con
 |asimetría| &gt; 1 <strong>siempre que la transformación la reduzca</strong>.</p>
 <div class="cell docutils container">
@@ -1353,10 +1382,11 @@ unidades PH tuvieran terreno 0 (el lote es del edificio). Con los datos
 reales <strong>prácticamente no hay ceros</strong> (0.0 % de train en todas las
 condiciones de predio): las unidades PH también tienen área de terreno
 positiva. Lo más probable es que a cada unidad PH se le
-asigne su cuota del lote común (según el coeficiente de copropiedad), lo
-que encaja con la correlación de Spearman fuertemente negativa entre
-terreno y piso de ubicación (−0.695, cap. 6). Consecuencia práctica: no hace falta un indicador de «terreno
-= 0» ni tratar el cero aparte en la transformación log1p.</p></li>
+asigne su cuota del lote común (según el coeficiente de copropiedad). El
+capítulo 6 lo confirma: el terreno disminuye con el piso de ubicación
+(correlación de Spearman de −0.695). Consecuencia práctica: no hace falta
+un indicador de «terreno = 0» ni tratar el cero aparte en la
+transformación log1p.</p></li>
 <li><p><strong>Unidades de <code class="docutils literal notranslate"><span class="pre">altura</span></code>:</strong> si la razón altura / número de plantas ronda 3,
 la altura está en metros (≈ 3 m por piso).</p></li>
 </ul>
@@ -1423,7 +1453,7 @@ Mediana de altura / total_plantas = 3.00  (≈3 sugiere metros)
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/2e5ab215f094fdd1df4f92eaa7c3727e92ed1f68b002e4d72580f28bd5e4dc72.png" src="../_images/2e5ab215f094fdd1df4f92eaa7c3727e92ed1f68b002e4d72580f28bd5e4dc72.png" />
+<img alt="../_images/c821225cd96f8335068658a23015ccfb5837f375f3f60708b9b694671c803179.png" src="../_images/c821225cd96f8335068658a23015ccfb5837f375f3f60708b9b694671c803179.png" />
 </div>
 </div>
 </section>
@@ -1520,7 +1550,7 @@ Piso             218870 100.00      False
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/7f7a0a9eae89fe7d185c5d2aff212b75995a5900982be1bb93ce6feefdb262ac.png" src="../_images/7f7a0a9eae89fe7d185c5d2aff212b75995a5900982be1bb93ce6feefdb262ac.png" />
+<img alt="../_images/eaedb6c91caa3aba9444a64c27ab007afc4818a05c6fd6abea7fca56cd06fa1f.png" src="../_images/eaedb6c91caa3aba9444a64c27ab007afc4818a05c6fd6abea7fca56cd06fa1f.png" />
 </div>
 </div>
 <div class="note admonition">
@@ -1542,10 +1572,12 @@ con y sin PH) suman 255 filas y se agrupan como <code class="docutils literal no
 <strong>99.99 %</strong> de train (29 filas en otras 7 categorías) y <code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code> es
 <strong>constante</strong> («Piso» en el 100 %; las otras 2 categorías del crudo
 desaparecen con las exclusiones del embudo del cap. 1, que saca garajes y
-depósitos). Ninguna de las dos puede discriminar el estrato: en el cap. 6
-<code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code> tiene V de Cramér = 0 (p = 0.47) y <code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>,
-por ser constante, ni siquiera entra en la prueba. Ambas <strong>se excluyen</strong>
-del modelo (cap. 9).</p></li>
+depósitos). Una variable que casi no cambia no puede distinguir un
+estrato de otro: si el 99.99 % de las viviendas dice «Habitacional», esa
+columna no informa nada. El capítulo 6 lo confirma
+(<code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code> tiene V de Cramér = 0, y <code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code>, por ser
+constante, ni siquiera entra en la prueba), y ambas se excluyen en la
+lista final de variables (capítulo 9.4).</p></li>
 <li><p><strong>Decisión:</strong> agrupar las categorías con &lt; 1 % (línea roja) en una
 categoría <code class="docutils literal notranslate"><span class="pre">infrequent</span></code> con <code class="docutils literal notranslate"><span class="pre">OneHotEncoder(min_frequency=0.01)</span></code>, que calcula
 las frecuencias <strong>solo en train</strong>.</p></li>
@@ -1595,8 +1627,8 @@ la mejora es parcial porque son conteos con mucho peso en 1. <strong>Decisión:<
 −10.0 → −16.9).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">altura</span></code> es <strong>casi constante</strong>: vale 3 (metros por planta) en el 99.7 %
 de las filas (su IQR es 0, así que sus 683 outliers de Tukey son
-exactamente los valores distintos de 3). Aportará muy poco (cap. 6:
-η² = 0.005).</p></li>
+exactamente los valores distintos de 3), así que se espera que aporte muy
+poco; el capítulo 6 lo confirma (η² = 0.005).</p></li>
 <li><p>Las pruebas de normalidad rechazan en todas (esperable con n grande); no es
 un problema para la regresión logística, que no supone normalidad de las
 predictoras. La transformación busca reducir la influencia de las colas,

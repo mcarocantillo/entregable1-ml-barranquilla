@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -409,7 +413,11 @@
 <li><p><strong>Base de datos.</strong> El catastro abierto de Barranquilla permitió construir
 una base de <strong>332 718 unidades de vivienda</strong> con estrato residencial válido
 (87.0 % de las 382 597 filas descargadas), en 320 792 predios y 168 044
-predios matriz (edificios, conjuntos o lotes). Durante la construcción se corrigió un error de uniones
+predios matriz (edificios, conjuntos o lotes). De ellas, <strong>278 824 (83.8 %)
+tienen coordenadas</strong> y son el universo con el que se parte y se modela;
+las 53 894 restantes son casi todas mejoras en terreno ajeno de estratos 1
+y 2, y por eso el capítulo 1 reporta las cifras clave en los dos universos
+(sección 1.7). Durante la construcción se corrigió un error de uniones
 muchos-a-muchos que duplicaba ~29 % de las filas. La limpieza distingue
 tres tipos de problema. (i) <strong>Códigos centinela</strong>: año de construcción
 2500 y 1512, y pisos 97–99; se tratan como faltantes. (ii) <strong>Filas que no
@@ -424,8 +432,9 @@ cola larga marca miles de viviendas reales.</p></li>
 <li><p><strong>Estructura de dependencia.</strong> El estrato casi no varía dentro de un
 edificio o conjunto (ICC = 0.992), y hay conjuntos de hasta 1 860 unidades: la
 información sobre el estrato está gobernada por edificios, conjuntos y zonas, no por
-filas (tamaño efectivo ≈ 2 300). Esto obliga a partir los datos por grupos
-espaciales y a medir la incertidumbre remuestreando bloques.</p></li>
+filas (tamaño efectivo ≈ 2 300 con todas las filas y ≈ 1 620 con las que
+tienen coordenadas). Esto obliga a partir los datos por grupos espaciales y
+a medir la incertidumbre remuestreando bloques.</p></li>
 <li><p><strong>Objetivo.</strong> El estrato está moderadamente desbalanceado (4.6:1 en
 train), es ordinal y tiene una <strong>autocorrelación espacial extremadamente
 fuerte</strong> (Moran’s I = 0.913 a nivel de edificio; casi la mitad de los
@@ -484,9 +493,10 @@ falta un modelo más flexible y variables del entorno.</p></li>
 <section id="limitaciones">
 <h2>11.2 Limitaciones<a class="headerlink" href="#limitaciones" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Cobertura:</strong> el 16.2 % de las filas (predios informales, 96.5 % en estratos
-1–2) no tiene coordenadas y queda fuera del modelo; las conclusiones
-aplican a la ciudad formal.</p></li>
+<li><p><strong>Cobertura:</strong> el 16.2 % de las filas (casi todas mejoras en terreno ajeno,
+96.5 % en estratos 1–2) no tiene coordenadas y queda fuera del modelo; las
+conclusiones aplican a la ciudad formal. Quitar esas filas baja el estrato 1
+de 32.8 % a 26.3 % (sección 1.7.2).</p></li>
 <li><p><strong>Pocos bloques de test:</strong> el test quedó con 7 bloques, con poco estrato 6
 (1.3 % frente a 5.7 % en train). Los intervalos son muy anchos y la cifra de
 test es una realización favorable; la estimación más representativa es la
@@ -521,7 +531,7 @@ definición con la Gerencia de Gestión Catastral. El detalle está en el
 multinomial ignora el orden de las clases, y las probabilidades no están
 bien calibradas (ECE = 0.14).</p></li>
 <li><p><strong>Riesgos éticos:</strong> reidentificación por NPN + coordenadas y uso
-discriminatorio del estrato (capítulo 1.8).</p></li>
+discriminatorio del estrato (sección 1.11).</p></li>
 </ul>
 </section>
 <section id="proximos-pasos-entregable-2">
@@ -542,8 +552,11 @@ zonas, y comparar tamaños de bloque y buffer como hiperparámetros de la
 evaluación (notas de clase 9.1.11).</p></li>
 <li><p>Verificar con el diccionario del catastro los ceros de habitaciones y
 baños y el amontonamiento de años.</p></li>
-<li><p>Ubicar los predios informales con otra fuente para reducir el sesgo de
-cobertura.</p></li>
+<li><p>Ubicar las viviendas sin coordenadas con el centroide de su manzana
+(primeros 17 dígitos del NPN): el 92.7 % es recuperable y el universo de
+modelado pasaría del 83.8 % al 98.8 % de las viviendas (sección 1.7.3).
+Habría que repetir la partición y el análisis espacial, cuidando que todas
+las viviendas de una manzana quedan en un mismo punto.</p></li>
 </ul>
 </section>
 <section id="veredicto-la-base-de-datos-sirve-para-el-proyecto">
@@ -570,15 +583,15 @@ declaró antes de modelar.</p>
 <td><p>Tamaño de la muestra</p></td>
 <td><p>Instrucciones 1</p></td>
 <td><p>≥ 20 000 observaciones</p></td>
-<td><p>332 718 viviendas</p></td>
+<td><p>332 718 viviendas (278 824 con coordenadas)</p></td>
 <td><p>1</p></td>
 <td><p>Sí</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>Relación n/p (filas por cada columna del modelo; ver 1.6)</p></td>
+<td><p>Relación n/p (filas por cada columna del modelo; ver 1.8)</p></td>
 <td><p>Instrucciones 1</p></td>
 <td><p>reportar; n ≫ p</p></td>
-<td><p>~9 500 filas por columna</p></td>
+<td><p>~9 500 filas por columna (~8 000 con coordenadas)</p></td>
 <td><p>1</p></td>
 <td><p>Sí</p></td>
 </tr>
@@ -594,7 +607,7 @@ declaró antes de modelar.</p>
 <td><p>Entidades independientes</p></td>
 <td><p>Instrucciones 1</p></td>
 <td><p>reportar el tamaño efectivo</p></td>
-<td><p>168 044 predios matriz; ICC = 0.992; tamaño efectivo ≈ 2 300</p></td>
+<td><p>168 044 predios matriz (132 276 con coordenadas); ICC = 0.992; tamaño efectivo ≈ 2 300 (≈ 1 620 con coordenadas)</p></td>
 <td><p>1</p></td>
 <td><p>Sí, con partición por bloques</p></td>
 </tr>
@@ -610,8 +623,8 @@ declaró antes de modelar.</p>
 <td><p>Sesgo de muestreo y representatividad</p></td>
 <td><p>Instrucciones 1</p></td>
 <td><p>sin sesgo de cobertura</p></td>
-<td><p>16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato</p></td>
-<td><p>3, 8</p></td>
+<td><p>16.2 % sin coordenadas, casi todo informal; V = 0.42 con el estrato; 92.7 % recuperable por manzana</p></td>
+<td><p>1, 3, 8</p></td>
 <td><p>Con reservas</p></td>
 </tr>
 <tr class="row-even"><td><p>7</p></td>
@@ -702,7 +715,8 @@ La curva de aprendizaje muestra que la cantidad de datos no es el límite.</p></
 <li><p><strong>Representatividad (criterio 6).</strong> La base describe la ciudad formal: las
 filas sin coordenadas son casi todas predios informales de estratos 1 y 2,
 y quedan fuera del modelo. Las conclusiones no se deben extrapolar a esos
-asentamientos.</p></li>
+asentamientos. La reserva tiene un remedio concreto: ubicarlas con el
+centroide de su manzana (11.3).</p></li>
 <li><p><strong>Residuos con dependencia espacial (criterio 14).</strong> Según las instrucciones del proyecto, esto
 indica información estructural sin capturar. Es una limitación del modelo
 lineal más que de la base: el modelo capta la tendencia norte-sur, pero no

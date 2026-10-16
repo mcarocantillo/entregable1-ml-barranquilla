@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -462,15 +466,15 @@ servicio ArcGIS con caché). Fecha de descarga: 15 de septiembre de 2026.</p></l
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Python 3.11.15 — Linux 6.18.44-fc-v50
-numpy          2.4.4
-pandas         3.0.2
-scipy          1.17.1
-scikit-learn   1.8.0
-matplotlib     3.10.9
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Python 3.13.16 — Linux 6.18.44-fc-v139
+numpy          2.5.3
+pandas         3.0.5
+scipy          1.18.1
+scikit-learn   1.9.1
+matplotlib     3.11.2
 seaborn        0.13.2
 folium         0.20.0
-pyarrow        25.0.1
+pyarrow        26.0.0
 jupyter-book   1.0.4.post1
 
 SEED = 42 | CSV = predios_residenciales_barranquilla.csv
@@ -482,8 +486,8 @@ SEED = 42 | CSV = predios_residenciales_barranquilla.csv
 <p class="admonition-title">Dónde se ejecutó esta copia del libro</p>
 <p>Según la salida anterior, el libro se ejecutó completo (todos los cuadernos,
 capítulos 1–10 y este apéndice) en un entorno Linux en la nube (kernel
-6.18.44), con Python 3.11.15,
-scikit-learn 1.8.0, pandas 3.0.2 y numpy 2.4.4, sobre el CSV real
+6.18.44), con Python 3.13.16,
+scikit-learn 1.9.1, pandas 3.0.5 y numpy 2.5.3, sobre el CSV real
 (<code class="docutils literal notranslate"><span class="pre">predios_residenciales_barranquilla.csv</span></code>) y con <code class="docutils literal notranslate"><span class="pre">SEED</span> <span class="pre">=</span> <span class="pre">42</span></code>. Gracias a la
 función propia de partición, ejecutarlo con otra versión de scikit-learn no
 cambia qué bloques quedan en train y en test; otras salidas (p. ej. el

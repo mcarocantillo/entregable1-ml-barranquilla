@@ -216,7 +216,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -408,14 +412,28 @@
   <section class="tex2jax_ignore mathjax_ignore" id="calidad-de-datos-en-entrenamiento-faltantes-outliers-y-sesgo">
 <h1>3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo<a class="headerlink" href="#calidad-de-datos-en-entrenamiento-faltantes-outliers-y-sesgo" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
-<p>Completa la parte de <strong>calidad de datos</strong> de la Sección 1 de las instrucciones del proyecto que sí
-implica decisiones de modelado (cómo imputar, cómo tratar outliers). Por eso
-se hace <strong>solo con entrenamiento</strong>:</p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿cómo tratar los datos faltantes y los valores
+extremos, y a quién deja fuera el modelo?</p>
+<p><strong>Datos:</strong> las <strong>218 870 viviendas de entrenamiento</strong> (capítulo 2). A
+partir de aquí y hasta el capítulo 9 no se mira el conjunto de prueba.</p>
+<p><strong>Conceptos nuevos:</strong> mecanismos de faltantes (MCAR, MAR, MNAR), diferencia
+de medias estandarizada (SMD), AUC, regla de Tukey y winsorización.</p>
+<p><strong>Sale de aquí:</strong> cómo imputar los faltantes, cómo limitar los extremos y
+la medida del sesgo de cobertura.</p>
+</div>
+<p>El capítulo 1 ya contó los faltantes y anuló los valores imposibles con
+reglas fijas. Lo que falta de la parte de <strong>calidad de datos</strong> de la
+Sección 1 de las instrucciones del proyecto son las preguntas que <strong>sí</strong>
+llevan a decisiones de modelado (con qué valor rellenar un faltante, hasta
+dónde recortar un extremo). Esas decisiones aprenden de los datos, y por eso
+se toman <strong>solo con entrenamiento</strong>:</p>
 <ul class="simple">
 <li><p>Valores faltantes: <strong>patrón</strong> (matriz de nulos) y <strong>mecanismo</strong>
-(MCAR / MAR / MNAR) con evidencia.</p></li>
-<li><p>Outliers univariados: detección (IQR de Tukey) y tratamiento.</p></li>
-<li><p>Sesgo de muestreo y representatividad: quién queda fuera del modelo.</p></li>
+(MCAR / MAR / MNAR) con evidencia (3.1).</p></li>
+<li><p>Outliers univariados: detección (regla de Tukey) y tratamiento (3.2).</p></li>
+<li><p>Sesgo de muestreo y representatividad: quién queda fuera del modelo (3.3).</p></li>
 </ul>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
@@ -640,12 +658,43 @@ se hace <strong>solo con entrenamiento</strong>:</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/75da53313f32c8b23eb7bb4d5af7f4d1fe5a325bb15a0d156cf6c3117a37f362.png" src="../_images/75da53313f32c8b23eb7bb4d5af7f4d1fe5a325bb15a0d156cf6c3117a37f362.png" />
+<img alt="../_images/14bc969e47576ad21be2e67ca58b6ea22f41d1909cd02883cfd7d74dba2e0cd5.png" src="../_images/14bc969e47576ad21be2e67ca58b6ea22f41d1909cd02883cfd7d74dba2e0cd5.png" />
 </div>
 </div>
 </section>
 <section id="mecanismo-mcar-mar-mnar">
 <h3>Mecanismo (MCAR / MAR / MNAR)<a class="headerlink" href="#mecanismo-mcar-mar-mnar" title="Link to this heading">#</a></h3>
+<p>No basta con saber <strong>cuántos</strong> datos faltan; importa <strong>por qué</strong> faltan,
+porque de eso depende si rellenarlos introduce sesgo. Hay tres casos
+clásicos (Rubin, 1976), que se entienden mejor con un ejemplo sobre el año
+de construcción:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mecanismo</p></th>
+<th class="head"><p>Significado</p></th>
+<th class="head"><p>Ejemplo</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>MCAR</strong> (completamente al azar)</p></td>
+<td><p>faltar no depende de nada</p></td>
+<td><p>un funcionario olvida digitar el año en fichas elegidas al azar</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MAR</strong> (al azar, dado lo observado)</p></td>
+<td><p>faltar depende de otras variables que sí vemos</p></td>
+<td><p>el año falta más en cierto sector de la ciudad, y el sector sí está en los datos</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MNAR</strong> (no al azar)</p></td>
+<td><p>faltar depende del propio valor que falta</p></td>
+<td><p>el año falta más justo en las casas muy antiguas, porque nadie lo sabe</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Con MCAR, rellenar con la mediana no sesga nada. Con MAR, las otras
+variables ayudan a corregir. MNAR no se puede detectar con los datos (habría
+que conocer el valor que falta) y solo se argumenta con conocimiento del
+dominio.</p>
 <p>Con cientos de miles de filas la prueba de Little rechaza MCAR ante
 cualquier diferencia mínima, así que se usan tres evidencias complementarias
 y se interpreta la <strong>magnitud</strong>:</p>
@@ -653,12 +702,19 @@ y se interpreta la <strong>magnitud</strong>:</p>
 <li><p><strong>Faltante vs. estrato:</strong> chi² y V de Cramér entre el indicador de nulo y
 el objetivo. V ≈ 0 es compatible con MCAR respecto al objetivo.</p></li>
 <li><p><strong>Registros completos vs. incompletos:</strong> diferencia de medias estandarizada
-(SMD) en las demás variables. |SMD| &lt; 0.1 se considera despreciable.</p></li>
-<li><p><strong>¿Se puede predecir el faltante?</strong> Regresión logística del indicador de
-nulo con las variables observadas (AUC por validación cruzada). AUC ≈ 0.5
-→ MCAR plausible; AUC claramente &gt; 0.5 → el faltante depende de variables
-observadas (<strong>MAR</strong>). MNAR (depende del propio valor no observado) no se
-puede probar con los datos: se argumenta con conocimiento del dominio.</p></li>
+(SMD) en las demás variables: la diferencia de medias entre las filas con
+y sin el dato, dividida por la desviación estándar. <em>Ejemplo:</em> si las
+viviendas sin año miden en promedio 90 m² y las demás 80 m², con una
+desviación de 50 m², la SMD es (90 − 80) ÷ 50 = 0.2. |SMD| &lt; 0.1 se
+considera despreciable.</p></li>
+<li><p><strong>¿Se puede predecir el faltante?</strong> Se entrena una regresión logística
+que intenta adivinar, con las variables observadas, si a una fila le
+falta el dato. Su acierto se mide con el <strong>AUC</strong>: la probabilidad de que,
+al tomar una fila con faltante y otra sin él, el modelo le dé más
+probabilidad de faltante a la primera. AUC ≈ 0.5 es adivinar a ciegas
+(MCAR plausible); AUC claramente &gt; 0.5 indica que el faltante depende de
+variables observadas (<strong>MAR</strong>). MNAR no se puede probar con los datos: se
+argumenta con conocimiento del dominio.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -876,9 +932,15 @@ supera el 30 % de faltantes, así que, siguiendo las notas del curso
 <h2>3.2 Outliers univariados (IQR de Tukey)<a class="headerlink" href="#outliers-univariados-iqr-de-tukey" title="Link to this heading">#</a></h2>
 <p>Los valores <strong>imposibles</strong> ya se convirtieron en NaN (capítulo 1). Lo que
 queda son valores <strong>extremos pero plausibles</strong>: una casa de 8 baños, un lote
-muy grande. Se cuantifican con la regla de Tukey
-<span class="math notranslate nohighlight">\([Q_1 - 1.5\,IQR,\ Q_3 + 1.5\,IQR]\)</span> y con un criterio más estricto
-(<span class="math notranslate nohighlight">\(3\,IQR\)</span>, «outliers lejanos»).</p>
+muy grande. Se cuantifican con la <strong>regla de Tukey</strong>, que se basa en los
+cuartiles: <span class="math notranslate nohighlight">\(Q_1\)</span> deja por debajo el 25 % de los datos, <span class="math notranslate nohighlight">\(Q_3\)</span> el 75 %, y el
+rango intercuartílico es <span class="math notranslate nohighlight">\(IQR = Q_3 - Q_1\)</span>. Es outlier todo valor fuera de
+<span class="math notranslate nohighlight">\([Q_1 - 1.5\,IQR,\ Q_3 + 1.5\,IQR]\)</span>, y «outlier lejano» todo valor fuera
+de <span class="math notranslate nohighlight">\([Q_1 - 3\,IQR,\ Q_3 + 3\,IQR]\)</span>.</p>
+<p><em>Ejemplo:</em> si el área construida tiene <span class="math notranslate nohighlight">\(Q_1 = 50\)</span> m² y <span class="math notranslate nohighlight">\(Q_3 = 100\)</span> m², el
+<span class="math notranslate nohighlight">\(IQR\)</span> es 50 m² y el límite superior de Tukey es 100 + 1.5 × 50 = 175 m².
+Una casa de 200 m² sería «outlier», aunque en el norte de la ciudad es
+perfectamente normal. Por eso la regla aquí <strong>describe</strong>, no limpia.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outliers univariados con la regla de Tukey (1.5·IQR) y con el criterio de</span>
@@ -1065,7 +1127,7 @@ muy grande. Se cuantifican con la regla de Tukey
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/22dca49c905886a9e88943de3e541a59ca4b18845be171c4a79c96b3eb3afac8.png" src="../_images/22dca49c905886a9e88943de3e541a59ca4b18845be171c4a79c96b3eb3afac8.png" />
+<img alt="../_images/df100b0aa70147f3c4d6a19b5d7c03fc4bfcbd52ed29afe6dd2f64a3b88b3e8d.png" src="../_images/df100b0aa70147f3c4d6a19b5d7c03fc4bfcbd52ed29afe6dd2f64a3b88b3e8d.png" />
 </div>
 </div>
 <div class="note admonition">
@@ -1091,13 +1153,16 @@ umbrales que usará la winsorización) está en 692 m² de área construida,
 <li><p>En <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code>, los códigos 97–99 ya se trataron como faltantes
 (cap. 1, techo del rango en 60): el p99.9 queda en 20 y el máximo en 41,
 un piso real de las torres más altas, no un código.</p></li>
-<li><p><strong>Decisión:</strong> no se elimina ninguna fila por ser outlier estadístico, porque
-el área construida crece con el estrato (mediana de 54 m² en estrato 1
-frente a 152 m² en estrato 6, cap. 6): las viviendas más grandes pesan más
-en las clases altas, que ya son minoritarias. Su influencia en el modelo
-lineal se reduce con (i) <code class="docutils literal notranslate"><span class="pre">log1p</span></code>
-en las variables muy asimétricas (cap. 5) y (ii) <strong>winsorización</strong> a los
-percentiles 0.1 y 99.9 <strong>aprendidos en train</strong> dentro del Pipeline.</p></li>
+<li><p><strong>Decisión:</strong> no se elimina ninguna fila por ser outlier estadístico,
+porque el área construida crece con el estrato (el capítulo 6 lo mide: la
+mediana pasa de 54 m² en estrato 1 a 152 m² en estrato 6). Las viviendas
+más grandes pesan más en las clases altas, que ya son minoritarias, y
+eliminarlas les quitaría ejemplos. Su influencia en el modelo lineal se
+reduce de dos formas: (i) con <code class="docutils literal notranslate"><span class="pre">log1p</span></code> en las variables muy asimétricas
+(capítulo 5) y (ii) con <strong>winsorización</strong> a los percentiles 0.1 y 99.9
+<strong>aprendidos en train</strong> dentro del Pipeline. Winsorizar es recortar sin
+borrar: un valor por encima del percentil 99.9 (por ejemplo, 692 m² de
+área construida) se reemplaza por ese percentil, y la fila se conserva.</p></li>
 <li><p>Los outliers <strong>multivariados</strong> (combinaciones raras) se revisan en el
 capítulo 7.</p></li>
 </ul>
@@ -1123,10 +1188,17 @@ capítulo 7.</p></li>
 </section>
 <section id="sesgo-de-muestreo-y-representatividad">
 <h2>3.3 Sesgo de muestreo y representatividad<a class="headerlink" href="#sesgo-de-muestreo-y-representatividad" title="Link to this heading">#</a></h2>
-<p>¿A quién deja fuera el modelo? Se comparan las filas <strong>con</strong> coordenadas
-(población de modelado) contra las filas <strong>sin</strong> coordenadas, que no se
-pudieron ubicar (predios informales, capítulo 1). Para no mirar el conjunto
-de prueba, la comparación usa solo train frente a las filas no ubicables.</p>
+<p>¿A quién deja fuera el modelo? En la sección 1.7 se decidió modelar solo
+con las viviendas que tienen coordenadas. Aquí se mide el costo de esa
+decisión: se comparan las filas <strong>con</strong> coordenadas (población de
+modelado) contra las <strong>53 894 sin coordenadas</strong>, casi todas mejoras en
+terreno ajeno. Para no mirar el conjunto de prueba, la comparación usa solo
+train frente a las filas no ubicables.</p>
+<p>La fuerza de la diferencia se mide con la <strong>V de Cramér</strong>, una medida de
+asociación entre dos variables categóricas que va de 0 (las proporciones de
+estrato son iguales en los dos grupos) a 1 (conocer el grupo determina el
+estrato). Como guía: menos de 0.1 es despreciable, 0.1–0.3 débil, 0.3–0.5
+moderada y más de 0.5 fuerte.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sesgo de cobertura: compara la distribución del estrato en la población modelada</span>
@@ -1298,7 +1370,7 @@ de prueba, la comparación usa solo train frente a las filas no ubicables.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/90371e4c8aafa6b4747ee8dcebc1ef19a95495d5856f971264c6d6af01c16bd7.png" src="../_images/90371e4c8aafa6b4747ee8dcebc1ef19a95495d5856f971264c6d6af01c16bd7.png" />
+<img alt="../_images/559b3fd83d1763c005c380db2df70d56d2c6ed6462e82959fef5061c553bcf33.png" src="../_images/559b3fd83d1763c005c380db2df70d56d2c6ed6462e82959fef5061c553bcf33.png" />
 </div>
 </div>
 <div class="important admonition">
@@ -1307,17 +1379,21 @@ de prueba, la comparación usa solo train frente a las filas no ubicables.</p>
 <li><p>El sesgo de cobertura es <strong>fuerte</strong>: de las filas sin coordenadas, el
 <strong>66.3 % son estrato 1 y el 30.2 % estrato 2</strong> (96.5 % en los dos estratos
 más bajos), frente a 25.5 % y 19.9 % en la población modelada. La V de
-Cramér entre «tener o no coordenadas» y el estrato es <strong>0.42</strong>, una
-asociación grande.</p></li>
+Cramér entre «tener o no coordenadas» y el estrato es <strong>0.42</strong>: una
+asociación moderada en la escala de arriba, cerca del límite de «fuerte»
+(0.5). Para comparar, ninguna predictora categórica del capítulo 6 supera
+0.33 con el estrato.</p></li>
 <li><p>La razón es estructural: el <strong>99.5 %</strong> de las filas sin coordenadas son
 predios <code class="docutils literal notranslate"><span class="pre">Informal</span></code> (sin lote propio ni edificio matriz de donde tomar un
 centroide). En train, lo informal pesa solo 7.6 %.</p></li>
 <li><p>Consecuencia: el modelo representa la <strong>ciudad formal</strong>. Aprenderá del
 estrato 1 sobre todo su versión formal, y sus métricas no deben
 extrapolarse a asentamientos informales. Se declara como limitación en las
-conclusiones. Mejora futura: ubicar estos predios con otra fuente
-(cartografía de manzanas o geocodificación de direcciones) o con el código
-de sector/barrio del NPN.</p></li>
+conclusiones (11.2).</p></li>
+<li><p>Mejora evaluada en la sección 1.7.3: el 92.7 % de estas viviendas comparte
+manzana (primeros 17 dígitos del NPN) con viviendas ubicadas, así que se
+podrían ubicar con el centroide de su manzana. Queda como primer paso del
+Entregable 2 (11.3).</p></li>
 </ul>
 </div>
 </section>

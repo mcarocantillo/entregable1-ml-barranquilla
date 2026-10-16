@@ -214,7 +214,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -400,39 +404,61 @@
   <section class="tex2jax_ignore mathjax_ignore" id="reserva-del-conjunto-de-prueba-particion-por-bloques-espaciales">
 <h1>2. Reserva del conjunto de prueba (partición por bloques espaciales)<a class="headerlink" href="#reserva-del-conjunto-de-prueba-particion-por-bloques-espaciales" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
-<p>Las instrucciones del proyecto exigen <strong>reservar el conjunto de prueba antes de tomar cualquier
-decisión basada en los datos</strong> (imputación, transformaciones, selección de
-variables, umbrales de outliers) y que la partición respete la estructura de
-los datos. Aquí hay tres estructuras que respetar a la vez:</p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿cómo separar un conjunto de prueba que sea un
+«examen justo» para el modelo?</p>
+<p><strong>Datos:</strong> las <strong>278 824 viviendas con coordenadas</strong> (universo de modelado,
+sección 1.7). Las 53 894 sin coordenadas no se pueden asignar a una zona y
+se guardan aparte para medir su sesgo en el capítulo 3.</p>
+<p><strong>Conceptos nuevos:</strong> estratificar, agrupar, bloque espacial y divergencia
+de Jensen-Shannon (todos se explican abajo; ver también la Guía de
+lectura).</p>
+<p><strong>Sale de aquí:</strong> la etiqueta <code class="docutils literal notranslate"><span class="pre">train</span></code> / <code class="docutils literal notranslate"><span class="pre">test</span></code> de cada vivienda, que todos
+los capítulos siguientes leen del mismo archivo.</p>
+</div>
+<p>Las instrucciones del proyecto exigen <strong>reservar el conjunto de prueba antes
+de tomar cualquier decisión basada en los datos</strong> (imputación,
+transformaciones, selección de variables, umbrales de outliers). La razón es
+la misma por la que un profesor no muestra el examen antes de la clase: si
+las decisiones se toman mirando la prueba, la nota final ya no mide lo que
+el modelo aprendió. Además, la partición debe respetar la estructura de los
+datos. Aquí hay tres estructuras que respetar a la vez:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Estructura</p></th>
+<th class="head"><p>Ejemplo</p></th>
 <th class="head"><p>Riesgo si se ignora</p></th>
 <th class="head"><p>Respuesta</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Desbalance de clases (~8:1 entre estrato 1 y estrato 6 en el dataset limpio, cap. 1)</p></td>
-<td><p>un fold sin casos de estrato 5 o 6</p></td>
-<td><p><strong>estratificar</strong></p></td>
+<tr class="row-even"><td><p>Desbalance de clases (~8:1 entre estrato 1 y estrato 6 en las filas limpias, cap. 1)</p></td>
+<td><p>hay unas 108 000 viviendas de estrato 1 y solo 13 000 de estrato 6</p></td>
+<td><p>por azar, un fold podría quedar casi sin estratos 5 o 6</p></td>
+<td><p><strong>estratificar</strong>: que cada fold tenga proporciones de estrato parecidas</p></td>
 </tr>
-<tr class="row-odd"><td><p>Varias filas por entidad (apartamentos de un mismo edificio, casi idénticos)</p></td>
-<td><p>el modelo «reconoce» el edificio</p></td>
-<td><p><strong>agrupar</strong></p></td>
+<tr class="row-odd"><td><p>Varias filas por entidad</p></td>
+<td><p>los 200 apartamentos de un conjunto comparten estrato y son casi idénticos</p></td>
+<td><p>el modelo «reconoce» el conjunto en vez de aprender</p></td>
+<td><p><strong>agrupar</strong>: un predio matriz va completo a un solo lado</p></td>
 </tr>
-<tr class="row-even"><td><p>Coordenadas con autocorrelación espacial fuerte</p></td>
-<td><p>test optimista: vecinos casi iguales en train</p></td>
-<td><p><strong>bloques espaciales</strong></p></td>
+<tr class="row-even"><td><p>Autocorrelación espacial fuerte</p></td>
+<td><p>una casa de estrato 1 suele estar rodeada de casas de estrato 1</p></td>
+<td><p>test optimista: cada vivienda de prueba tiene vecinas casi iguales en entrenamiento</p></td>
+<td><p><strong>bloques espaciales</strong>: se separan zonas completas de la ciudad</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>La herramienta que cubre las tres es una partición <strong>estratificada por
 grupos</strong> (la lógica de <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>) usando como grupo un <strong>bloque
-espacial</strong> de 2 km × 2 km (un edificio siempre cae completo en un bloque
-porque todas sus unidades comparten centroide). Se toma 1 de 5 folds como
-prueba (~20 %). Referencias: notas de clase 9.1.9 (<code class="docutils literal notranslate"><span class="pre">GroupKFold</span></code>) y 9.1.11
-(Spatial Block CV; Roberts et al., 2017; Valavi et al., 2019).</p>
+espacial</strong> de 2 km × 2 km. Un predio matriz siempre cae completo en un
+bloque, porque todas sus unidades comparten el mismo centroide. Los bloques
+se reparten en 5 grupos (<em>folds</em>) con proporciones de estrato parecidas, y
+uno de ellos (~20 % de las filas) se reserva como prueba. Referencias: notas
+de clase 9.1.9 (<code class="docutils literal notranslate"><span class="pre">GroupKFold</span></code>) y 9.1.11 (Spatial Block CV; Roberts et al.,
+2017; Valavi et al., 2019).</p>
 <div class="tip admonition">
 <p class="admonition-title">Por qué una función propia y no StratifiedGroupKFold</p>
 <p>Los folds se generan con <code class="docutils literal notranslate"><span class="pre">folds_estratificados_por_grupo</span></code>, una función propia
@@ -452,10 +478,12 @@ folds de la validación cruzada espacial del capítulo 10.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El <strong>buffer</strong> (franja de exclusión entre train y test) se decide en el
-capítulo 8 a partir del correlograma calculado <strong>solo con train</strong>, y se
-aplica al entrenar el modelo final (capítulo 10). Así su tamaño también es
-una decisión tomada sin mirar el conjunto de prueba.</p>
+<p>Este capítulo solo separa los bloques. La otra protección espacial, el
+<strong>buffer</strong> (franja de exclusión de 1 km entre entrenamiento y prueba, ver la
+Guía de lectura), se decide más adelante, en el capítulo 8, a partir de
+cómo se parecen las viviendas según la distancia, calculado <strong>solo con
+entrenamiento</strong>. Se aplica al entrenar el modelo final (capítulo 10). Así su
+tamaño también es una decisión tomada sin mirar el conjunto de prueba.</p>
 </div>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
@@ -519,8 +547,9 @@ una decisión tomada sin mirar el conjunto de prueba.</p>
 </div>
 </div>
 <p>Las filas <strong>sin coordenadas</strong> no pueden asignarse a ningún bloque espacial,
-así que quedan fuera del modelado. Se guardan aparte para cuantificar el
-sesgo que esto introduce (capítulo 3).</p>
+así que quedan fuera del modelado (la decisión se justificó en la sección
+1.7). Se guardan aparte para cuantificar el sesgo que esto introduce
+(capítulo 3.3).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reserva del conjunto de prueba ANTES de cualquier decisión aprendida de los datos.</span>
@@ -545,6 +574,11 @@ sesgo que esto introduce (capítulo 3).</p>
 </div>
 <section id="verificaciones-de-la-particion">
 <h2>Verificaciones de la partición<a class="headerlink" href="#verificaciones-de-la-particion" title="Link to this heading">#</a></h2>
+<p>Una partición se verifica en tres frentes: (1) que ningún predio matriz
+quede repartido entre entrenamiento y prueba, (2) que las proporciones de
+estrato sean parecidas en ambos lados y (3) que no haya entidades
+compartidas. En este libro «edificio» equivale a predio matriz (sección
+1.3).</p>
 <p>Primero, si algún edificio aparece en ambos conjuntos es porque sus unidades tienen
 centroides distintos (unas con terreno propio y otras propagadas) y cayeron
 en bloques distintos; si ocurre, se reasigna todo el edificio al conjunto de
@@ -726,12 +760,22 @@ prueba para que no quede partido.</p>
 </div>
 <div class="note admonition">
 <p class="admonition-title">Cómo leer esto</p>
-<p>Con cientos de miles de filas el chi² casi siempre sale significativo aunque
-las diferencias sean mínimas; lo que importa es la <strong>magnitud</strong>: diferencias
-de pocos puntos porcentuales y una divergencia de Jensen-Shannon cercana a 0
-indican que train y test tienen proporciones de estrato comparables. Como la
-partición es por zonas de la ciudad, es imposible que sean idénticas: el
-estrato depende del lugar.</p>
+<p>Se usan dos medidas complementarias:</p>
+<ul class="simple">
+<li><p><strong>Prueba χ² (chi-cuadrado):</strong> pregunta si las proporciones de estrato de
+train y test podrían ser iguales y diferir solo por azar. Con cientos de
+miles de filas casi siempre sale significativa aunque las diferencias sean
+mínimas (ver «tamaño de efecto frente a p-valor» en la Guía de lectura).</p></li>
+<li><p><strong>Divergencia de Jensen-Shannon (JS):</strong> mide <strong>cuánto</strong> se diferencian
+dos distribuciones. Vale 0 si son idénticas y como máximo ln 2 ≈ 0.69 si
+no comparten nada. <em>Ejemplo:</em> si train tuviera 50 % de estrato 1 y 50 % de
+estrato 2 y test 49 % y 51 %, la JS sería ≈ 0.00005; si test fuera 100 %
+estrato 6, sería 0.69.</p></li>
+</ul>
+<p>Lo que importa es la <strong>magnitud</strong>: diferencias de pocos puntos porcentuales
+y una JS cercana a 0 indican que train y test tienen proporciones de estrato
+comparables. Como la partición es por zonas de la ciudad, es imposible que
+sean idénticas: el estrato depende del lugar.</p>
 </div>
 <div class="important admonition">
 <p class="admonition-title">Resultado con los datos reales</p>
@@ -850,7 +894,7 @@ cruzada espacial en train, que sí rota todas las zonas.</p></li>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/11dfcb7bb5fe2e1726031008d1831137df315916102a1bbf9ce7f33ca9f92693.png" src="../_images/11dfcb7bb5fe2e1726031008d1831137df315916102a1bbf9ce7f33ca9f92693.png" />
+<img alt="../_images/6685f78f9c62376865e04065b704f3816fd4654c24ae29bfcfabcc1172b66709.png" src="../_images/6685f78f9c62376865e04065b704f3816fd4654c24ae29bfcfabcc1172b66709.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -877,7 +921,7 @@ cruzada espacial en train, que sí rota todas las zonas.</p></li>
    motivo: Bloques de 2 km: mayores que la escala de un barrio/edificio, de modo que unidades vecinas casi idénticas no queden a ambos lados de la partición.
 [decisión registrada] semilla = 42
    motivo: Semilla única para partición, CV, muestreos y modelos.
-Guardado: datos/procesados/dataset_modelado.parquet
+Guardado: /home/user/entregable1-ml-barranquilla/datos/procesados/dataset_modelado.parquet
 </pre></div>
 </div>
 </div>

@@ -216,7 +216,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -419,6 +423,27 @@
   <section class="tex2jax_ignore mathjax_ignore" id="modelo-base-seccion-3">
 <h1>10. Modelo base (sección 3)<a class="headerlink" href="#modelo-base-seccion-3" title="Link to this heading">#</a></h1>
 <p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿qué tan bien predice el estrato una regresión
+logística construida con las decisiones del análisis exploratorio, y supera
+a las reglas triviales?</p>
+<p><strong>Datos:</strong> entrenamiento tras el buffer de 1 km (<strong>138 239 viviendas</strong>)
+para ajustar el modelo final, y el conjunto de <strong>prueba (59 954)</strong>, que se
+abre aquí por primera y única vez.</p>
+<p><strong>Recorrido:</strong> se preparan los datos y el buffer (10.1); se eligen los
+hiperparámetros con validación cruzada espacial y se compara con las líneas
+base (10.2); se revisa si más datos ayudarían (10.3); se evalúa una sola
+vez en prueba, con intervalos de confianza (10.4); se buscan patrones
+espaciales en los errores (10.5) y se interpretan los coeficientes (10.6).</p>
+<p><strong>Conceptos que se usan</strong> (ver la Guía de lectura): validación cruzada,
+línea base, Pipeline, regularización, F1 macro, bootstrap por bloques y
+calibración.</p>
+</div>
+<p>Se comparan <strong>dos modelos</strong>: <strong>A</strong>, solo con variables físicas de la
+vivienda, y <strong>B</strong>, con variables físicas <strong>y</strong> de ubicación (<code class="docutils literal notranslate"><span class="pre">x_km</span></code>,
+<code class="docutils literal notranslate"><span class="pre">y_km</span></code>, <code class="docutils literal notranslate"><span class="pre">dist_centro_km</span></code>). La comparación responde cuánto aporta la
+ubicación.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Requisito de las instrucciones</p></th>
@@ -827,7 +852,9 @@ así que diferencias entre modelos de 0.01–0.02 no se interpretan.</p>
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold 1: train  112268 -&gt;   72611 tras buffer 1.00 km (35.3% excluido) | validación  25971 | bloques val: 5
-  fold 2: train  107695 -&gt;   69000 tras buffer 1.00 km (35.9% excluido) | validación  30544 | bloques val: 4
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold 2: train  107695 -&gt;   69000 tras buffer 1.00 km (35.9% excluido) | validación  30544 | bloques val: 4
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold 3: train  106429 -&gt;   73690 tras buffer 1.00 km (30.8% excluido) | validación  31810 | bloques val: 4
@@ -836,10 +863,10 @@ así que diferencias entre modelos de 0.01–0.02 no se interpretan.</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold 4: train  116052 -&gt;   56155 tras buffer 1.00 km (51.6% excluido) | validación  22187 | bloques val: 7
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A_fisicas: elegido (regla 1-SE) {'clf__C': 0.01, 'clf__class_weight': 'balanced'} | F1 macro CV = 0.2832 | máximo de la rejilla: {'clf__C': 0.01, 'clf__class_weight': 'balanced'} con 0.2832 (SE = 0.0385) (52s)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A_fisicas: elegido (regla 1-SE) {'clf__C': 0.01, 'clf__class_weight': 'balanced'} | F1 macro CV = 0.2832 | máximo de la rejilla: {'clf__C': 0.01, 'clf__class_weight': 'balanced'} con 0.2832 (SE = 0.0385) (38s)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B_fisicas+ubicacion: elegido (regla 1-SE) {'clf__C': 0.01, 'clf__class_weight': None} | F1 macro CV = 0.2988 | máximo de la rejilla: {'clf__C': 0.1, 'clf__class_weight': None} con 0.3118 (SE = 0.0303) (101s)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B_fisicas+ubicacion: elegido (regla 1-SE) {'clf__C': 0.01, 'clf__class_weight': None} | F1 macro CV = 0.2988 | máximo de la rejilla: {'clf__C': 0.1, 'clf__class_weight': None} con 0.3118 (SE = 0.0303) (67s)
 </pre></div>
 </div>
 </div>
@@ -876,7 +903,7 @@ así que diferencias entre modelos de 0.01–0.02 no se interpretan.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/b872550aa5ece68e42bbc0c4d65e0af2af62b8670ad01febacecb0da6fe0d50e.png" src="../_images/b872550aa5ece68e42bbc0c4d65e0af2af62b8670ad01febacecb0da6fe0d50e.png" />
+<img alt="../_images/2a89b7ef8021fd25cb144061c9e619ac9a692687dfa223ae74ffa101005b1ae0.png" src="../_images/2a89b7ef8021fd25cb144061c9e619ac9a692687dfa223ae74ffa101005b1ae0.png" />
 </div>
 </div>
 <section id="linea-base-espacial-tamano-de-la-zona">
@@ -1292,7 +1319,7 @@ puede «reconocer» la zona a través de x e y en lugar de generalizar.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/af1c645135d9e974c5ef9b2f75b5c043dc14a02d99c1b34f954d1fa6fc2abce0.png" src="../_images/af1c645135d9e974c5ef9b2f75b5c043dc14a02d99c1b34f954d1fa6fc2abce0.png" />
+<img alt="../_images/8861e800e8bc0d684497acf486e67536fc7901d98a21a311495f29d85a7fed1d.png" src="../_images/8861e800e8bc0d684497acf486e67536fc7901d98a21a311495f29d85a7fed1d.png" />
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1802,7 +1829,7 @@ Ganancia sobre la mayoritaria: +0.309 en accuracy, +0.375 en F1 macro
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/d80b167e74b024d17c4ca7786f5e245add486ed6d66298cfbe4544916673f6ab.png" src="../_images/d80b167e74b024d17c4ca7786f5e245add486ed6d66298cfbe4544916673f6ab.png" />
+<img alt="../_images/8451483d3726c1664e6a1d9aeca0412ff4603f79f98dc2537107b4b4adda4467.png" src="../_images/8451483d3726c1664e6a1d9aeca0412ff4603f79f98dc2537107b4b4adda4467.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1880,7 +1907,7 @@ weighted avg      0.639     0.598     0.554     59954
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/4b92fe77085b416169262f006b7a7e61f0ee3243a47e1b58fa73b2677a8b5508.png" src="../_images/4b92fe77085b416169262f006b7a7e61f0ee3243a47e1b58fa73b2677a8b5508.png" />
+<img alt="../_images/b18f22bd14856d483401d04ea26f3633599e38284872e8aedf6d3071d6b15ad6.png" src="../_images/b18f22bd14856d483401d04ea26f3633599e38284872e8aedf6d3071d6b15ad6.png" />
 </div>
 </div>
 <div class="note admonition">
@@ -1962,7 +1989,7 @@ esperado (ECE) de la clase predicha.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/42d2d486557cb3602a0a86974c73fd7edeef35538e9927a8eea037ef2655c989.png" src="../_images/42d2d486557cb3602a0a86974c73fd7edeef35538e9927a8eea037ef2655c989.png" />
+<img alt="../_images/868f312c90c6d1ba2e743961a754242cb5242102550b7868c04bccbd563f7f99.png" src="../_images/868f312c90c6d1ba2e743961a754242cb5242102550b7868c04bccbd563f7f99.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ECE (clase predicha, 10 bins): 0.1395 | Brier multiclase: 0.5479
 </pre></div>
 </div>
@@ -2055,7 +2082,7 @@ nivel de edificio en test.</p>
     </tr>
     <tr>
       <th>Logística B_fisicas+ubicacion</th>
-      <td>0.6997</td>
+      <td>0.6998</td>
       <td>0.0020</td>
       <td>27239</td>
       <td>-0.1370</td>
@@ -2087,7 +2114,7 @@ nivel de edificio en test.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/152af925b277ce0b6ea633e3abbcde702fab3e6e32f68031b00dd1c5958d2cef.png" src="../_images/152af925b277ce0b6ea633e3abbcde702fab3e6e32f68031b00dd1c5958d2cef.png" />
+<img alt="../_images/7ae629ac84887092f626c133bfcc2599de20b0bbd35c8f2ae3b966e33ed37012.png" src="../_images/7ae629ac84887092f626c133bfcc2599de20b0bbd35c8f2ae3b966e33ed37012.png" />
 </div>
 </div>
 <div class="note admonition">
@@ -2136,6 +2163,15 @@ log-odds por <strong>una desviación estándar</strong>. Para una lectura direct
 muestra <span class="math notranslate nohighlight">\(\beta_{6} - \beta_{1}\)</span>: el cambio en el log-odds de ser estrato 6
 frente a estrato 1 por cada desviación estándar (o por pertenecer a la
 categoría, en las one-hot).</p>
+<p><em>Cómo leer un coeficiente, con un ejemplo.</em> Los <strong>odds</strong> de ser estrato 6
+frente a estrato 1 son el cociente de sus probabilidades: si una vivienda
+tiene 10 % de probabilidad de ser estrato 6 y 40 % de ser estrato 1, sus
+odds son 0.10 ÷ 0.40 = 0.25. El coeficiente trabaja en logaritmo de esos
+odds (log-odds). Un <span class="math notranslate nohighlight">\(\beta_6 - \beta_1 = 2\)</span> significa que, al subir la
+variable una desviación estándar (dejando las demás fijas), los odds se
+multiplican por <span class="math notranslate nohighlight">\(e^2 \approx 7.4\)</span>: es la <strong>razón de odds (OR)</strong>. En el
+ejemplo, pasarían de 0.25 a 1.85. Un coeficiente negativo indica que la
+variable empuja hacia el estrato 1.</p>
 <p>Cautelas de lectura: (i) en las variables con log1p, «una DE» es una DE del
 valor winsorizado y transformado; (ii) <code class="docutils literal notranslate"><span class="pre">x_km</span></code>, <code class="docutils literal notranslate"><span class="pre">y_km</span></code> y <code class="docutils literal notranslate"><span class="pre">dist_centro_km</span></code>
 están relacionadas (la distancia es función de x e y), así que sus
@@ -2177,7 +2213,7 @@ tipo de vivienda) el peso se reparte entre ellas.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a26563c191d4885ad2bbcc88d902af771f6c4b3d52d3b21d9eb2ef8ff980317c.png" src="../_images/a26563c191d4885ad2bbcc88d902af771f6c4b3d52d3b21d9eb2ef8ff980317c.png" />
+<img alt="../_images/e73bebab2748045d731335e0ad17a14a865561066cd7ba20287cc1019eaa6b34.png" src="../_images/e73bebab2748045d731335e0ad17a14a865561066cd7ba20287cc1019eaa6b34.png" />
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {

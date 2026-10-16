@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -67,7 +67,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Índice" href="genindex.html" />
     <link rel="search" title="Búsqueda" href="search.html" />
-    <link rel="next" title="1. Base de datos" href="notebooks/01_base_de_datos.html" />
+    <link rel="next" title="Guía de lectura" href="notebooks/00_guia_de_lectura.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="es"/>
   <meta name="docsearch:version" content="" />
@@ -217,7 +217,11 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="notebooks/01_base_de_datos.html">1. Base de datos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
@@ -389,6 +393,7 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-esta-organizado-este-libro">Cómo está organizado este libro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-leer-este-libro">Cómo leer este libro</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trazabilidad-eda-modelo">Trazabilidad EDA → modelo</a></li>
 </ul>
             </nav>
@@ -408,7 +413,8 @@ Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (
 <div class="tip admonition">
 <p class="admonition-title">Resumen</p>
 <p>A partir del servicio abierto de catastro de Barranquilla se construye una
-base de <strong>332 718 unidades de vivienda</strong> con estrato residencial válido. Se
+base de <strong>332 718 unidades de vivienda</strong> con estrato residencial válido, de
+las cuales <strong>278 824 tienen coordenadas</strong> y forman el universo de modelado. Se
 realiza un análisis exploratorio uni, bi, multivariado y espacial, y se entrena
 una regresión logística multinomial para predecir el estrato socioeconómico
 (1–6), comparada con líneas base triviales y espaciales bajo validación por
@@ -436,55 +442,59 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>1. Base de datos</p></td>
-<td><p>problema, fuente, licencia, diccionario, estructura, tamaño, duplicados, valores imposibles, ética</p></td>
+<tr class="row-even"><td><p>Guía de lectura</p></td>
+<td><p>conceptos clave con ejemplos y recorrido de los datos (de 382 597 filas al modelo)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>1. Base de datos</p></td>
+<td><p>problema, fuente, estructura del catastro (vivienda, predio, predio matriz), limpieza, calidad, filas sin coordenadas (dos universos), tamaño efectivo, ética</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td><p>2. Partición</p></td>
+<tr class="row-even"><td><p>2. Partición</p></td>
 <td><p>reserva del conjunto de prueba por bloques espaciales</p></td>
 <td><p>2 (orden de trabajo), 3</p></td>
 </tr>
-<tr class="row-even"><td><p>3. Calidad en train</p></td>
+<tr class="row-odd"><td><p>3. Calidad en train</p></td>
 <td><p>faltantes (patrón y mecanismo), outliers, sesgo de cobertura</p></td>
 <td><p>1 (calidad), 2.9</p></td>
 </tr>
-<tr class="row-odd"><td><p>4. Variable objetivo</p></td>
+<tr class="row-even"><td><p>4. Variable objetivo</p></td>
 <td><p>clases, desbalance, comportamiento espacial, implicaciones</p></td>
 <td><p>2.1</p></td>
 </tr>
-<tr class="row-even"><td><p>5. Unidimensional</p></td>
+<tr class="row-odd"><td><p>5. Unidimensional</p></td>
 <td><p>estadísticos, distribuciones, normalidad, transformaciones, categorías raras</p></td>
 <td><p>2.2</p></td>
 </tr>
-<tr class="row-odd"><td><p>6. Bidimensional</p></td>
+<tr class="row-even"><td><p>6. Bidimensional</p></td>
 <td><p>correlaciones, pruebas con tamaño de efecto y Holm, V de Cramér, información mutua, VIF</p></td>
 <td><p>2.3</p></td>
 </tr>
-<tr class="row-even"><td><p>7. Multivariado</p></td>
+<tr class="row-odd"><td><p>7. Multivariado</p></td>
 <td><p>PCA, outliers multivariados, clustering exploratorio</p></td>
 <td><p>2.4</p></td>
 </tr>
-<tr class="row-odd"><td><p>8. Espacial</p></td>
+<tr class="row-even"><td><p>8. Espacial</p></td>
 <td><p>coordenadas, mapas, patrón de puntos, Moran/LISA/Gi*, correlograma, MAUP</p></td>
 <td><p>2.7</p></td>
 </tr>
-<tr class="row-even"><td><p>9. Fuga de datos</p></td>
+<tr class="row-odd"><td><p>9. Fuga de datos</p></td>
 <td><p>disponibilidad, identificadores, AUC univariado, entidades repetidas</p></td>
 <td><p>2.5</p></td>
 </tr>
-<tr class="row-odd"><td><p>Resumen ejecutivo del EDA</p></td>
+<tr class="row-even"><td><p>Resumen ejecutivo del EDA</p></td>
 <td><p>calidad, variables prometedoras, problemas y decisiones preliminares</p></td>
 <td><p>2 (notas 9.10.4.1.5)</p></td>
 </tr>
-<tr class="row-even"><td><p>10. Modelo base</p></td>
+<tr class="row-odd"><td><p>10. Modelo base</p></td>
 <td><p>Pipeline, líneas base, CV espacial, métricas con IC, residuos, curva de aprendizaje</p></td>
 <td><p>2.9, 3</p></td>
 </tr>
-<tr class="row-odd"><td><p>11. Conclusiones</p></td>
+<tr class="row-even"><td><p>11. Conclusiones</p></td>
 <td><p>hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según las instrucciones del proyecto</p></td>
 <td><p>Figura 1, nota crítica</p></td>
 </tr>
-<tr class="row-even"><td><p>Apéndices</p></td>
+<tr class="row-odd"><td><p>Apéndices</p></td>
 <td><p>bitácora de decisiones, reproducibilidad, referencias</p></td>
 <td><p>Entregables</p></td>
 </tr>
@@ -492,7 +502,15 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 </table>
 </div>
 <p>Las secciones 2.6 (temporal) y 2.8 (espacio-temporal) <strong>no aplican</strong>: los datos
-son una foto del catastro sin marca de tiempo por observación (capítulo 1.5).</p>
+son una foto del catastro sin marca de tiempo por observación (sección 1.3).</p>
+</section>
+<section id="como-leer-este-libro">
+<h2>Cómo leer este libro<a class="headerlink" href="#como-leer-este-libro" title="Link to this heading">#</a></h2>
+<p>Si el vocabulario de <em>machine learning</em> no es familiar, conviene empezar por
+la <strong>Guía de lectura</strong>: explica con ejemplos los conceptos que se repiten
+(entrenamiento y prueba, fuga de información, validación cruzada, bloques
+espaciales, F1 macro…) y resume cuántas filas usa cada etapa. Cada capítulo
+abre con un cuadro <strong>«Qué hace este capítulo»</strong> y cierra con sus decisiones.</p>
 </section>
 <section id="trazabilidad-eda-modelo">
 <h2>Trazabilidad EDA → modelo<a class="headerlink" href="#trazabilidad-eda-modelo" title="Link to this heading">#</a></h2>
@@ -508,6 +526,8 @@ otra descarga del catastro, hay que revisar esas cifras frente a las salidas de
 cada celda.</p>
 </div>
 </section>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -549,11 +569,11 @@ cada celda.</p>
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="notebooks/01_base_de_datos.html"
+       href="notebooks/00_guia_de_lectura.html"
        title="siguiente página">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">siguiente</p>
-        <p class="prev-next-title">1. Base de datos</p>
+        <p class="prev-next-title">Guía de lectura</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -576,6 +596,7 @@ cada celda.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-esta-organizado-este-libro">Cómo está organizado este libro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-leer-este-libro">Cómo leer este libro</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trazabilidad-eda-modelo">Trazabilidad EDA → modelo</a></li>
 </ul>
   </nav></div>
