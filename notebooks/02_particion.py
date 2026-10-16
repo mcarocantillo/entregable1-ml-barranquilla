@@ -15,23 +15,45 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# Las instrucciones del proyecto exigen **reservar el conjunto de prueba antes de tomar cualquier
-# decisión basada en los datos** (imputación, transformaciones, selección de
-# variables, umbrales de outliers) y que la partición respete la estructura de
-# los datos. Aquí hay tres estructuras que respetar a la vez:
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿cómo separar un conjunto de prueba que sea un
+# "examen justo" para el modelo?
 #
-# | Estructura | Riesgo si se ignora | Respuesta |
-# |---|---|---|
-# | Desbalance de clases (~8:1 entre estrato 1 y estrato 6 en el dataset limpio, cap. 1) | un fold sin casos de estrato 5 o 6 | **estratificar** |
-# | Varias filas por entidad (apartamentos de un mismo edificio, casi idénticos) | el modelo "reconoce" el edificio | **agrupar** |
-# | Coordenadas con autocorrelación espacial fuerte | test optimista: vecinos casi iguales en train | **bloques espaciales** |
+# **Datos:** las **278 824 viviendas con coordenadas** (universo de modelado,
+# sección 1.7). Las 53 894 sin coordenadas no se pueden asignar a una zona y
+# se guardan aparte para medir su sesgo en el capítulo 3.
+#
+# **Conceptos nuevos:** estratificar, agrupar, bloque espacial y divergencia
+# de Jensen-Shannon (todos se explican abajo; ver también la Guía de
+# lectura).
+#
+# **Sale de aquí:** la etiqueta `train` / `test` de cada vivienda, que todos
+# los capítulos siguientes leen del mismo archivo.
+# ```
+#
+# Las instrucciones del proyecto exigen **reservar el conjunto de prueba antes
+# de tomar cualquier decisión basada en los datos** (imputación,
+# transformaciones, selección de variables, umbrales de outliers). La razón es
+# la misma por la que un profesor no muestra el examen antes de la clase: si
+# las decisiones se toman mirando la prueba, la nota final ya no mide lo que
+# el modelo aprendió. Además, la partición debe respetar la estructura de los
+# datos. Aquí hay tres estructuras que respetar a la vez:
+#
+# | Estructura | Ejemplo | Riesgo si se ignora | Respuesta |
+# |---|---|---|---|
+# | Desbalance de clases (~8:1 entre estrato 1 y estrato 6 en las filas limpias, cap. 1) | hay unas 108 000 viviendas de estrato 1 y solo 13 000 de estrato 6 | por azar, un fold podría quedar casi sin estratos 5 o 6 | **estratificar**: que cada fold tenga proporciones de estrato parecidas |
+# | Varias filas por entidad | los 200 apartamentos de un conjunto comparten estrato y son casi idénticos | el modelo "reconoce" el conjunto en vez de aprender | **agrupar**: un predio matriz va completo a un solo lado |
+# | Autocorrelación espacial fuerte | una casa de estrato 1 suele estar rodeada de casas de estrato 1 | test optimista: cada vivienda de prueba tiene vecinas casi iguales en entrenamiento | **bloques espaciales**: se separan zonas completas de la ciudad |
 #
 # La herramienta que cubre las tres es una partición **estratificada por
 # grupos** (la lógica de `StratifiedGroupKFold`) usando como grupo un **bloque
-# espacial** de 2 km × 2 km (un edificio siempre cae completo en un bloque
-# porque todas sus unidades comparten centroide). Se toma 1 de 5 folds como
-# prueba (~20 %). Referencias: notas de clase 9.1.9 (`GroupKFold`) y 9.1.11
-# (Spatial Block CV; Roberts et al., 2017; Valavi et al., 2019).
+# espacial** de 2 km × 2 km. Un predio matriz siempre cae completo en un
+# bloque, porque todas sus unidades comparten el mismo centroide. Los bloques
+# se reparten en 5 grupos (*folds*) con proporciones de estrato parecidas, y
+# uno de ellos (~20 % de las filas) se reserva como prueba. Referencias: notas
+# de clase 9.1.9 (`GroupKFold`) y 9.1.11 (Spatial Block CV; Roberts et al.,
+# 2017; Valavi et al., 2019).
 #
 # ```{admonition} Por qué una función propia y no StratifiedGroupKFold
 # :class: tip
@@ -52,10 +74,12 @@
 # ```
 #
 # ```{note}
-# El **buffer** (franja de exclusión entre train y test) se decide en el
-# capítulo 8 a partir del correlograma calculado **solo con train**, y se
-# aplica al entrenar el modelo final (capítulo 10). Así su tamaño también es
-# una decisión tomada sin mirar el conjunto de prueba.
+# Este capítulo solo separa los bloques. La otra protección espacial, el
+# **buffer** (franja de exclusión de 1 km entre entrenamiento y prueba, ver la
+# Guía de lectura), se decide más adelante, en el capítulo 8, a partir de
+# cómo se parecen las viviendas según la distancia, calculado **solo con
+# entrenamiento**. Se aplica al entrenar el modelo final (capítulo 10). Así su
+# tamaño también es una decisión tomada sin mirar el conjunto de prueba.
 # ```
 
 # %% tags=["hide-input"]
@@ -100,8 +124,9 @@ print(f"  sin coordenadas (no ubicables):          {len(sin):,} ({100 * len(sin)
 
 # %% [markdown]
 # Las filas **sin coordenadas** no pueden asignarse a ningún bloque espacial,
-# así que quedan fuera del modelado. Se guardan aparte para cuantificar el
-# sesgo que esto introduce (capítulo 3).
+# así que quedan fuera del modelado (la decisión se justificó en la sección
+# 1.7). Se guardan aparte para cuantificar el sesgo que esto introduce
+# (capítulo 3.3).
 
 # %%
 # Reserva del conjunto de prueba ANTES de cualquier decisión aprendida de los datos.
@@ -118,6 +143,12 @@ print(con["particion"].value_counts(normalize=True).round(3).to_dict())
 
 # %% [markdown]
 # ## Verificaciones de la partición
+#
+# Una partición se verifica en tres frentes: (1) que ningún predio matriz
+# quede repartido entre entrenamiento y prueba, (2) que las proporciones de
+# estrato sean parecidas en ambos lados y (3) que no haya entidades
+# compartidas. En este libro "edificio" equivale a predio matriz (sección
+# 1.3).
 #
 # Primero, si algún edificio aparece en ambos conjuntos es porque sus unidades tienen
 # centroides distintos (unas con terreno propio y otras propagadas) y cayeron
@@ -169,12 +200,22 @@ dist
 # %% [markdown]
 # ```{admonition} Cómo leer esto
 # :class: note
-# Con cientos de miles de filas el chi² casi siempre sale significativo aunque
-# las diferencias sean mínimas; lo que importa es la **magnitud**: diferencias
-# de pocos puntos porcentuales y una divergencia de Jensen-Shannon cercana a 0
-# indican que train y test tienen proporciones de estrato comparables. Como la
-# partición es por zonas de la ciudad, es imposible que sean idénticas: el
-# estrato depende del lugar.
+# Se usan dos medidas complementarias:
+#
+# - **Prueba χ² (chi-cuadrado):** pregunta si las proporciones de estrato de
+#   train y test podrían ser iguales y diferir solo por azar. Con cientos de
+#   miles de filas casi siempre sale significativa aunque las diferencias sean
+#   mínimas (ver "tamaño de efecto frente a p-valor" en la Guía de lectura).
+# - **Divergencia de Jensen-Shannon (JS):** mide **cuánto** se diferencian
+#   dos distribuciones. Vale 0 si son idénticas y como máximo ln 2 ≈ 0.69 si
+#   no comparten nada. *Ejemplo:* si train tuviera 50 % de estrato 1 y 50 % de
+#   estrato 2 y test 49 % y 51 %, la JS sería ≈ 0.00005; si test fuera 100 %
+#   estrato 6, sería 0.69.
+#
+# Lo que importa es la **magnitud**: diferencias de pocos puntos porcentuales
+# y una JS cercana a 0 indican que train y test tienen proporciones de estrato
+# comparables. Como la partición es por zonas de la ciudad, es imposible que
+# sean idénticas: el estrato depende del lugar.
 # ```
 #
 # ```{admonition} Resultado con los datos reales

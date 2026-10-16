@@ -1,6 +1,9 @@
 format: jb-book
 root: intro
 parts:
+  - caption: Antes de empezar
+    chapters:
+      - file: notebooks/00_guia_de_lectura
   - caption: Base de datos
     chapters:
       - file: notebooks/01_base_de_datos

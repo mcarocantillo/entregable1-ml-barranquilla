@@ -15,15 +15,33 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
-# - Reducción de dimensionalidad exploratoria (**PCA**; t-SNE solo como
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** mirando todas las variables físicas **a la
+# vez**, ¿qué estructura tienen las viviendas, hay combinaciones raras y se
+# forman grupos naturales?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento** (algunas técnicas
+# usan una submuestra por costo de cómputo).
+#
+# **Conceptos nuevos:** PCA, outliers multivariados (Mahalanobis robusta,
+# Isolation Forest), K-Means con coeficiente de silueta y t-SNE.
+#
+# **Sale de aquí:** la decisión de conservar los outliers multivariados y una
+# primera señal de que las variables físicas, solas, no bastan.
+# ```
+#
+# - Reducción de dimensionalidad exploratoria (**PCA**, 7.1; t-SNE solo como
 #   herramienta visual, no inferencial).
 # - Outliers **multivariados** (distancia de Mahalanobis robusta e Isolation
-#   Forest).
+#   Forest, 7.2).
 # - Estructura de grupos o subpoblaciones (clustering exploratorio con
-#   K-Means).
+#   K-Means, 7.3).
 #
 # Se usan las variables físicas numéricas en la escala en que entrarían al
-# modelo (log1p en las asimétricas, estandarizadas). Todo con **train**.
+# modelo (log1p en las asimétricas, estandarizadas: a cada variable se le
+# resta su media y se divide por su desviación estándar, para que todas
+# queden en la misma escala y ninguna domine solo por sus unidades).
 
 # %% tags=["hide-input"]
 # Celda de preparación: librerías, carga de train y construcción de la matriz
@@ -85,6 +103,16 @@ print(f"Matriz para el análisis multivariado: {Zs.shape[0]:,} filas × {Zs.shap
 
 # %% [markdown]
 # ## 7.1 PCA: varianza explicada y estructura
+#
+# El **análisis de componentes principales (PCA)** busca nuevas variables,
+# llamadas **componentes**, que resumen a las originales. Cada componente es
+# una combinación de las variables originales; la primera (PC1) es la que
+# recoge la mayor parte de la variación, la segunda (PC2) la mayor parte de
+# lo que queda, y así sucesivamente. *Ejemplo:* área construida,
+# habitaciones y baños suelen subir juntos; PCA puede resumirlos en un solo
+# eje de "tamaño de la vivienda". Las **cargas** dicen cuánto pesa cada
+# variable original en cada componente, y la **varianza explicada** cuánta
+# información conserva cada componente.
 
 # %%
 # PCA con todas las componentes para ver cómo se reparte la varianza y cuántas
@@ -195,7 +223,16 @@ corr_pc
 # %% [markdown]
 # ## 7.2 Outliers multivariados
 #
-# **Mahalanobis robusta:** la distancia de Mahalanobis clásica usa la media y
+# Un **outlier multivariado** es una vivienda cuyos valores son normales uno
+# por uno, pero raros en **combinación**. *Ejemplo:* 200 m² construidos es
+# normal y 1 habitación también, pero una vivienda de 200 m² con una sola
+# habitación es una combinación poco común. La regla de Tukey del capítulo 3
+# no la detecta, porque mira cada variable por separado.
+#
+# **Mahalanobis robusta:** la distancia de Mahalanobis mide qué tan lejos
+# está una vivienda del centro de los datos, teniendo en cuenta que las
+# variables están correlacionadas (alejarse en área *y* en habitaciones a la
+# vez es menos raro que alejarse solo en una). La versión clásica usa la media y
 # la covarianza, que los propios outliers distorsionan; por eso se estima con
 # el **determinante de covarianza mínima** (MCD) sobre una submuestra y se
 # marca como outlier a quien supera el cuantil 0.999 de una χ² con p grados de
@@ -280,7 +317,7 @@ perfil
 #   construcciones menores o unidades sin espacios habitables registrados
 #   (p. ej. en obra o con ficha incompleta). Las reglas de limpieza del cap. 1
 #   no los tocan: los ceros en habitaciones y baños quedaron como limitación
-#   abierta (cap. 1.7.3).
+#   abierta (sección 1.5.4).
 # - Están **sobre-representados en estratos altos**: el 25.3 % son estratos
 #   5–6, frente al 11.7 % del resto (y solo 11.0 % son estrato 1 frente a
 #   25.6 %). Eliminarlos quitaría justo casos de las clases minoritarias.
@@ -304,8 +341,12 @@ C.guardar_decision("outliers_multivariados", "conservar (sin eliminar filas)",
 # %% [markdown]
 # ## 7.3 Subpoblaciones: clustering exploratorio
 #
-# K-Means sobre las variables estandarizadas (submuestra de 30 000), eligiendo
-# k con el coeficiente de silueta. El objetivo **no** es modelar (eso es la
+# **K-Means** divide las viviendas en k grupos de manera que cada vivienda
+# quede cerca del centro (centroide) de su grupo. El número de grupos k se
+# elige con el **coeficiente de silueta**, que compara, para cada vivienda,
+# qué tan cerca está de su propio grupo frente al grupo vecino: vale cerca de
+# 1 si los grupos están bien separados y cerca de 0 si se solapan. Se aplica
+# sobre las variables estandarizadas (submuestra de 30 000). El objetivo **no** es modelar (eso es la
 # tesis) sino ver si hay grupos naturales y cómo se relacionan con el estrato.
 
 # %%

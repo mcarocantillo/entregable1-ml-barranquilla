@@ -77,8 +77,8 @@ print(f"\nSEED = {C.SEED} | CSV = {C.ruta_csv().name}")
 # :class: note
 # Según la salida anterior, el libro se ejecutó completo (todos los cuadernos,
 # capítulos 1–10 y este apéndice) en un entorno Linux en la nube (kernel
-# 6.18.44), con Python 3.11.15,
-# scikit-learn 1.8.0, pandas 3.0.2 y numpy 2.4.4, sobre el CSV real
+# 6.18.44), con Python 3.13.16,
+# scikit-learn 1.9.1, pandas 3.0.5 y numpy 2.5.3, sobre el CSV real
 # (`predios_residenciales_barranquilla.csv`) y con `SEED = 42`. Gracias a la
 # función propia de partición, ejecutarlo con otra versión de scikit-learn no
 # cambia qué bloques quedan en train y en test; otras salidas (p. ej. el

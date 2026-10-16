@@ -15,9 +15,27 @@
 #
 # *Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)*
 #
+# ```{admonition} Qué hace este capítulo
+# :class: tip
+# **Pregunta que responde:** ¿alguna variable le "sopla la respuesta" al
+# modelo, y comparten entrenamiento y prueba alguna vivienda o edificio?
+#
+# **Datos:** las **218 870 viviendas de entrenamiento**; la sección 9.3 mira
+# solo los **identificadores** del conjunto de prueba, nunca sus estratos.
+#
+# **Conceptos nuevos:** escenario de predicción, proxy del objetivo y AUC
+# one-vs-rest.
+#
+# **Sale de aquí:** la lista final de variables del modelo.
+# ```
+#
 # La fuga ocurre cuando el modelo usa información que **no estaría disponible
 # en el momento de predecir**, lo que produce estimaciones optimistas (notas de
-# clase, sección 10.3). Se revisa:
+# clase, sección 10.3; ver también la Guía de lectura). *Ejemplo:* si el
+# catastro tuviera una columna "tarifa de energía", que se fija **a partir**
+# del estrato, el modelo acertaría casi siempre, pero solo porque la columna
+# es el estrato disfrazado (un **proxy**); en una zona sin estratificar esa
+# columna no existiría. Se revisa:
 #
 # 1. Disponibilidad de cada variable al momento de la predicción.
 # 2. Variables derivadas del objetivo, identificadores y proxies.
@@ -106,6 +124,13 @@ auditoria
 # Para cada variable por separado se ajusta una regresión logística con solo
 # esa variable (con el mismo preprocesamiento del modelo) y se mide el AUC
 # macro one-vs-rest con la **misma validación espacial por bloques + buffer**.
+#
+# *Qué es el AUC one-vs-rest.* Con dos clases, el AUC es la probabilidad de
+# que el modelo le dé más puntaje a un caso positivo que a uno negativo
+# tomados al azar: 0.5 es adivinar y 1 es ordenar perfecto. Con seis
+# estratos se calcula un AUC por estrato, "este estrato contra el resto"
+# (*one-vs-rest*), y se promedian (*macro*). Si una sola variable lograra un
+# AUC cercano a 1, sería sospechosa de ser un proxy del estrato.
 # Referencia de lectura: ≥ 0.95 alerta de fuga/proxy; 0.85–0.95 revisar;
 # 0.7–0.85 informativa.
 #
