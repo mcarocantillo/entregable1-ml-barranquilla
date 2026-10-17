@@ -1,0 +1,1557 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo &#8212; Estrato y catastro en Barranquilla — Entregable 1 (versión 2)</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03_calidad_train';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="4. Análisis de la variable objetivo (sección 2.1)" href="04_variable_objetivo.html" />
+    <link rel="prev" title="2. Reserva del conjunto de prueba (partición por bloques espaciales)" href="02_particion.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1 (versión 2)</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/03_calidad_train.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes">3.1 Valores faltantes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#patron">Patrón</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mecanismo-mcar-mar-mnar">Mecanismo (MCAR / MAR / MNAR)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outliers-univariados-iqr-de-tukey">3.2 Outliers univariados (IQR de Tukey)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgo-de-muestreo-y-representatividad">3.3 Sesgo de muestreo y representatividad</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="calidad-de-datos-en-entrenamiento-faltantes-outliers-y-sesgo">
+<h1>3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo<a class="headerlink" href="#calidad-de-datos-en-entrenamiento-faltantes-outliers-y-sesgo" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿cómo tratar los datos faltantes y los valores
+extremos, y a quién deja fuera el modelo?</p>
+<p><strong>Datos:</strong> las <strong>257 273 viviendas de entrenamiento</strong> (capítulo 2). A
+partir de aquí y hasta el capítulo 9 no se mira el conjunto de prueba.</p>
+<p><strong>Conceptos nuevos:</strong> mecanismos de faltantes (MCAR, MAR, MNAR), diferencia
+de medias estandarizada (SMD), AUC, regla de Tukey y winsorización.</p>
+<p><strong>Sale de aquí:</strong> cómo imputar los faltantes, cómo limitar los extremos y
+la medida del sesgo de cobertura.</p>
+</div>
+<p>El capítulo 1 ya contó los faltantes y anuló los valores imposibles con
+reglas fijas. Lo que falta de la parte de <strong>calidad de datos</strong> de la
+Sección 1 de las instrucciones del proyecto son las preguntas que <strong>sí</strong>
+llevan a decisiones de modelado (con qué valor rellenar un faltante, hasta
+dónde recortar un extremo). Esas decisiones aprenden de los datos, y por eso
+se toman <strong>solo con entrenamiento</strong>:</p>
+<ul class="simple">
+<li><p>Valores faltantes: <strong>patrón</strong> (matriz de nulos) y <strong>mecanismo</strong>
+(MCAR / MAR / MNAR) con evidencia (3.1).</p></li>
+<li><p>Outliers univariados: detección (regla de Tukey) y tratamiento (3.2).</p></li>
+<li><p>Sesgo de muestreo y representatividad: quién queda fuera del modelo (3.3).</p></li>
+</ul>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configuración y carga de SOLO entrenamiento. Desde este capítulo todo lo que</span>
+<span class="c1"># pueda convertirse en una decisión de modelado (imputación, outliers) se calcula</span>
+<span class="c1"># sin mirar test, para evitar fuga de información (orden de trabajo de las instrucciones del proyecto).</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Raíz del libro en sys.path para importar src/ desde notebooks/ o desde la raíz.</span>
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"notebooks"</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span><span class="p">))</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="c1"># Regresión logística + CV: se usan para intentar PREDECIR el indicador de nulo</span>
+<span class="c1"># (diagnóstico MCAR vs. MAR), no para predecir el estrato.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">C</span>       <span class="c1"># listas de variables, SEED, guardar_decision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">estadistica</span> <span class="k">as</span> <span class="n">E</span>  <span class="c1"># V de Cramér y demás pruebas del EDA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">graficos</span> <span class="k">as</span> <span class="n">G</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">particion</span> <span class="k">as</span> <span class="n">P</span>    <span class="c1"># cargar_particion lee el dataset del cap. 2</span>
+
+<span class="n">G</span><span class="o">.</span><span class="n">estilo</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">aviso_sintetico</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.float_format"</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">,.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># solo="train" filtra particion == "train": el conjunto de prueba no se abre aquí.</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">cargar_particion</span><span class="p">(</span><span class="n">solo</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Filas de entrenamiento: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filas de entrenamiento: 257,273
+</pre></div>
+</div>
+</div>
+</div>
+<section id="valores-faltantes">
+<h2>3.1 Valores faltantes<a class="headerlink" href="#valores-faltantes" title="Link to this heading">#</a></h2>
+<section id="patron">
+<h3>Patrón<a class="headerlink" href="#patron" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Patrón de faltantes en train: conteo y % de nulos por variable, más una columna</span>
+<span class="c1"># que indica si el nulo proviene sobre todo de una regla del cap. 1 (valor</span>
+<span class="c1"># imposible: año 1512, piso 99...; o incoherencia dentro de la fila) o si ya venía</span>
+<span class="c1"># vacío en el origen.</span>
+<span class="n">vars_nulos</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">NUMERICAS</span> <span class="o">+</span> <span class="n">C</span><span class="o">.</span><span class="n">CATEGORICAS</span>
+<span class="n">tabla_nulos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"n nulos"</span><span class="p">:</span> <span class="n">train</span><span class="p">[</span><span class="n">vars_nulos</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+    <span class="s2">"% nulos"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">train</span><span class="p">[</span><span class="n">vars_nulos</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+<span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"% nulos"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Criterio: si al menos la mitad de los nulos de la variable tiene su bandera</span>
+<span class="c1"># flag_imposible_* (rango de dominio, paso 4) o flag_incoherente_* (coherencia</span>
+<span class="c1"># dentro de la fila, paso 5) activa, ese es el origen principal. 'antiguedad'</span>
+<span class="c1"># no tiene bandera propia: hereda la de 'anio_construccion', de donde se deriva.</span>
+<span class="c1"># max(1, n) evita que una variable sin nulos (n = 0) cuente como "valor imposible".</span>
+<span class="n">tabla_nulos</span><span class="p">[</span><span class="s2">"origen principal"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"valor imposible -&gt; NaN"</span> <span class="k">if</span> <span class="sa">f</span><span class="s2">"flag_imposible_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="ow">in</span> <span class="n">train</span> <span class="ow">and</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s2">"flag_imposible_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span> <span class="p">(</span><span class="s2">"incoherencia en la fila -&gt; NaN"</span> <span class="k">if</span> <span class="sa">f</span><span class="s2">"flag_incoherente_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="ow">in</span> <span class="n">train</span>
+          <span class="ow">and</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s2">"flag_incoherente_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+          <span class="k">else</span> <span class="p">(</span><span class="s2">"año imposible -&gt; NaN"</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">"antiguedad"</span> <span class="ow">and</span> <span class="n">train</span><span class="p">[</span><span class="s2">"flag_imposible_anio_construccion"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+                <span class="k">else</span> <span class="s2">"faltante en origen"</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tabla_nulos</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">tabla_nulos</span><span class="p">[</span><span class="s2">"n nulos"</span><span class="p">])]</span>
+<span class="n">tabla_nulos</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n nulos</th>
+      <th>% nulos</th>
+      <th>origen principal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>total_habitaciones</th>
+      <td>320</td>
+      <td>0.124</td>
+      <td>incoherencia en la fila -&gt; NaN</td>
+    </tr>
+    <tr>
+      <th>planta_ubicacion</th>
+      <td>237</td>
+      <td>0.092</td>
+      <td>valor imposible -&gt; NaN</td>
+    </tr>
+    <tr>
+      <th>antiguedad</th>
+      <td>128</td>
+      <td>0.050</td>
+      <td>año imposible -&gt; NaN</td>
+    </tr>
+    <tr>
+      <th>total_banios</th>
+      <td>29</td>
+      <td>0.011</td>
+      <td>incoherencia en la fila -&gt; NaN</td>
+    </tr>
+    <tr>
+      <th>area_catastral_terreno</th>
+      <td>4</td>
+      <td>0.002</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>total_plantas</th>
+      <td>3</td>
+      <td>0.001</td>
+      <td>valor imposible -&gt; NaN</td>
+    </tr>
+    <tr>
+      <th>area_construida</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>altura</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>tipo_vivienda</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>uso</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>condicion_predio</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>destinacion_economica</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+    <tr>
+      <th>tipo_planta</th>
+      <td>0</td>
+      <td>0.000</td>
+      <td>faltante en origen</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Figura del patrón de nulos. Izquierda: matriz de nulos (oscuro = falta el dato)</span>
+<span class="c1"># en 4 000 filas ordenadas por estrato; si los nulos se agrupan en una franja de</span>
+<span class="c1"># estrato, el faltante no es al azar. Derecha: correlación entre indicadores de</span>
+<span class="c1"># nulo (valores altos = variables que faltan juntas, en los mismos registros).</span>
+<span class="n">con_nulos</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">vars_nulos</span> <span class="k">if</span> <span class="n">train</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span>   <span class="c1"># solo las que tienen nulos</span>
+<span class="c1"># Submuestra con semilla fija solo para que la matriz sea legible; ordenada por estrato.</span>
+<span class="n">muestra</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)),</span> <span class="n">random_state</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">"width_ratios"</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="k">if</span> <span class="n">con_nulos</span><span class="p">:</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">muestra</span><span class="p">[</span><span class="n">con_nulos</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="p">[</span><span class="s2">"#e8eef4"</span><span class="p">,</span> <span class="s2">"#1f3b57"</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">xticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Matriz de nulos (4 000 filas, ordenadas por estrato)"</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"filas (estrato 1 → 6)"</span><span class="p">)</span>
+    <span class="c1"># Indicadores 0/1 de nulo en TODO train (no en la submuestra) para la correlación.</span>
+    <span class="n">co</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">con_nulos</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">con_nulos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">co</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">".2f"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"rocket_r"</span><span class="p">,</span>
+                <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Correlación entre indicadores de nulo"</span><span class="p">)</span>
+<span class="n">G</span><span class="o">.</span><span class="n">guardar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"03_matriz_nulos"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/4de4c89cf886b7b8360caf2212300d655fe50bdc0027205ff77df9d6179482d5.png" src="../_images/4de4c89cf886b7b8360caf2212300d655fe50bdc0027205ff77df9d6179482d5.png" />
+</div>
+</div>
+</section>
+<section id="mecanismo-mcar-mar-mnar">
+<h3>Mecanismo (MCAR / MAR / MNAR)<a class="headerlink" href="#mecanismo-mcar-mar-mnar" title="Link to this heading">#</a></h3>
+<p>No basta con saber <strong>cuántos</strong> datos faltan; importa <strong>por qué</strong> faltan,
+porque de eso depende si rellenarlos introduce sesgo. Hay tres casos
+clásicos (Rubin, 1976), que se entienden mejor con un ejemplo sobre el año
+de construcción:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mecanismo</p></th>
+<th class="head"><p>Significado</p></th>
+<th class="head"><p>Ejemplo</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>MCAR</strong> (completamente al azar)</p></td>
+<td><p>faltar no depende de nada</p></td>
+<td><p>un funcionario olvida digitar el año en fichas elegidas al azar</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MAR</strong> (al azar, dado lo observado)</p></td>
+<td><p>faltar depende de otras variables que sí vemos</p></td>
+<td><p>el año falta más en cierto sector de la ciudad, y el sector sí está en los datos</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MNAR</strong> (no al azar)</p></td>
+<td><p>faltar depende del propio valor que falta</p></td>
+<td><p>el año falta más justo en las casas muy antiguas, porque nadie lo sabe</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Con MCAR, rellenar con la mediana no sesga nada. Con MAR, las otras
+variables ayudan a corregir. MNAR no se puede detectar con los datos (habría
+que conocer el valor que falta) y solo se argumenta con conocimiento del
+dominio.</p>
+<p>Con cientos de miles de filas la prueba de Little rechaza MCAR ante
+cualquier diferencia mínima, así que se usan tres evidencias complementarias
+y se interpreta la <strong>magnitud</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>Faltante vs. estrato:</strong> chi² y V de Cramér entre el indicador de nulo y
+el objetivo. V ≈ 0 es compatible con MCAR respecto al objetivo.</p></li>
+<li><p><strong>Registros completos vs. incompletos:</strong> diferencia de medias estandarizada
+(SMD) en las demás variables: la diferencia de medias entre las filas con
+y sin el dato, dividida por la desviación estándar. <em>Ejemplo:</em> si las
+viviendas sin año miden en promedio 90 m² y las demás 80 m², con una
+desviación de 50 m², la SMD es (90 − 80) ÷ 50 = 0.2. |SMD| &lt; 0.1 se
+considera despreciable.</p></li>
+<li><p><strong>¿Se puede predecir el faltante?</strong> Se entrena una regresión logística
+que intenta adivinar, con las variables observadas, si a una fila le
+falta el dato. Su acierto se mide con el <strong>AUC</strong>: la probabilidad de que,
+al tomar una fila con faltante y otra sin él, el modelo le dé más
+probabilidad de faltante a la primera. AUC ≈ 0.5 es adivinar a ciegas
+(MCAR plausible); AUC claramente &gt; 0.5 indica que el faltante depende de
+variables observadas (<strong>MAR</strong>). MNAR no se puede probar con los datos: se
+argumenta con conocimiento del dominio.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Diagnóstico del mecanismo de faltantes con tres evidencias por variable:</span>
+<span class="c1"># (1) V de Cramér entre el indicador de nulo y el estrato, (2) diferencia de medias</span>
+<span class="c1"># estandarizada (SMD) entre registros con y sin nulo, y (3) AUC de una regresión</span>
+<span class="c1"># logística que intenta predecir el nulo a partir de variables observadas.</span>
+<span class="c1"># Variables observadas que se usan como "explicativas" del faltante.</span>
+<span class="n">observadas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"area_construida"</span><span class="p">,</span> <span class="s2">"total_habitaciones"</span><span class="p">,</span> <span class="s2">"total_banios"</span><span class="p">,</span> <span class="s2">"total_plantas"</span><span class="p">,</span> <span class="s2">"x_km"</span><span class="p">,</span> <span class="s2">"y_km"</span><span class="p">]</span>
+<span class="c1"># Régimen del predio en one-hot (con "NA" como categoría) para añadirlo a la logística.</span>
+<span class="n">dummies_cond</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s2">"condicion_predio"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">"NA"</span><span class="p">),</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">"cond"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">con_nulos</span><span class="p">:</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>          <span class="c1"># indicador de nulo de la variable v (True = falta)</span>
+    <span class="k">if</span> <span class="n">ind</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
+        <span class="k">continue</span>                   <span class="c1"># con menos de 30 nulos no hay base para ningún diagnóstico</span>
+    <span class="c1"># (1) Asociación nulo ~ estrato: V ≈ 0 es compatible con MCAR respecto al objetivo.</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">cramers_v</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">])</span>
+    <span class="c1"># (2) SMD de cada variable observada entre filas con nulo (a) y sin nulo (b),</span>
+    <span class="c1"># usando la desviación estándar combinada; |SMD| &lt; 0.1 se considera despreciable.</span>
+    <span class="n">smd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">observadas</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="o">==</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">continue</span>               <span class="c1"># no se compara la variable consigo misma</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="n">o</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">ind</span><span class="p">,</span> <span class="n">o</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">a</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">var</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">smd</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">b</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">sd</span> <span class="k">if</span> <span class="n">sd</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># (3) Matriz de predictores del nulo: observadas (sin v) imputadas con su mediana</span>
+    <span class="c1"># de train, solo para este diagnóstico, más las dummies de condición del predio.</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train</span><span class="p">[[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">observadas</span> <span class="k">if</span> <span class="n">o</span> <span class="o">!=</span> <span class="n">v</span><span class="p">]]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">train</span><span class="p">[[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">observadas</span> <span class="k">if</span> <span class="n">o</span> <span class="o">!=</span> <span class="n">v</span><span class="p">]]</span><span class="o">.</span><span class="n">median</span><span class="p">()),</span>
+                   <span class="n">dummies_cond</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Submuestra de hasta 60 000 filas (semilla fija) para acotar el tiempo de cómputo.</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mi">60_000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># AUC promedio en CV de 3 folds; el escalado va dentro del pipeline para que se</span>
+    <span class="c1"># ajuste en cada fold. AUC ≈ 0.5 -&gt; MCAR plausible; AUC alto -&gt; MAR.</span>
+    <span class="n">auc</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">)),</span>
+                          <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">sub</span><span class="p">],</span> <span class="n">ind</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">sub</span><span class="p">],</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"roc_auc"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Variable con la mayor |SMD| (los NaN se ignoran asignándoles -1 en la comparación).</span>
+    <span class="n">smd_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">smd</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Se guarda también la tasa de nulo en cada estrato (1/2/3/4/5/6) para leerla a ojo.</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"variable"</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">"n nulos"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">ind</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="s2">"% nulos"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">ind</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">"V (nulo~estrato)"</span><span class="p">:</span> <span class="n">cv</span><span class="p">[</span><span class="s2">"V"</span><span class="p">],</span>
+                  <span class="s2">"|SMD| máx."</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">smd_max</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="s2">"en variable"</span><span class="p">:</span> <span class="n">smd_max</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"AUC predecir nulo"</span><span class="p">:</span> <span class="n">auc</span><span class="p">,</span>
+                  <span class="s2">"tasa de nulo por estrato (%)"</span><span class="p">:</span> <span class="s2">" / "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span>
+                                                              <span class="n">ind</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">())})</span>
+<span class="n">mecanismo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"variable"</span><span class="p">)</span> <span class="k">if</span> <span class="n">filas</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+
+<span class="c1"># Regla de lectura que combina las tres evidencias. MCAR solo si las tres son</span>
+<span class="c1"># débiles a la vez; en otro caso el faltante depende de lo observado (MAR). MNAR no</span>
+<span class="c1"># se puede probar con los datos y se argumenta con conocimiento del dominio.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lectura_mecanismo</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">"n nulos"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"muy pocos casos (&lt;100): no evaluable; proviene de valores imposibles"</span>
+    <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">"AUC predecir nulo"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.6</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">"V (nulo~estrato)"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">"|SMD| máx."</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"compatible con MCAR"</span>
+    <span class="k">return</span> <span class="s2">"MAR (depende de variables observadas)"</span>
+
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mecanismo</span><span class="p">):</span>
+    <span class="n">mecanismo</span><span class="p">[</span><span class="s2">"lectura"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mecanismo</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lectura_mecanismo</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mecanismo</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n nulos</th>
+      <th>% nulos</th>
+      <th>V (nulo~estrato)</th>
+      <th>|SMD| máx.</th>
+      <th>en variable</th>
+      <th>AUC predecir nulo</th>
+      <th>tasa de nulo por estrato (%)</th>
+      <th>lectura</th>
+    </tr>
+    <tr>
+      <th>variable</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>total_habitaciones</th>
+      <td>320</td>
+      <td>0.124</td>
+      <td>0.034</td>
+      <td>1.625</td>
+      <td>area_construida</td>
+      <td>0.997</td>
+      <td>0.1 / 0.1 / 0.3 / 0.0 / 0.1 / 0.0</td>
+      <td>MAR (depende de variables observadas)</td>
+    </tr>
+    <tr>
+      <th>antiguedad</th>
+      <td>128</td>
+      <td>0.050</td>
+      <td>0.053</td>
+      <td>2.100</td>
+      <td>y_km</td>
+      <td>0.984</td>
+      <td>0.0 / 0.0 / 0.0 / 0.3 / 0.0 / 0.0</td>
+      <td>MAR (depende de variables observadas)</td>
+    </tr>
+    <tr>
+      <th>planta_ubicacion</th>
+      <td>237</td>
+      <td>0.092</td>
+      <td>0.042</td>
+      <td>1.587</td>
+      <td>total_habitaciones</td>
+      <td>0.969</td>
+      <td>0.0 / 0.0 / 0.3 / 0.0 / 0.1 / 0.2</td>
+      <td>MAR (depende de variables observadas)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Interpretación y decisión</p>
+<ul class="simple">
+<li><p><strong>Los faltantes son mínimos.</strong> En train, la variable con más nulos es
+<code class="docutils literal notranslate"><span class="pre">total_habitaciones</span></code> con <strong>320 (0.12 %)</strong>; luego <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code> con
+237 (0.09 %), <code class="docutils literal notranslate"><span class="pre">antiguedad</span></code> con 128 (0.05 %), baños con 29 (0.01 %),
+terreno con 4 y plantas con 3. Casi todos provienen de las reglas del
+capítulo 1, no de celdas vacías en origen: pisos codificados (97–99) y
+años centinela (paso 4), e incoherencias dentro de la fila (paso 5). La
+columna «origen principal» lo confirma: planta y plantas salen como
+«valor imposible», antigüedad como «año imposible», y habitaciones y
+baños como «incoherencia en la fila» (bandera <code class="docutils literal notranslate"><span class="pre">flag_incoherente_*</span></code>),
+igual que en el dataset completo, donde todos los nulos de habitaciones
+(0.107 %) y de baños (0.012 %) son incoherencias (cap. 1, columna «de
+ellos, por incoherencia»). Los 4 nulos de <code class="docutils literal notranslate"><span class="pre">area_catastral_terreno</span></code> sí
+vienen vacíos en origen: son viviendas informales, 3 de ellas ubicadas
+por su manzana (sección 1.7.2). Las variables sin
+nulos aparecen como «faltante en origen» solo porque es la etiqueta por
+defecto de la tabla.</p></li>
+<li><p><strong>Baños</strong> tiene menos de 30 nulos y queda fuera del diagnóstico de
+mecanismo: no hay base para evaluarlo.</p></li>
+<li><p><strong>Habitaciones</strong> es <strong>MAR</strong>, pero por construcción: su nulo se predice casi
+perfectamente (AUC = 0.997) y la mayor diferencia está en
+<code class="docutils literal notranslate"><span class="pre">area_construida</span></code> (|SMD| = 1.62), porque la regla anula las habitaciones
+cuando el área por habitación es menor de 6 m². El faltante depende de
+una variable observada (el área), no del azar.</p></li>
+<li><p><strong>Piso de ubicación</strong> es <strong>MAR</strong>: su nulo se predice casi perfectamente
+(AUC = 0.969) y la mayor diferencia está en <code class="docutils literal notranslate"><span class="pre">total_habitaciones</span></code>
+(|SMD| = 1.59); el 0.3 % de las unidades de estrato 3 tiene un código de
+piso, frente a ≤ 0.2 % en el resto. El código se concentra en ciertos
+edificios o sectores, no al azar.</p></li>
+<li><p><strong>Antigüedad</strong> es <strong>MAR</strong>: su nulo se predice casi perfectamente con las
+variables observadas (AUC = 0.984) y la mayor diferencia estandarizada
+está en <code class="docutils literal notranslate"><span class="pre">y_km</span></code> (|SMD| = 2.10), es decir, los años faltantes se concentran
+en una zona concreta de la ciudad (0.3 % de nulos en estrato 4 frente a
+~0 % en el resto). 128 de los 129 años imposibles del dataset completo
+(cap. 1) caen en train, lo que es coherente con esa concentración espacial.
+No es un faltante al azar: parece un proyecto o un sector cuyo año no se
+registró.</p></li>
+<li><p><strong>Decisión:</strong> mediana + indicador de faltante, dentro del Pipeline (el
+indicador deja que el modelo use «no tener el dato» si eso informa el
+estrato). Con tan pocos nulos (&lt; 1 %), la elección del imputador apenas afecta
+al modelo; lo importante es no aprenderlo con test. Ninguna variable
+supera el 30 % de faltantes, así que, siguiendo las notas del curso
+(9.10.4.1.4), <strong>no se elimina ninguna variable</strong> por faltantes.</p></li>
+</ul>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Registro de decisiones de imputación en decisiones_eda.json, con su motivo. El</span>
+<span class="c1"># modelo base (cap. 10) lee este archivo, de modo que cada paso del Pipeline queda</span>
+<span class="c1"># rastreado al hallazgo de este capítulo. La imputación se ajusta dentro del</span>
+<span class="c1"># Pipeline, es decir, solo con los datos de entrenamiento de cada fold.</span>
+<span class="n">C</span><span class="o">.</span><span class="n">guardar_decision</span><span class="p">(</span>
+    <span class="s2">"imputacion_numericas"</span><span class="p">,</span> <span class="s2">"mediana + indicador de faltante (SimpleImputer(add_indicator=True)), dentro del Pipeline"</span><span class="p">,</span>
+    <span class="s2">"Faltantes &lt; 30 </span><span class="si">% e</span><span class="s2">n todas las variables; mecanismo MAR/informativo según AUC y SMD (cap. 3.1); "</span>
+    <span class="s2">"la mediana es robusta a la asimetría fuerte de áreas y conteos."</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">guardar_decision</span><span class="p">(</span>
+    <span class="s2">"imputacion_categoricas"</span><span class="p">,</span> <span class="s2">"categoría explícita 'faltante'"</span><span class="p">,</span>
+    <span class="s2">"Conserva la información de que el dato no existía, sin inventar una categoría real."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[decisión registrada] imputacion_numericas = mediana + indicador de faltante (SimpleImputer(add_indicator=True)), dentro del Pipeline
+   motivo: Faltantes &lt; 30 % en todas las variables; mecanismo MAR/informativo según AUC y SMD (cap. 3.1); la mediana es robusta a la asimetría fuerte de áreas y conteos.
+[decisión registrada] imputacion_categoricas = categoría explícita 'faltante'
+   motivo: Conserva la información de que el dato no existía, sin inventar una categoría real.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="outliers-univariados-iqr-de-tukey">
+<h2>3.2 Outliers univariados (IQR de Tukey)<a class="headerlink" href="#outliers-univariados-iqr-de-tukey" title="Link to this heading">#</a></h2>
+<p>Los valores <strong>imposibles</strong> ya se convirtieron en NaN (capítulo 1). Lo que
+queda son valores <strong>extremos pero plausibles</strong>: una casa de 8 baños, un lote
+muy grande. Se cuantifican con la <strong>regla de Tukey</strong>, que se basa en los
+cuartiles: <span class="math notranslate nohighlight">\(Q_1\)</span> deja por debajo el 25 % de los datos, <span class="math notranslate nohighlight">\(Q_3\)</span> el 75 %, y el
+rango intercuartílico es <span class="math notranslate nohighlight">\(IQR = Q_3 - Q_1\)</span>. Es outlier todo valor fuera de
+<span class="math notranslate nohighlight">\([Q_1 - 1.5\,IQR,\ Q_3 + 1.5\,IQR]\)</span>, y «outlier lejano» todo valor fuera
+de <span class="math notranslate nohighlight">\([Q_1 - 3\,IQR,\ Q_3 + 3\,IQR]\)</span>.</p>
+<p><em>Ejemplo:</em> si el área construida tiene <span class="math notranslate nohighlight">\(Q_1 = 50\)</span> m² y <span class="math notranslate nohighlight">\(Q_3 = 100\)</span> m², el
+<span class="math notranslate nohighlight">\(IQR\)</span> es 50 m² y el límite superior de Tukey es 100 + 1.5 × 50 = 175 m².
+Una casa de 200 m² sería «outlier», aunque en el norte de la ciudad es
+perfectamente normal. Por eso la regla aquí <strong>describe</strong>, no limpia.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outliers univariados con la regla de Tukey (1.5·IQR) y con el criterio de</span>
+<span class="c1"># "outliers lejanos" (3·IQR), calculados solo con train. Se reportan también p99.9</span>
+<span class="c1"># y máximo porque el p99.9 es el umbral de la winsorización que se decide después.</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">NUMERICAS</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">q1</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">.25</span><span class="p">,</span> <span class="mf">.75</span><span class="p">])</span>
+    <span class="n">iqr</span> <span class="o">=</span> <span class="n">q3</span> <span class="o">-</span> <span class="n">q1</span>
+    <span class="c1"># Fracción de valores fuera de las vallas de Tukey (1.5·IQR) y de las lejanas (3·IQR).</span>
+    <span class="n">f15</span> <span class="o">=</span> <span class="p">((</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">q1</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">f30</span> <span class="o">=</span> <span class="p">((</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">q1</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">q3</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"variable"</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">"Q1"</span><span class="p">:</span> <span class="n">q1</span><span class="p">,</span> <span class="s2">"Q3"</span><span class="p">:</span> <span class="n">q3</span><span class="p">,</span> <span class="s2">"IQR"</span><span class="p">:</span> <span class="n">iqr</span><span class="p">,</span> <span class="s2">"lím. sup. 1.5·IQR"</span><span class="p">:</span> <span class="n">q3</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">,</span>
+                  <span class="s2">"</span><span class="si">% f</span><span class="s2">uera 1.5·IQR"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f15</span><span class="p">,</span> <span class="s2">"</span><span class="si">% f</span><span class="s2">uera 3·IQR"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f30</span><span class="p">,</span>
+                  <span class="s2">"p99.9"</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">.999</span><span class="p">),</span> <span class="s2">"máx"</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">max</span><span class="p">()})</span>
+<span class="n">outliers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"variable"</span><span class="p">)</span>
+<span class="n">outliers</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Q1</th>
+      <th>Q3</th>
+      <th>IQR</th>
+      <th>lím. sup. 1.5·IQR</th>
+      <th>% fuera 1.5·IQR</th>
+      <th>% fuera 3·IQR</th>
+      <th>p99.9</th>
+      <th>máx</th>
+    </tr>
+    <tr>
+      <th>variable</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>area_construida</th>
+      <td>53.000</td>
+      <td>111.380</td>
+      <td>58.380</td>
+      <td>198.950</td>
+      <td>5.957</td>
+      <td>2.102</td>
+      <td>678.000</td>
+      <td>1,971.000</td>
+    </tr>
+    <tr>
+      <th>area_catastral_terreno</th>
+      <td>23.660</td>
+      <td>120.000</td>
+      <td>96.340</td>
+      <td>264.510</td>
+      <td>7.277</td>
+      <td>1.939</td>
+      <td>4,194.857</td>
+      <td>36,022.000</td>
+    </tr>
+    <tr>
+      <th>total_habitaciones</th>
+      <td>2.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>4.500</td>
+      <td>5.591</td>
+      <td>0.959</td>
+      <td>12.000</td>
+      <td>20.000</td>
+    </tr>
+    <tr>
+      <th>total_banios</th>
+      <td>1.000</td>
+      <td>2.000</td>
+      <td>1.000</td>
+      <td>3.500</td>
+      <td>2.956</td>
+      <td>0.252</td>
+      <td>6.000</td>
+      <td>15.000</td>
+    </tr>
+    <tr>
+      <th>total_plantas</th>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>9.960</td>
+      <td>9.960</td>
+      <td>11.000</td>
+      <td>35.000</td>
+    </tr>
+    <tr>
+      <th>antiguedad</th>
+      <td>8.000</td>
+      <td>29.000</td>
+      <td>21.000</td>
+      <td>60.500</td>
+      <td>1.172</td>
+      <td>0.075</td>
+      <td>86.000</td>
+      <td>94.000</td>
+    </tr>
+    <tr>
+      <th>planta_ubicacion</th>
+      <td>1.000</td>
+      <td>3.000</td>
+      <td>2.000</td>
+      <td>6.000</td>
+      <td>10.693</td>
+      <td>5.166</td>
+      <td>20.000</td>
+      <td>41.000</td>
+    </tr>
+    <tr>
+      <th>altura</th>
+      <td>3.000</td>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>3.000</td>
+      <td>0.267</td>
+      <td>0.267</td>
+      <td>3.000</td>
+      <td>9.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Boxplots de cada variable numérica de train en escala log(1 + x). El logaritmo</span>
+<span class="c1"># comprime las colas largas para poder ver el cuerpo de la distribución y los</span>
+<span class="c1"># extremos en la misma figura; los puntos sueltos son los outliers de Tukey.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">nums</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="c1"># clip(lower=0) evita log de negativos; los puntos atípicos se dibujan pequeños.</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">"horizontal"</span><span class="p">,</span> <span class="n">widths</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+               <span class="n">flierprops</span><span class="o">=</span><span class="p">{</span><span class="s2">"markersize"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"alpha"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"log(1 + valor)"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="c1"># Se ocultan los paneles sobrantes de la grilla si el número de variables es impar.</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">"Boxplots en escala log1p (entrenamiento)"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">G</span><span class="o">.</span><span class="n">guardar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"03_boxplots_outliers"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/1abce500bda62dd7d59c03f76ec9e221dfe038a9ef2c15c790b92331b4c9ad55.png" src="../_images/1abce500bda62dd7d59c03f76ec9e221dfe038a9ef2c15c790b92331b4c9ad55.png" />
+</div>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Interpretación y decisión</p>
+<ul class="simple">
+<li><p>La regla de Tukey marca entre <strong>3 % y 7 %</strong> de las filas en áreas,
+habitaciones y baños (11 % en piso de ubicación), pero muy pocas son «lejanas» (3·IQR): 2.1 % en
+área construida, 1.9 % en terreno, &lt; 1 % en habitaciones y baños. Las
+distribuciones son muy <strong>asimétricas a la derecha</strong>; esos puntos son
+viviendas grandes, no errores.</p></li>
+<li><p>En <code class="docutils literal notranslate"><span class="pre">total_plantas</span></code> y <code class="docutils literal notranslate"><span class="pre">altura</span></code> la regla es <strong>inservible</strong>: su IQR es 0 (Q1 =
+Q3 = 1 planta; Q1 = Q3 = 3 m). En plantas, <em>cualquier</em> casa de dos pisos
+queda marcada como outlier (10.0 % de train); en altura, cualquier valor
+distinto de 3 (0.3 %). Es un ejemplo de por qué no se debe eliminar filas
+con una regla automática sin mirarla.</p></li>
+<li><p>Los máximos que quedan son grandes pero posibles: 1 971 m² construidos,
+36 022 m² de terreno, 20 habitaciones, 15 baños y 35 plantas. Los de
+área construida, habitaciones y baños quedan dentro de los topes de la
+regla de registros agregados del cap. 1 (paso 2c: más de 2 000 m², 20
+habitaciones o 15 baños es un edificio entero en una fila). El p99.9 (los
+umbrales que usará la winsorización) está en 678 m² de área construida,
+4 195 m² de terreno, 12 habitaciones, 6 baños y 11 plantas.</p></li>
+<li><p>En <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code>, los códigos 97–99 ya se trataron como faltantes
+(cap. 1, techo del rango en 60): el p99.9 queda en 20 y el máximo en 41,
+un piso real de las torres más altas, no un código.</p></li>
+<li><p><strong>Decisión:</strong> no se elimina ninguna fila por ser outlier estadístico,
+porque el área construida crece con el estrato (el capítulo 6 lo mide: la
+mediana pasa de 54 m² en estrato 1 a 152 m² en estrato 6). Las viviendas
+más grandes pesan más en las clases altas, que ya son minoritarias, y
+eliminarlas les quitaría ejemplos. Su influencia en el modelo lineal se
+reduce de dos formas: (i) con <code class="docutils literal notranslate"><span class="pre">log1p</span></code> en las variables muy asimétricas
+(capítulo 5) y (ii) con <strong>winsorización</strong> a los percentiles 0.1 y 99.9
+<strong>aprendidos en train</strong> dentro del Pipeline. Winsorizar es recortar sin
+borrar: un valor por encima del percentil 99.9 (por ejemplo, 692 m² de
+área construida) se reemplaza por ese percentil, y la fila se conserva.</p></li>
+<li><p>Los outliers <strong>multivariados</strong> (combinaciones raras) se revisan en el
+capítulo 7.</p></li>
+</ul>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Se registra la decisión de winsorizar a los percentiles 0.1 y 99.9 en lugar de</span>
+<span class="c1"># eliminar filas. Los cuantiles se aprenden en train dentro del Pipeline (clase de</span>
+<span class="c1"># recorte de modelo.py), así que test nunca influye en los umbrales.</span>
+<span class="n">C</span><span class="o">.</span><span class="n">guardar_decision</span><span class="p">(</span><span class="s2">"winsorizacion_cuantiles"</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">],</span>
+                   <span class="s2">"Colas largas plausibles (cap. 3.2): se recortan a p0.1/p99.9 de train dentro del "</span>
+                   <span class="s2">"Pipeline en lugar de eliminar filas, para no sesgar las clases altas."</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[decisión registrada] winsorizacion_cuantiles = [0.001, 0.999]
+   motivo: Colas largas plausibles (cap. 3.2): se recortan a p0.1/p99.9 de train dentro del Pipeline en lugar de eliminar filas, para no sesgar las clases altas.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sesgo-de-muestreo-y-representatividad">
+<h2>3.3 Sesgo de muestreo y representatividad<a class="headerlink" href="#sesgo-de-muestreo-y-representatividad" title="Link to this heading">#</a></h2>
+<p>¿A quién deja fuera el modelo? En la sección 1.7 se ubicaron por el
+centroide de su manzana la mayoría de las viviendas que llegaban sin
+coordenadas, y se decidió modelar solo con las viviendas que tienen
+coordenadas. Aquí se mide el costo de esa decisión: se comparan las filas
+<strong>con</strong> coordenadas (población de modelado) contra las <strong>10 300 que siguen
+sin coordenadas</strong>, casi todas mejoras en terreno ajeno. Para no mirar el
+conjunto de prueba, la comparación usa solo train frente a las filas no
+ubicables. Se muestra aparte el subconjunto de train ubicado por el
+centroide de su manzana: es la parte del sesgo que el paso 6 del embudo
+corrige.</p>
+<p>La fuerza de la diferencia se mide con la <strong>V de Cramér</strong>, una medida de
+asociación entre dos variables categóricas que va de 0 (las proporciones de
+estrato son iguales en los dos grupos) a 1 (conocer el grupo determina el
+estrato). Como guía: menos de 0.1 es despreciable, 0.1–0.3 débil, 0.3–0.5
+moderada y más de 0.5 fuerte.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sesgo de cobertura: compara la distribución del estrato en la población modelada</span>
+<span class="c1"># (solo train, para no mirar test) con la de las filas sin coordenadas, que quedan</span>
+<span class="c1"># fuera del modelo. Si difieren mucho, el modelo no representa a toda la ciudad.</span>
+<span class="n">ruta_sin</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">CARPETA_PROCESADOS</span> <span class="o">/</span> <span class="s2">"sin_coordenadas.parquet"</span>
+<span class="c1"># Se lee el formato con que se guardó en el cap. 2 (parquet o, si no, CSV).</span>
+<span class="n">sin</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">ruta_sin</span><span class="p">)</span> <span class="k">if</span> <span class="n">ruta_sin</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ruta_sin</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">))</span>
+<span class="c1"># % de cada estrato dentro de cada grupo; fillna(0) por si a un grupo le falta un estrato.</span>
+<span class="n">por_manzana</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s2">"ubicado_por_manzana"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Train: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> filas, de ellas </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">por_manzana</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> ubicadas por manzana "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">por_manzana</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %) | sin coordenadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sin</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">({</span>
+    <span class="s2">"modelado (train)"</span><span class="p">:</span> <span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"de ellas: ubicadas por manzana"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">por_manzana</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"sin coordenadas"</span><span class="p">:</span> <span class="n">sin</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">NOMBRES_CLASES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">comp</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+<span class="c1"># V de Cramér entre "grupo" (modelado / sin coordenadas) y estrato: se apilan ambos</span>
+<span class="c1"># grupos en una sola tabla para medir la fuerza de la asociación (0 = sin sesgo).</span>
+<span class="n">cv_sesgo</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">cramers_v</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">"modelado"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">train</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">"sin"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sin</span><span class="o">.</span><span class="n">index</span><span class="p">)],</span>
+                                 <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                       <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">],</span> <span class="n">sin</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"V de Cramér (grupo ~ estrato) = </span><span class="si">{</span><span class="n">cv_sesgo</span><span class="p">[</span><span class="s1">'V'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">comp</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train: 257,273 filas, de ellas 34,892 ubicadas por manzana (13.6 %) | sin coordenadas: 10,300
+V de Cramér (grupo ~ estrato) = 0.224
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelado (train)</th>
+      <th>de ellas: ubicadas por manzana</th>
+      <th>sin coordenadas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1 Bajo-bajo</th>
+      <td>30.020</td>
+      <td>64.582</td>
+      <td>84.078</td>
+    </tr>
+    <tr>
+      <th>2 Bajo</th>
+      <td>22.688</td>
+      <td>33.194</td>
+      <td>9.029</td>
+    </tr>
+    <tr>
+      <th>3 Medio-bajo</th>
+      <td>22.917</td>
+      <td>2.012</td>
+      <td>5.728</td>
+    </tr>
+    <tr>
+      <th>4 Medio</th>
+      <td>14.357</td>
+      <td>0.069</td>
+      <td>0.039</td>
+    </tr>
+    <tr>
+      <th>5 Medio-alto</th>
+      <td>5.193</td>
+      <td>0.080</td>
+      <td>1.126</td>
+    </tr>
+    <tr>
+      <th>6 Alto</th>
+      <td>4.825</td>
+      <td>0.063</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Misma comparación para el régimen del predio (condicion_predio): sirve para</span>
+<span class="c1"># explicar POR QUÉ faltan coordenadas (se espera que dominen los predios informales).</span>
+<span class="n">cond</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">({</span>
+    <span class="s2">"modelado (train)"</span><span class="p">:</span> <span class="n">train</span><span class="p">[</span><span class="s2">"condicion_predio"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"de ellas: ubicadas por manzana"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">por_manzana</span><span class="p">,</span> <span class="s2">"condicion_predio"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"sin coordenadas"</span><span class="p">:</span> <span class="n">sin</span><span class="p">[</span><span class="s2">"condicion_predio"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">cond</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelado (train)</th>
+      <th>de ellas: ubicadas por manzana</th>
+      <th>sin coordenadas</th>
+    </tr>
+    <tr>
+      <th>condicion_predio</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>PH_Unidad_Predial</th>
+      <td>45.024</td>
+      <td>0.160</td>
+      <td>1.864</td>
+    </tr>
+    <tr>
+      <th>NPH</th>
+      <td>35.001</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>Informal</th>
+      <td>19.949</td>
+      <td>99.840</td>
+      <td>98.136</td>
+    </tr>
+    <tr>
+      <th>PH_Matriz</th>
+      <td>0.024</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>Condominio_Unidad_Predial</th>
+      <td>0.002</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Barras del % de cada estrato en la población modelada (azul), en su parte ubicada</span>
+<span class="c1"># por manzana (azul claro) y en las filas sin coordenadas (naranja): visualiza el</span>
+<span class="c1"># sesgo de cobertura hacia estratos bajos y cuánto lo reduce el paso 6.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">"#4c72b0"</span><span class="p">,</span> <span class="s2">"#8fb3d9"</span><span class="p">,</span> <span class="s2">"#dd8452"</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>   <span class="c1"># estrato 1 arriba, 6 abajo</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"</span><span class="si">% d</span><span class="s2">e filas del grupo"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Distribución de estrato: población modelada vs. filas sin coordenadas"</span><span class="p">)</span>
+<span class="n">G</span><span class="o">.</span><span class="n">guardar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">"03_sesgo_cobertura"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/a3cec697585a03f1e9e936da3f28a0689f62a9ba4490cd7028a98afa0bfa9749.png" src="../_images/a3cec697585a03f1e9e936da3f28a0689f62a9ba4490cd7028a98afa0bfa9749.png" />
+</div>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Interpretación</p>
+<ul class="simple">
+<li><p>Sin la ubicación por manzana, el sesgo de cobertura era <strong>moderado</strong>,
+cerca del límite de «fuerte»: las 53 894 filas sin coordenadas propias
+eran 96.5 % de estratos 1 y 2, y la V de Cramér entre «tener o no
+coordenadas» y el estrato era 0.42 (versión anterior del libro). El paso 6
+del embudo (sección 1.7.2) incorpora a train <strong>34 892 viviendas ubicadas
+por su manzana (13.6 % de train)</strong>: 99.8 % informales, 64.6 % de estrato 1
+y 33.2 % de estrato 2. Con ellas, lo informal pasa del 7.6 % al <strong>19.9 %</strong>
+de train, y el estrato 1 del 25.5 % al 30.0 %.</p></li>
+<li><p>El sesgo que queda es <strong>débil</strong> en la escala de arriba: las <strong>10 300
+filas</strong> que siguen sin coordenadas (3.1 % del dataset) son 84.1 % de
+estrato 1 y 9.0 % de estrato 2, frente a 30.0 % y 22.7 % en train. La V de
+Cramér baja a <strong>0.22</strong>. El 98.1 % de esas filas son predios <code class="docutils literal notranslate"><span class="pre">Informal</span></code>:
+viviendas cuya manzana no tiene ninguna vivienda ubicada, tiene el código
+genérico <code class="docutils literal notranslate"><span class="pre">0000</span></code> o está demasiado dispersa para usar su centroide.</p></li>
+<li><p>Consecuencia: el modelo ya ve buena parte de la ciudad informal, pero no
+toda. Sus métricas deben extrapolarse con cautela a los asentamientos
+informales que siguen sin ubicar, sobre todo los de estrato 1. Se declara
+como limitación en las conclusiones (11.2). Mejora futura: ubicar las
+10 300 filas restantes con otra fuente (cartografía oficial de manzanas o
+geocodificación de direcciones).</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_particion.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">2. Reserva del conjunto de prueba (partición por bloques espaciales)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_variable_objetivo.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">4. Análisis de la variable objetivo (sección 2.1)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes">3.1 Valores faltantes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#patron">Patrón</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mecanismo-mcar-mar-mnar">Mecanismo (MCAR / MAR / MNAR)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outliers-univariados-iqr-de-tukey">3.2 Outliers univariados (IQR de Tukey)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgo-de-muestreo-y-representatividad">3.3 Sesgo de muestreo y representatividad</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
