@@ -25,7 +25,7 @@ from sklearn.calibration import calibration_curve
 from sklearn.metrics import (confusion_matrix, precision_recall_fscore_support, roc_curve, auc)
 
 DATOS_RAIZ = Path(__file__).resolve().parent / "datos"
-VERSIONES = {"v1": "Versión 1 (entregada)", "v2": "Versión 2 (con ubicación por manzana)"}
+VERSIONES = {"v1": "v1 · entregada", "v2": "v2 · con ubicación por manzana"}
 _ESTADO = {"v": "v2"}
 _CANDADO = threading.RLock()
 
@@ -139,6 +139,18 @@ MODELOS = list(COLOR_MODELO)
 
 class _NombresCortos(dict):
     """Nombre corto de cada modelo; el de la moda por zona lleva el tamaño de zona elegido por CV."""
+
+    def __getitem__(self, modelo):
+        if modelo == "Moda por zona":
+            return f"Moda por zona ({float(resultados().get('tam_zona_moda_km', 2.0)):g} km)"
+        return dict.__getitem__(self, modelo)
+
+
+NOMBRE_CORTO = _NombresCortos(NOMBRE_CORTO)
+
+
+class _NombresCortos(dict):
+    """Nombre corto de cada modelo; el de la moda por zona lleva el tamaño de zona elegido por CV (Entregable 1)."""
 
     def __getitem__(self, modelo):
         if modelo == "Moda por zona":

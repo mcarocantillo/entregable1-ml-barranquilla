@@ -44,19 +44,24 @@ NOTA_VERSION = {
 
 app.layout = html.Div([
     html.Header(dbc.Container([
-        html.H1("Estrato socioeconómico de las viviendas de Barranquilla", className="titulo"),
-        html.Div(["Clasificación con datos catastrales — Entregable 1, Machine Learning (Maestría, Universidad del "
-                  "Norte). Profesor Lihki Rubio. ", html.A(id="enlace-libro", children="Jupyter Book del Entregable 1",
-                                                           href=LIBROS["v2"], target="_blank",
-                                                           style={"color": "#fff", "textDecoration": "underline"})],
-                 className="subtitulo"),
-        html.Div(AUTORES, className="autores"),
-        dbc.RadioItems(id="version", value="v2", inline=True, className="mt-2 selector-version",
-                       options=[{"label": etiqueta, "value": v} for v, etiqueta in F.VERSIONES.items()],
-                       inputStyle={"marginRight": "6px"}, labelStyle={"marginRight": "18px", "color": "#fff"}),
-    ], fluid=True), className="cabecera"),
+        html.Div("Machine Learning · Maestría · Universidad del Norte · Entregable 1", className="hero-kicker"),
+        html.H1("¿Se puede predecir el estrato de una vivienda con sus datos catastrales?", className="hero-titulo"),
+        html.Div("Estrato socioeconómico de las viviendas de Barranquilla a partir del catastro abierto: base de "
+                 "datos, análisis exploratorio, validación espacial y un modelo base.", className="hero-sub"),
+        html.Div([AUTORES, html.Br(), "Profesor Lihki Rubio · ",
+                  html.A(id="enlace-libro", children="Jupyter Book del Entregable 1", href=LIBROS["v2"],
+                         target="_blank", className="hero-enlace")], className="hero-autores"),
+        html.Div([html.Span("Versión", className="selector-titulo"),
+                  dbc.RadioItems(id="version", value="v2", inline=True, className="selector-version",
+                                 inputClassName="btn-check", labelClassName="btn btn-version",
+                                 labelCheckedClassName="activa",
+                                 options=[{"label": etiqueta, "value": v} for v, etiqueta in F.VERSIONES.items()])],
+                 className="selector-caja"),
+        html.Div("Mapa de fondo: cada luz es una zona de unos 165 m con viviendas; más brillante = estrato más alto.",
+                 className="hero-nota"),
+    ], fluid=True), id="cabecera", className="hero hero-v2"),
     dbc.Container([
-        dbc.Alert(id="nota-version", color="info", className="mt-3 mb-0"),
+        dbc.Alert(id="nota-version", color="info", className="mt-3 mb-0 nota-version"),
         dcc.Loading(html.Div(id="contenido"), type="default"),
     ], fluid=True),
     html.Footer(dbc.Container(html.Small(
@@ -65,17 +70,27 @@ app.layout = html.Div([
 ])
 
 
+ESCALA = html.Section([
+    html.Div("El estrato en Colombia", className="etiqueta-seccion mt-4"),
+    html.Img(src=app.get_asset_url("escala_estratos.svg"), className="escala-estratos",
+             alt="Escala de estratos 1 a 6 y su efecto en las tarifas de servicios públicos"),
+    html.P("Seis estratos, de 1 (bajo-bajo) a 6 (alto). Los estratos 1 a 3 reciben subsidio en las tarifas de "
+           "servicios públicos, el 4 paga la tarifa plena y los 5 y 6 pagan una contribución adicional "
+           "(Ley 142 de 1994).", className="text-muted text-center pie-imagen"),
+])
+
+
 @app.callback(Output("contenido", "children"), Output("nota-version", "children"), Output("enlace-libro", "href"),
-              Input("version", "value"))
+              Output("cabecera", "className"), Input("version", "value"))
 def mostrar_version(version):
     p = construir(version)
     pestanas = dbc.Tabs([
-        dbc.Tab(p["t1"], label="1. Contexto del problema", tab_id="t1"),
+        dbc.Tab(html.Div([ESCALA, p["t1"]]), label="1. Contexto del problema", tab_id="t1"),
         dbc.Tab(p["t2"], label="2. Base de datos y calidad", tab_id="t2"),
         dbc.Tab(p["t3"], label="3. Análisis exploratorio", tab_id="t3"),
         dbc.Tab(p["t4"], label="4. Modelo base", tab_id="t4"),
-    ], active_tab="t1", className="mt-3")
-    return pestanas, NOTA_VERSION[version], LIBROS[version]
+    ], active_tab="t1", className="mt-4 pestanas")
+    return pestanas, NOTA_VERSION[version], LIBROS[version], f"hero hero-{version}"
 
 
 # ===========================================================================
