@@ -79,8 +79,8 @@ TINTA, TINTA_2, REJILLA = "#0b0b0b", "#52514e", "#e6e5e1"
 
 NUMERICAS = {
     "area_construida": "Área construida (m²)", "area_catastral_terreno": "Área de terreno (m²)",
-    "total_habitaciones": "Habitaciones", "total_banios": "Baños", "total_plantas": "Pisos del edificio",
-    "planta_ubicacion": "Piso de ubicación", "altura": "Altura", "antiguedad": "Antigüedad (años)",
+    "total_habitaciones": "Habitaciones", "total_banios": "Baños", "total_plantas": "Pisos de la vivienda",
+    "planta_ubicacion": "Piso de ubicación", "altura": "Altura (casi siempre 3 m)", "antiguedad": "Antigüedad (años)",
     "dist_centro_km": "Distancia al centro (km)",
 }
 CATEGORICAS = {"condicion_predio": "Condición del predio (régimen)", "uso": "Uso", "tipo_vivienda": "Tipo de vivienda"}
