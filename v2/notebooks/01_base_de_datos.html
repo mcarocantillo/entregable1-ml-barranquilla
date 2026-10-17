@@ -1054,11 +1054,11 @@ significado de los códigos de <code class="docutils literal notranslate"><span 
     <span class="p">(</span><span class="s2">"area_catastral_terreno"</span><span class="p">,</span> <span class="s2">"numérica continua"</span><span class="p">,</span> <span class="s2">"m²"</span><span class="p">,</span> <span class="s2">"Área del terreno del predio (en unidades PH, su cuota del lote común)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"total_habitaciones"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"conteo"</span><span class="p">,</span> <span class="s2">"Número de habitaciones"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"total_banios"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"conteo"</span><span class="p">,</span> <span class="s2">"Número de baños"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"total_plantas"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"conteo"</span><span class="p">,</span> <span class="s2">"Número de plantas/pisos de la construcción"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"total_plantas"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"conteo"</span><span class="p">,</span> <span class="s2">"Pisos de la propia vivienda (no del edificio): 1 en casi todos los apartamentos, 1 o 2 en las casas; en algunos apartamentos el catastro registra los pisos del edificio"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"anio_construccion"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"año"</span><span class="p">,</span> <span class="s2">"Año de construcción registrado en el catastro"</span><span class="p">,</span> <span class="s2">"origen de antigüedad"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"antiguedad"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"años"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">C</span><span class="o">.</span><span class="n">ANIO_ACTUAL</span><span class="si">}</span><span class="s2"> − año de construcción (derivada)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"planta_ubicacion"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"piso"</span><span class="p">,</span> <span class="s2">"Piso en que está la unidad"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"altura"</span><span class="p">,</span> <span class="s2">"numérica continua"</span><span class="p">,</span> <span class="s2">"m (verificar)"</span><span class="p">,</span> <span class="s2">"Altura de la unidad de construcción"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"planta_ubicacion"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"piso"</span><span class="p">,</span> <span class="s2">"Piso en que está la unidad (hasta 41 en las torres más altas)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"altura"</span><span class="p">,</span> <span class="s2">"numérica continua"</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">,</span> <span class="s2">"Altura registrada de la unidad de construcción: vale 3 m en el 99.7 </span><span class="si">% d</span><span class="s2">e las filas, aunque la vivienda tenga 2 pisos (valor casi fijo)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"tipo_vivienda"</span><span class="p">,</span> <span class="s2">"categórica nominal (código)"</span><span class="p">,</span> <span class="s2">"—"</span><span class="p">,</span> <span class="s2">"Código de dominio ArcGIS del tipo de vivienda"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"uso"</span><span class="p">,</span> <span class="s2">"categórica nominal"</span><span class="p">,</span> <span class="s2">"—"</span><span class="p">,</span> <span class="s2">"Uso catastral de la unidad (casa, apartamento en PH, barraca…)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"condicion_predio"</span><span class="p">,</span> <span class="s2">"categórica nominal"</span><span class="p">,</span> <span class="s2">"—"</span><span class="p">,</span> <span class="s2">"Régimen: NPH (no propiedad horizontal), PH_Matriz, PH_Unidad_Predial, Informal…"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
@@ -1208,7 +1208,7 @@ significado de los códigos de <code class="docutils literal notranslate"><span 
       <td>total_plantas</td>
       <td>numérica discreta</td>
       <td>conteo</td>
-      <td>Número de plantas/pisos de la construcción</td>
+      <td>Pisos de la propia vivienda (no del edificio):...</td>
       <td>predictora</td>
       <td>Total Pisos</td>
     </tr>
@@ -1235,7 +1235,7 @@ significado de los códigos de <code class="docutils literal notranslate"><span 
       <td>planta_ubicacion</td>
       <td>numérica discreta</td>
       <td>piso</td>
-      <td>Piso en que está la unidad</td>
+      <td>Piso en que está la unidad (hasta 41 en las to...</td>
       <td>predictora</td>
       <td>Planta Ubicación</td>
     </tr>
@@ -1243,8 +1243,8 @@ significado de los códigos de <code class="docutils literal notranslate"><span 
       <th>13</th>
       <td>altura</td>
       <td>numérica continua</td>
-      <td>m (verificar)</td>
-      <td>Altura de la unidad de construcción</td>
+      <td>m</td>
+      <td>Altura registrada de la unidad de construcción...</td>
       <td>predictora</td>
       <td>Altura</td>
     </tr>
@@ -1913,7 +1913,9 @@ si el número baja, había variantes mal escritas.</p>
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>condicion_predio         categorías crudas:   5  -&gt;  normalizadas:   5
-tipo_planta              categorías crudas:   3  -&gt;  normalizadas:   3
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tipo_planta              categorías crudas:   3  -&gt;  normalizadas:   3
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>destinacion_economica    categorías crudas:  18  -&gt;  normalizadas:  18

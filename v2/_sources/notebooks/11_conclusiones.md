@@ -141,6 +141,17 @@
   catastral» y no como edad física del edificio. Queda pendiente confirmar su
   definición con la Gerencia de Gestión Catastral. El detalle está en el
   [sitio de datos de la tesis](https://mcarocantillo.github.io/tesis-datos-barranquilla/11_coherencia.html).
+- **Significado de `total_plantas`, `planta_ubicacion` y `altura`:** las tres
+  describen la vivienda, no el edificio. `planta_ubicacion` es el piso en que
+  está la unidad (hasta 41) y es confiable. `total_plantas` son los pisos de la
+  propia vivienda (1 en el 96.5 % de los apartamentos de train; 1 o 2 en las
+  casas), pero en unas 900 filas, casi todas apartamentos en PH, el catastro
+  parece registrar los pisos del edificio (14 o 20 plantas en un piso 3 u 8), y
+  hay al menos un error evidente: una casa NPH "de hasta 3 pisos" con 35
+  plantas. `altura` vale 3 m en el 99.7 % de las filas, también en casas de dos
+  pisos: es un valor casi fijo que no mide la altura del edificio. Una regla de
+  coherencia (por ejemplo, anular `total_plantas` > 3 en las viviendas de
+  "hasta 3 pisos") queda pendiente.
 - **Modelo lineal:** no captura interacciones ni heterogeneidad espacial; la
   multinomial ignora el orden de las clases, y aunque la calibración global
   es buena (ECE = 0.03), las probabilidades por clase están desplazadas por
