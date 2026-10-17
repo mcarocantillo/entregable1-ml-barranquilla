@@ -20,9 +20,10 @@
 # **Pregunta que responde:** ¿cómo separar un conjunto de prueba que sea un
 # "examen justo" para el modelo?
 #
-# **Datos:** las **278 824 viviendas con coordenadas** (universo de modelado,
-# sección 1.7). Las 53 894 sin coordenadas no se pueden asignar a una zona y
-# se guardan aparte para medir su sesgo en el capítulo 3.
+# **Datos:** las **322 418 viviendas con coordenadas** (universo de modelado,
+# sección 1.7), incluidas las 43 594 ubicadas por el centroide de su manzana.
+# Las 10 300 que siguen sin coordenadas no se pueden asignar a una zona y se
+# guardan aparte para medir su sesgo en el capítulo 3.
 #
 # **Conceptos nuevos:** estratificar, agrupar, bloque espacial y divergencia
 # de Jensen-Shannon (todos se explican abajo; ver también la Guía de
@@ -113,19 +114,25 @@ pd.set_option("display.float_format", lambda v: f"{v:,.3f}")
 # %%
 # Se reconstruye el dataset limpio con las mismas reglas del cap. 1 y se separa en
 # filas con y sin coordenadas: solo las ubicables pueden asignarse a un bloque
-# espacial, así que ellas forman la población de modelado.
+# espacial, así que ellas forman la población de modelado. Las coordenadas
+# incluyen las del paso 6 del embudo (centroide de la manzana, sección 1.7.2).
 df = L.cargar_datos_limpios()
 # reset_index deja índices 0..n-1, necesarios porque la partición usa posiciones.
 con = df[df["tiene_coordenadas"]].reset_index(drop=True)
 sin = df[~df["tiene_coordenadas"]].reset_index(drop=True)
+n_manz = int(con["ubicado_por_manzana"].sum())
 print(f"Filas limpias: {len(df):,}")
 print(f"  con coordenadas (población de modelado): {len(con):,} ({100 * len(con) / len(df):.1f}%)")
+print(f"    propias o del edificio matriz:         {len(con) - n_manz:,} ({100 * (len(con) - n_manz) / len(df):.1f}%)")
+print(f"    centroide de la manzana (paso 6):      {n_manz:,} ({100 * n_manz / len(df):.1f}%)")
 print(f"  sin coordenadas (no ubicables):          {len(sin):,} ({100 * len(sin) / len(df):.1f}%)")
 
 # %% [markdown]
-# Las filas **sin coordenadas** no pueden asignarse a ningún bloque espacial,
-# así que quedan fuera del modelado (la decisión se justificó en la sección
-# 1.7). Se guardan aparte para cuantificar el sesgo que esto introduce
+# Las viviendas ubicadas por el centroide de su manzana entran a la partición
+# como cualquier otra: todas las de una manzana caen en el mismo bloque. Las
+# filas que siguen **sin coordenadas** no pueden asignarse a ningún bloque
+# espacial, así que quedan fuera del modelado (la decisión se justificó en la
+# sección 1.7). Se guardan aparte para cuantificar el sesgo que esto introduce
 # (capítulo 3.3).
 
 # %%
@@ -220,25 +227,40 @@ dist
 #
 # ```{admonition} Resultado con los datos reales
 # :class: important
-# - De las 332 718 filas limpias, **278 824 (83.8 %)** tienen coordenadas y
-#   forman la población de modelado; las **53 894 (16.2 %)** sin coordenadas
+# - De las 332 718 filas limpias, **322 418 (96.9 %)** tienen coordenadas y
+#   forman la población de modelado: 278 824 con coordenadas propias o de su
+#   edificio matriz y **43 594 (13.1 %) ubicadas por el centroide de su
+#   manzana** (sección 1.7.2). Las **10 300 (3.1 %)** que siguen sin coordenadas
 #   quedan fuera (su perfil se analiza en el cap. 3).
-# - **Test: 59 954 filas (21.5 %) en 7 bloques y 27 239 edificios. Train:
-#   218 870 filas (78.5 %) en 34 bloques y 105 037 edificios.** Solo 1
+# - **Test: 65 145 filas (20.2 %) en 7 bloques y 31 178 edificios. Train:
+#   257 273 filas (79.8 %) en 34 bloques y 134 776 edificios.** Solo 1
 #   edificio quedó partido entre dos bloques y se movió completo a test; tras
 #   eso no hay ningún edificio ni predio compartido (el único bloque
 #   "compartido" es el de ese edificio movido).
+# - **La partición cambió respecto a la versión sin ubicación por manzana.**
+#   La grilla de bloques es la misma, pero las viviendas recuperadas (casi
+#   todas de estratos 1 y 2, en el sur) cambian los conteos por clase de cada
+#   bloque, y el algoritmo voraz de la estratificación asigna los bloques a
+#   otros folds: de los 7 bloques de test, solo 3 coinciden con los de la
+#   versión anterior. Por eso las cifras de test de este libro no se comparan
+#   una a una con las de la versión anterior; las de la validación cruzada,
+#   que rota todas las zonas, son más comparables.
 # - Las proporciones difieren pocos puntos (divergencia de Jensen-Shannon =
-#   **0.009**, prácticamente 0; el χ² = 2 712 es significativo solo por el
-#   tamaño de muestra). Las diferencias en los estratos 1 a 4 no pasan de
-#   ±3.6 puntos porcentuales; la relevante está en el **estrato 6: 1.3 %
-#   en test frente a 5.7 % en train** (≈ 800 casos en test). El estrato 6 está
-#   concentrado en pocos bloques del norte, y el fold que quedó como test tiene
-#   pocos de ellos. Consecuencia: las métricas por clase del estrato 6 en test
-#   serán inestables y sus intervalos de confianza anchos (cap. 10). No se
+#   **0.010**, prácticamente 0; el χ² = 3 296 es significativo solo por el
+#   tamaño de muestra). Las diferencias en los estratos 1 a 5 no pasan de
+#   ±5.4 puntos porcentuales (test tiene más estrato 1: 35.4 % frente a
+#   30.0 %); la relevante está en el **estrato 6: 1.2 % en test frente a 4.8 %
+#   en train** (≈ 790 casos en test). El estrato 6 está concentrado en pocos
+#   bloques del norte, y el fold que quedó como test tiene pocos de ellos.
+#   Consecuencia: las métricas por clase del estrato 6 en test serán
+#   inestables y sus intervalos de confianza anchos (cap. 10). No se
 #   "corrige" moviendo bloques a mano, porque eso sería elegir el test mirando
 #   sus etiquetas; se reporta como limitación y se compensa con la validación
 #   cruzada espacial en train, que sí rota todas las zonas.
+# - **147 manzanas** tienen viviendas en train y en test. No es una fuga
+#   (dos manzanas vecinas también se parecen) y no la causa la ubicación por
+#   manzana: las 147 ya quedarían partidas contando solo las viviendas con
+#   coordenadas propias. Son manzanas que cruza el borde de un bloque de 2 km.
 # ```
 
 # %%
@@ -253,6 +275,12 @@ fugas = {
     "bloques en train y test (solo por edificios movidos)": len(set(con.loc[con.particion == "train", "bloque"])
                                                                 & set(con.loc[con.particion == "test", "bloque"])),
 }
+# Manzanas con viviendas a ambos lados: no es una fuga (dos manzanas vecinas
+# también se parecen), pero se reporta porque las viviendas recuperadas usan el
+# centroide de su manzana y podrían caer en un bloque distinto al de sus vecinas.
+fugas["manzanas (NPN 17 díg.) en train y test"] = len(
+    set(con.loc[con.particion == "train", "npn_manzana"].dropna())
+    & set(con.loc[con.particion == "test", "npn_manzana"].dropna()))
 pd.Series(fugas, name="entidades compartidas").to_frame()
 
 # %% tags=["hide-input"]
@@ -296,7 +324,7 @@ C.guardar_decision("tam_bloque_km", C.TAM_BLOQUE_KM,
                    "Bloques de 2 km: mayores que la escala de un barrio/edificio, de modo que "
                    "unidades vecinas casi idénticas no queden a ambos lados de la partición.")
 C.guardar_decision("semilla", C.SEED, "Semilla única para partición, CV, muestreos y modelos.")
-print(f"Guardado: {ruta}")
+print(f"Guardado: {ruta.relative_to(C.RAIZ).as_posix()}")
 
 # %% [markdown]
 # ```{admonition} Regla para el resto del libro

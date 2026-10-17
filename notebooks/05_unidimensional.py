@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿cómo es cada variable por separado, y hay que
 # transformarla o agruparla antes de modelar?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento**.
+# **Datos:** las **257 273 viviendas de entrenamiento**.
 #
 # **Conceptos nuevos:** cardinalidad, asimetría, curtosis, pruebas de
 # normalidad, transformación `log1p` y categorías raras.
@@ -222,14 +222,18 @@ C.guardar_decision("num_lineal", num_lineal, "Variables sin asimetría fuerte o 
 #
 # - **¿Ceros estructurales en `area_catastral_terreno`?** Se esperaba que las
 #   unidades PH tuvieran terreno 0 (el lote es del edificio). Con los datos
-#   reales **prácticamente no hay ceros** (0.0 % de train en todas las
-#   condiciones de predio): las unidades PH también tienen área de terreno
-#   positiva. Lo más probable es que a cada unidad PH se le
-#   asigne su cuota del lote común (según el coeficiente de copropiedad). El
-#   capítulo 6 lo confirma: el terreno disminuye con el piso de ubicación
-#   (correlación de Spearman de −0.695). Consecuencia práctica: no hace falta
-#   un indicador de "terreno = 0" ni tratar el cero aparte en la
-#   transformación log1p.
+#   reales **no lo tienen**: las unidades PH, NPH y de condominio tienen área
+#   de terreno positiva en el 100 % de train. Lo más probable es que a cada
+#   unidad PH se le asigne su cuota del lote común (según el coeficiente de
+#   copropiedad). El capítulo 6 lo confirma: el terreno disminuye con el piso
+#   de ubicación. Los ceros sí existen, pero en otro grupo: el **13.5 % de
+#   train** tiene terreno 0, y todos son predios `Informal` (el 67.9 % de
+#   ellos). Son las **mejoras en terreno ajeno**, casi todas ubicadas por el
+#   centroide de su manzana (sección 1.7.2): una vivienda construida en un lote
+#   que no es suyo no tiene área de terreno propia. Es un cero estructural
+#   real, no un faltante. `log1p` lo maneja sin problema (log1p(0) = 0), y la
+#   información de "no tener terreno" ya la lleva `condicion_predio`, así que
+#   no se añade un indicador aparte.
 # - **Unidades de `altura`:** si la razón altura / número de plantas ronda 3,
 #   la altura está en metros (≈ 3 m por piso).
 
@@ -308,20 +312,22 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Categorías raras, degeneradas y redundantes
 # :class: note
-# - **`tipo_vivienda`** (códigos del dominio oficial de ArcGIS): 76.5 % es
-#   `tv_4` ("No Aplica"), 14.7 % `tv_3` ("No VIS"), 6.9 % `tv_1` (VIS) y
-#   1.9 % `tv_2` (VIP). Que tres de cada cuatro unidades sean "No Aplica"
+# - **`tipo_vivienda`** (códigos del dominio oficial de ArcGIS): 79.8 % es
+#   `tv_4` ("No Aplica"), 12.7 % `tv_3` ("No VIS"), 5.9 % `tv_1` (VIS) y
+#   1.6 % `tv_2` (VIP). Que tres de cada cuatro unidades sean "No Aplica"
 #   indica que la clasificación VIS/VIP solo se registra para una parte del
 #   parque (probablemente vivienda nueva de proyectos). Ninguna categoría es
 #   rara.
 # - **`uso`**: tres categorías concentran el 99.9 % (vivienda hasta 3 pisos
-#   47.5 %, apartamentos de 4 y más pisos en PH 42.6 %, vivienda hasta 3 pisos
-#   en PH 9.7 %); las otras tres (apartamentos sin PH, vivienda recreacional
-#   con y sin PH) suman 255 filas y se agrupan como `infrequent`.
-# - **`condicion_predio`**: PH unidad predial 52.5 %, NPH 39.9 %, Informal
-#   7.6 %; `PH_Matriz` (62 filas) es rara y se agrupa.
+#   54.9 %, apartamentos de 4 y más pisos en PH 36.6 %, vivienda hasta 3 pisos
+#   en PH 8.4 %); las otras tres (apartamentos sin PH, vivienda recreacional
+#   con y sin PH) suman 362 filas y se agrupan como `infrequent`.
+# - **`condicion_predio`**: PH unidad predial 45.0 %, NPH 35.0 %, Informal
+#   19.9 % (era 7.6 % antes de ubicar por manzana las viviendas informales,
+#   cap. 3.3); `PH_Matriz` (62 filas) y `Condominio_Unidad_Predial` (5) son
+#   raras y se agrupan.
 # - **Variables degeneradas:** `destinacion_economica` es "Habitacional" en el
-#   **99.99 %** de train (29 filas en otras 7 categorías) y `tipo_planta` es
+#   **99.99 %** de train (26 filas en otras 5 categorías) y `tipo_planta` es
 #   **constante** ("Piso" en el 100 %; las otras 2 categorías del crudo
 #   desaparecen con las exclusiones del embudo del cap. 1, que saca garajes y
 #   depósitos). Una variable que casi no cambia no puede distinguir un
@@ -352,24 +358,25 @@ C.guardar_decision("onehot_min_frecuencia", 0.01,
 # :class: note
 # - **Todas las variables físicas son altamente asimétricas** según la tabla
 #   del profesor Lihki (|asimetría| > 1) y leptocúrticas. Las más extremas son el
-#   terreno (asimetría 51.7, curtosis 3 402) y el número de plantas (10.2;
-#   148); el área construida queda en 4.0 (curtosis 34). La unidad típica
-#   tiene 76 m² construidos, 3 habitaciones y 1 baño, pero la cola llega a
+#   terreno (asimetría 56.1, curtosis 4 029) y el número de plantas (10.8;
+#   167); el área construida queda en 4.0 (curtosis 36). La unidad típica
+#   tiene 74 m² construidos, 3 habitaciones y 1 baño, pero la cola llega a
 #   1 971 m² construidos y a 36 022 m² de terreno. Los máximos de habitaciones
 #   (20), baños (15) y área construida quedan dentro de los umbrales con que
 #   el cap. 1 excluye los "registros agregados" (edificios enteros en una fila),
 #   y el piso máximo (41) dentro del techo de 60.
 # - `log1p` corrige casi por completo la asimetría de área construida
-#   (4.0 → 0.42), terreno (51.7 → 0.32), baños (1.7 → 0.01) y antigüedad
-#   (1.3 → −0.49); en habitaciones (2.3 → −0.67) la sobrecorrige y la deja
-#   moderada hacia la izquierda; en plantas (10.2 → 4.8) y piso (2.3 → 1.1)
-#   la mejora es parcial porque son conteos con mucho peso en 1. **Decisión:**
-#   `log1p` en 7 variables; `altura` queda lineal (log1p empeora su asimetría:
-#   −10.0 → −16.9).
+#   (4.0 → 0.35), baños (1.8 → −0.06) y antigüedad (1.2 → −0.54); en
+#   terreno (56.1 → −1.05) la reduce mucho pero la invierte, por los ceros de
+#   las mejoras en terreno ajeno (5.6); en habitaciones (2.3 → −0.61) la
+#   sobrecorrige y la deja moderada hacia la izquierda; en plantas
+#   (10.8 → 5.1) y piso (2.5 → 1.4) la mejora es parcial porque son conteos
+#   con mucho peso en 1. **Decisión:** `log1p` en 7 variables; `altura` queda
+#   lineal (log1p empeora su asimetría: −11.3 → −18.4).
 # - `altura` es **casi constante**: vale 3 (metros por planta) en el 99.7 %
-#   de las filas (su IQR es 0, así que sus 683 outliers de Tukey son
+#   de las filas (su IQR es 0, así que sus 686 outliers de Tukey son
 #   exactamente los valores distintos de 3), así que se espera que aporte muy
-#   poco; el capítulo 6 lo confirma (η² = 0.005).
+#   poco; el capítulo 6 lo confirma (η² = 0.004).
 # - Las pruebas de normalidad rechazan en todas (esperable con n grande); no es
 #   un problema para la regresión logística, que no supone normalidad de las
 #   predictoras. La transformación busca reducir la influencia de las colas,

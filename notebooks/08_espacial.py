@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿cómo se distribuye el estrato en el espacio, y
 # qué obliga eso a hacer en la validación y en el modelo?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento**, salvo en la
+# **Datos:** las **257 273 viviendas de entrenamiento**, salvo en la
 # sección 8.3, que usa solo las **ubicaciones** de todo el universo de
 # modelado (se explica allí por qué).
 #
@@ -139,11 +139,13 @@ val
 # puntos caen fuera de la caja de Barranquilla, ninguno en (0, 0), ninguno
 # invertido y ninguno fuera de los rangos de WGS84. Los **duplicados
 # espaciales** (muchas unidades en una misma coordenada) son esperables:
-# todos los apartamentos de un edificio heredan el centroide de su matriz. En
-# train hay 104 908 coordenadas únicas, con 2.1 unidades por coordenada en
-# promedio y hasta 1 266 en una sola. Por eso los cálculos de autocorrelación
-# se hacen a nivel de **edificio** (una fila por edificio) para no inflar
-# Moran's I.
+# todos los apartamentos de un edificio heredan el centroide de su matriz, y
+# todas las viviendas informales ubicadas por su manzana (sección 1.7.2)
+# comparten el centroide de la manzana. En train hay 110 492 coordenadas
+# únicas, con 2.3 unidades por coordenada en promedio y hasta 1 266 en una
+# sola. Por eso los cálculos de autocorrelación se hacen a nivel de
+# **edificio** (una fila por edificio, y un punto por manzana para las
+# viviendas ubicadas por su manzana) para no inflar Moran's I.
 #
 # ### Distancias: proyección local vs. haversine
 #
@@ -430,35 +432,38 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - **Agrupamiento fuerte.** Con 132 131 ubicaciones únicas en ~150 km², la
-#   distancia media al vecino más cercano es 9.4 m frente a 16.8 m esperados
-#   bajo aleatoriedad: **R de Clark-Evans = 0.56** (z = −309). La función L de
+# - **Agrupamiento fuerte.** Con 135 481 ubicaciones únicas en ~150 km², la
+#   distancia media al vecino más cercano es 9.3 m frente a 16.6 m esperados
+#   bajo aleatoriedad: **R de Clark-Evans = 0.56** (z = −311). La función L de
 #   Ripley está muy por encima de la envolvente de aleatoriedad en todas las
 #   escalas, de 100 m a 3 km. Los predios están **agrupados**, como es de
 #   esperar en una ciudad: manzanas densas separadas por vías, parques y
 #   cuerpos de agua.
 # - **DBSCAN.** Con ε = 300 m, el **94 % de los puntos cae en un único
 #   cluster** y solo 0.5 % es ruido: a esa escala Barranquilla es un **tejido
-#   urbano continuo**, y los otros 8 clusters suman apenas el 5.5 % restante.
-#   Con 200 m el cluster mayor aún reúne el 83 %. Al reducir ε el bloque se
-#   fragmenta: con **ε = 150 m** (el elegido: el mayor con el que ningún
-#   cluster concentra más de la mitad de los puntos) hay **33 clusters**, el
-#   mayor con el 45 % de los puntos (9 045 de 20 000) y 8.5 % de ruido. Con
-#   100 m el ruido sube al 47 % (143 clusters pequeños) y con 75 m al 82 %.
-#   A 150 m, el núcleo centro-sur sigue siendo un solo bloque denso; el
-#   suroccidente (3 723 puntos) y el oriente (2 032) forman los dos clusters
-#   siguientes, mientras que buena parte del norte queda como ruido o como
-#   clusters compactos: allí hay menos *ubicaciones únicas* por km², porque
-#   predominan torres PH (muchas unidades con un mismo centroide) y lotes más
-#   grandes.
+#   urbano continuo**, y los otros 7 clusters suman apenas el 6 % restante.
+#   Con 200 m el cluster mayor aún reúne el 83 %, y con 150 m el 63 %. Por eso
+#   la regla elige **ε = 100 m** (el mayor con el que ningún cluster concentra
+#   más de la mitad de los puntos): **126 clusters**, el mayor con el 13.5 %
+#   de los puntos (2 698 de 20 000) y 46 % de ruido; con 75 m el ruido sube
+#   al 82 %. En la versión anterior del libro la regla elegía 150 m: los
+#   centroides de manzana de las viviendas informales (sección 1.7.2) rellenan
+#   huecos del sur y el suroccidente, y a 150 m ese tejido ya queda unido al
+#   centro-sur en un solo bloque. A 100 m, el cluster mayor es el sur denso, y
+#   le siguen clusters de pocos cientos de puntos repartidos por el sur y el
+#   centro; casi todo el norte queda como ruido: allí hay menos *ubicaciones
+#   únicas* por km², porque predominan torres PH (muchas unidades con un
+#   mismo centroide) y lotes más grandes.
 # - **Cobertura.** El **36 %** de las celdas de 500 m dentro de la envolvente
-#   convexa no tiene ningún predio ubicado. La mayoría están en la periferia
+#   convexa no tiene ningún predio ubicado, igual que sin la ubicación por
+#   manzana: las viviendas recuperadas caen en manzanas que ya tenían
+#   edificios ubicados. La mayoría de las celdas vacías están en la periferia
 #   occidental y norte, donde el mapa muestra solo enclaves aislados. Parte
 #   son zonas sin uso residencial (industria, humedales, vías, suelo rural),
 #   pero parte pueden ser **asentamientos informales no ubicables** (cap. 2:
-#   el 16.2 % de las filas limpias no tiene coordenadas; cap. 3: el 99.5 % de
-#   ellas son predios informales y el 96.5 % son estratos 1–2). Es un **sesgo
-#   de muestreo espacial**: el modelo no ve esas zonas.
+#   el 3.1 % de las filas limpias sigue sin coordenadas; cap. 3: el 98 % de
+#   ellas son predios informales y el 84 % estrato 1). Es un **sesgo de
+#   muestreo espacial** residual: el modelo no ve esas zonas.
 # ```
 
 # %% [markdown]
@@ -528,17 +533,18 @@ moran
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - La muestra de 25 000 unidades se reduce a **15 042 edificios** (el 40 %
-#   eran unidades repetidas del mismo edificio). Cada edificio tiene sus 8
-#   vecinos a una distancia mediana de 55 m (media de 61 m).
-# - **Moran's I del estrato = 0.913** (z = 229, p = 0.001 con 999
+# - La muestra de 25 000 unidades se reduce a **14 668 edificios** (el 41 %
+#   eran unidades repetidas del mismo edificio o viviendas de una misma
+#   manzana ubicadas por su centroide). Cada edificio tiene sus 8 vecinos a
+#   una distancia mediana de 58 m (media de 63 m).
+# - **Moran's I del estrato = 0.918** (z = 228, p = 0.001 con 999
 #   permutaciones; bajo aleatoriedad se esperaría ≈ 0): una autocorrelación
 #   **positiva extremadamente fuerte**. Edificios vecinos casi siempre tienen
 #   el mismo estrato, lo que refleja que la estratificación se asigna por
 #   manzanas y zonas homogéneas: la ciudad está fuertemente **segregada** por
 #   estrato.
 # - Las predictoras físicas también están autocorrelacionadas, pero mucho
-#   menos: antigüedad 0.36, baños 0.34, área construida 0.22. El tipo de
+#   menos: baños 0.36, antigüedad 0.33, área construida 0.23. El tipo de
 #   construcción se agrupa por zonas, pero el estrato se agrupa **mucho más**
 #   que cualquier característica física. Consecuencia: la ubicación contiene
 #   información sobre el estrato que las variables físicas no recogen.
@@ -624,20 +630,21 @@ print(f"Significativos a 5%: sin ajuste {100 * (lis['p'] < 0.05).mean():.1f}% | 
 # %% [markdown]
 # ```{admonition} Interpretación de LISA y Gi*
 # :class: note
-# - Sin ajuste, el **46.8 %** de los edificios tiene un LISA significativo;
-#   con FDR (Benjamini-Hochberg), el **41.8 %**. La corrección apenas cambia
+# - Sin ajuste, el **46.4 %** de los edificios tiene un LISA significativo;
+#   con FDR (Benjamini-Hochberg), el **41.0 %**. La corrección apenas cambia
 #   el cuadro: el patrón no es un artefacto de hacer miles de pruebas.
-# - Casi todo lo significativo son **clusters homogéneos**: 27.7 % LL (bajo
-#   rodeado de bajo) y 19.0 % HH (alto rodeado de alto). Los **outliers
-#   espaciales** son rarísimos: 15 HL y 5 LH, 20 edificios en total (0.1 %).
+# - Casi todo lo significativo son **clusters homogéneos**: 29.0 % LL (bajo
+#   rodeado de bajo) y 17.2 % HH (alto rodeado de alto). Los **outliers
+#   espaciales** son rarísimos: 16 HL y 4 LH, 20 edificios en total (0.1 %).
 #   Un edificio de estrato alto rodeado de estratos bajos casi no existe.
-# - Gi* coincide: 27.2 % de *coldspots* y 18.9 % de *hotspots* tras FDR
-#   (29.5 % y 19.7 % sin ajuste). En el mapa, los hotspots forman un arco
+# - Gi* coincide: 27.2 % de *coldspots* y 16.9 % de *hotspots* tras FDR
+#   (29.9 % y 18.1 % sin ajuste). En el mapa, los hotspots forman un arco
 #   continuo en el norte que baja por el oriente hacia el centro, y los
-#   coldspots cubren el occidente y el suroccidente, además de los enclaves
-#   periféricos aislados. El centro-sur y el sureste quedan mayormente como no
-#   significativos en LISA y con z de Gi* moderados: son zonas de estratos
-#   intermedios o mezclados, que no forman clusters homogéneos.
+#   coldspots cubren el occidente, el suroccidente y el sur, además de los
+#   enclaves periféricos aislados. El centro-sur y el sureste quedan
+#   mayormente como no significativos en LISA y con z de Gi* moderados: son
+#   zonas de estratos intermedios o mezclados, que no forman clusters
+#   homogéneos.
 # ```
 #
 # ### Correlograma y semivariograma
@@ -737,7 +744,7 @@ C.guardar_decision("k_vecinos", C.K_VECINOS, "Densidad muy desigual: kNN garanti
 # ```{admonition} Interpretación del correlograma y del buffer
 # :class: important
 # - Moran's I del estrato baja lentamente con la distancia y solo cae por
-#   debajo de 0.3 a **≈ 2.9 km** (banda centrada en 2.875 km): dos edificios
+#   debajo de 0.3 a **≈ 2.6 km** (banda centrada en 2.625 km): dos edificios
 #   a 2 km siguen pareciéndose bastante en estrato. Ese es el **alcance** de
 #   la dependencia espacial.
 # - A distancias mayores el Moran por banda se vuelve negativo y el
@@ -745,13 +752,13 @@ C.guardar_decision("k_vecinos", C.K_VECINOS, "Densidad muy desigual: kNN garanti
 #   la varianza total. Es la huella de la **tendencia norte-sur de gran
 #   escala** (los pares muy alejados suelen ser norte frente a sur), que las
 #   coordenadas como predictoras pueden recoger.
-# - Un buffer de 2.9 km dejaría sin entrenamiento a la mayor parte de train:
-#   ya con 1 km se excluye en promedio el **35.7 %** de train en cada fold
-#   (8.1 % con 250 m, 17.0 % con 500 m, 26.1 % con 750 m). **Decisión:** buffer de
+# - Un buffer de 2.6 km dejaría sin entrenamiento a la mayor parte de train:
+#   ya con 1 km se excluye en promedio el **33.1 %** de train en cada fold
+#   (7.6 % con 250 m, 15.8 % con 500 m, 24.2 % con 750 m). **Decisión:** buffer de
 #   **1 km** (tope del recorte). Es un compromiso consciente: la separación
 #   entre train y validación es **parcial** (queda dependencia entre 1 y
-#   2.9 km), así que la validación espacial sigue siendo algo optimista. El
-#   capítulo 10 mide cuánto cambia el F1 con buffers de 0, 0.5, 1 y 2.9 km.
+#   2.6 km), así que la validación espacial sigue siendo algo optimista. El
+#   capítulo 10 mide cuánto cambia el F1 con buffers de 0, 0.5, 1 y 2.6 km.
 # ```
 
 # %% [markdown]
@@ -800,19 +807,18 @@ het
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - El estrato medio va de **1.1** en la macrozona sur-oeste a **4.6** en la
+# - El estrato medio va de **1.1** en la macrozona sur-oeste a **4.5** en la
 #   norte-centro: el gradiente norte-sur del cap. 4 se confirma, con un
 #   gradiente oeste-este adicional en el sur y en la franja media (sur: 1.1 →
-#   1.5 → 2.3; medio: 1.6 → 2.3 → 3.2). En el norte el máximo está en el
-#   centro (oeste 3.8, centro 4.6, este 3.6).
+#   1.5 → 2.2; medio: 1.4 → 2.3 → 2.7). En el norte el máximo está en el
+#   centro (oeste 3.3, centro 4.5, este 3.6).
 # - **La relación física–estrato no es la misma en toda la ciudad.** La
-#   correlación de Spearman entre área construida y estrato va de **0.07**
-#   (medio-este) y 0.09 (sur-centro) a **0.47–0.48** en el norte-oeste y el
-#   norte-centro (pero solo 0.13 en el norte-este); la de baños, de 0.11
-#   (sur-oeste) a **0.58** (norte-oeste). En el sur, casi todo es estrato 1–2
-#   y el tamaño de la vivienda apenas discrimina; en el norte-oeste y el
-#   norte-centro, donde conviven estratos altos y medios, el tamaño y los
-#   baños sí separan.
+#   correlación de Spearman entre área construida y estrato va de **0.12**
+#   (sur-centro) y 0.13 (sur-oeste y norte-este) a **0.46–0.49** en el
+#   norte-centro y el norte-oeste; la de baños, de 0.06 (sur-centro) a
+#   **0.65** (norte-oeste). En el sur, casi todo es estrato 1–2 y el tamaño
+#   de la vivienda apenas discrimina; en el norte-oeste y el norte-centro,
+#   donde conviven estratos altos y medios, el tamaño y los baños sí separan.
 # - Esto es **heterogeneidad espacial** (no estacionariedad): el peso de una
 #   característica física para predecir el estrato depende de dónde esté la
 #   vivienda. Un modelo global lineal como la regresión logística no captura
@@ -841,9 +847,9 @@ maup
 # ```{admonition} Interpretación
 # :class: note
 # - Moran's I del estrato medio por celda cae con el tamaño de la celda:
-#   **0.93** (250 m, 1 008 celdas) → 0.89 (500 m) → 0.73 (1 km) → **0.48**
-#   (2 km, 38 celdas) → **0.12** (4 km, 15 celdas). La dispersión entre celdas
-#   baja de 1.36 a 1.09 estratos, porque las celdas grandes promedian barrios
+#   **0.94** (250 m, 1 028 celdas) → 0.90 (500 m) → 0.73 (1 km) → **0.48**
+#   (2 km, 39 celdas) → **0.12** (4 km, 16 celdas). La dispersión entre celdas
+#   baja de 1.34 a 1.02 estratos, porque las celdas grandes promedian barrios
 #   distintos.
 # - Conclusión práctica: cualquier resultado "por zona" depende de la escala
 #   elegida; por eso el modelo trabaja a nivel de **unidad**.
@@ -888,10 +894,10 @@ C.guardar_decision("espaciales", C.ESPACIALES,
 # ```{admonition} Resumen
 # :class: important
 # 1. El estrato tiene una autocorrelación espacial positiva extremadamente
-#    fuerte (**Moran's I = 0.913**; 47 % de edificios en clusters LISA HH o
+#    fuerte (**Moran's I = 0.918**; 46 % de edificios en clusters LISA HH o
 #    LL, casi sin outliers espaciales). Una validación aleatoria sería **muy
 #    optimista**; se usa validación por **bloques espaciales de 2 km**
-#    (cap. 2) con **buffer de 1 km**. El alcance del correlograma (2.9 km)
+#    (cap. 2) con **buffer de 1 km**. El alcance del correlograma (2.6 km)
 #    supera ese buffer, así que la separación es parcial: se declara como
 #    limitación y se mide la sensibilidad en el capítulo 10.
 # 2. En el capítulo 10 se cuantifica el optimismo comparando validación
@@ -899,10 +905,11 @@ C.guardar_decision("espaciales", C.ESPACIALES,
 # 3. Se revisará la **autocorrelación de los residuos** del modelo (Moran de
 #    residuos): si persiste, el modelo no captura la estructura espacial.
 # 4. La relación física–estrato **varía por zonas** (Spearman área–estrato
-#    de 0.07 a 0.48): un modelo global lineal tendrá un techo.
+#    de 0.12 a 0.49): un modelo global lineal tendrá un techo.
 # 5. Generalización a **zonas nuevas**: el test está formado por bloques no
 #    vistos, que es exactamente el escenario de uso (predecir el estrato de
 #    predios en zonas sin estratificar o en expansión).
 # 6. Sesgo de cobertura: el 36 % de las celdas de la envolvente no tiene
-#    predios ubicados, y los predios informales sin coordenadas quedan fuera.
+#    predios ubicados, y los predios informales que siguen sin coordenadas
+#    (3.1 % de las filas, tras ubicar por manzana al resto) quedan fuera.
 # ```

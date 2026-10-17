@@ -24,9 +24,12 @@ automáticas de cada capítulo.
 - Predio (capa 500) no tiene geometría; el terreno (315) sí. ~60 % de las
   unidades (PH) no tienen terreno propio → heredan el centroide de su edificio
   matriz (prefijo de 22 dígitos del NPN).
-- Predios `Informal` sin terreno ni matriz quedan sin coordenadas (16.2 % de
-  las unidades del dataset de trabajo, cap. 2); el
-  intento de ubicarlos por manzana (capa 320) se descartó (prefijo genérico).
+- Predios `Informal` sin terreno ni matriz llegan sin coordenadas (16.2 % de
+  las unidades del dataset de trabajo). Un primer intento de ubicarlos por
+  manzana (capa 320) se descartó porque algunos prefijos de manzana son
+  genéricos. La versión actual (A.12) los ubica con el centroide de su
+  manzana calculado con las viviendas ya ubicadas, solo en manzanas
+  compactas; quedan sin ubicar 3.1 % de las unidades.
 
 ## A.4 Calidad de datos
 
@@ -134,7 +137,7 @@ automáticas de cada capítulo.
 ## A.9 Historial de ejecuciones con los datos reales (28 a 30 de septiembre)
 
 Las cifras de esta sección corresponden a ejecuciones anteriores y se
-conservan como registro del proceso. Las vigentes están en A.10.
+conservan como registro del proceso. Las vigentes están en A.12.
 
 - **Embudo:** 382 597 → −36 497 usos no habitables → −11 sin área → −12 218
   sin estrato residencial → **333 871** unidades (321 156 predios, 168 224
@@ -265,7 +268,7 @@ conservan como registro del proceso. Las vigentes están en A.10.
   con las 332 718 filas y muestra al lado las cifras con coordenadas (clases,
   duplicados, faltantes, n/p, ICC); desde el capítulo 2 se modela con las
   278 824. Nueva sección 1.7.
-- **Alternativa evaluada, no aplicada:** el 92.7 % de las filas sin
+- **Alternativa evaluada (aplicada después, ver A.13):** el 92.7 % de las filas sin
   coordenadas (49 981) comparte manzana (17 primeros dígitos del NPN) con
   viviendas ubicadas, con una dispersión típica de manzana de ~30 m. Con el
   centroide de la manzana el universo de modelado pasaría al 98.8 %. Se deja
@@ -280,7 +283,48 @@ conservan como registro del proceso. Las vigentes están en A.10.
   reproducen; solo cambian en la cuarta cifra decimal algunos Moran (p. ej.
   0.2183 → 0.2179 en área construida).
 
-## A.13 Pendientes
+
+## A.13 Ubicación por manzana de las viviendas sin coordenadas (16-oct-2026)
+
+- **Motivo:** el 92.7 % de las 53 894 filas sin coordenadas (casi todas de
+  estratos 1 y 2) comparte manzana (17 primeros dígitos del NPN) con
+  viviendas ubicadas. Ubicarlas reduce el sesgo de cobertura, que era la
+  principal reserva del veredicto (11.4).
+- **Por qué no se hizo antes sin más:** algunos prefijos de manzana son
+  genéricos. La manzana `0000` reúne hasta 820 edificios repartidos en 7 km,
+  y hay manzanas cuyos puntos ubicados están a más de 600 m del centroide.
+  Ponderando por filas recuperables, ~10 % habría caído en esos prefijos.
+- **Regla:** centroide de los puntos distintos ya ubicados de la manzana,
+  solo si el código no es `0000` y todos sus puntos están a ≤ 250 m del
+  centroide (`src/config.py`, `limpieza.recuperar_por_manzana`, paso 6 del
+  embudo). Usa coordenadas de otras filas, nunca el estrato.
+- **Resultado:** 43 594 filas ubicadas (80.9 % de las sin coordenadas);
+  universo de modelado 83.8 % → 96.9 %; quedan 10 300 (3.1 %): 3 913 en
+  manzanas sin viviendas ubicadas, 3 502 en manzanas dispersas y 2 885 con
+  manzana `0000`. Error de posición dejando fuera cada edificio ubicado:
+  mediana 31 m, p90 68 m, p99 122 m.
+- **Análisis espacial:** las viviendas de una manzana recuperada comparten
+  punto; en Moran, LISA, correlograma y Moran de residuos cuentan como un
+  punto por manzana (`espacial.deduplicar_por_edificio`).
+- **Efecto en la partición:** la grilla es la misma, pero cambian los conteos
+  por bloque y la asignación estratificada: solo 3 de los 7 bloques de test
+  coinciden con los de A.10. Test 65 145 filas (20.2 %); train 257 273 →
+  144 586 tras el buffer de 1 km.
+- **EDA:** desbalance 6.2:1 (estrato 1 mayoritario); V de Cramér de cobertura
+  0.42 → 0.22; Moran 0.918; alcance del correlograma 2.6 km (buffer sigue en
+  1 km); K-Means k = 5, con un clúster de viviendas informales sin terreno;
+  13.5 % de train con terreno 0 (mejoras en terreno ajeno).
+- **Modelo:** B con C = 0.01 y `class_weight="balanced"` (regla 1-SE en A y
+  en B). CV: B 0.322 ± 0.085, A 0.286, moda por zona (4 km) 0.187. Test: B F1
+  0.492 [IC 0.28–0.51], accuracy 0.611, MAE 0.44, κ 0.84, AUC 0.90,
+  ECE 0.03; B − A +0.12 [0.03, 0.15]; B − moda por zona +0.14 [−0.12, 0.17].
+  Validación aleatoria 0.620. Moran de residuos 0.56 (B). El estrato que más
+  falla es el 4 (recall 0.28; 48 % → 3); el 2 se recupera (recall 0.60).
+- El tamaño de zona elegido para la moda por zona se guarda ahora en
+  `resultados_modelo.json` (`tam_zona_moda_km`) para que el Entregable 2 use
+  el mismo.
+
+## A.14 Pendientes
 
 - (Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
   textos, conclusiones y resumen.

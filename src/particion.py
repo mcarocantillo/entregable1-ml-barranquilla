@@ -9,7 +9,7 @@ mismo edificio en train y en test: el modelo "reconocería" el edificio en vez
 de generalizar (notas del profesor Lihki 9.1.9 GroupKFold y 9.1.11 Spatial Block CV;
 Roberts et al., 2017).
 
-Por qué ESTRATIFICADA por grupos: hay desbalance (4.6:1 en train entre la clase más y
+Por qué ESTRATIFICADA por grupos: hay desbalance (6.2:1 en train entre la clase más y
 menos frecuente, cap. 4), así que se usa una partición estratificada por grupos:
 respeta los bloques (nunca parte uno) y además intenta que cada fold tenga
 proporciones de estrato parecidas a las del total.

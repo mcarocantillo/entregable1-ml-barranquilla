@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿alguna variable le "sopla la respuesta" al
 # modelo, y comparten entrenamiento y prueba alguna vivienda o edificio?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento**; la sección 9.3 mira
+# **Datos:** las **257 273 viviendas de entrenamiento**; la sección 9.3 mira
 # solo los **identificadores** del conjunto de prueba, nunca sus estratos.
 #
 # **Conceptos nuevos:** escenario de predicción, proxy del objetivo y AUC
@@ -256,26 +256,32 @@ plt.show()
 # ```{admonition} Interpretación
 # :class: note
 # - **Ninguna variable se acerca a la alerta de 0.95**; la más alta llega a
-#   0.76. No hay una predictora que "contenga" el estrato, y las categóricas
+#   0.75. No hay una predictora que "contenga" el estrato, y las categóricas
 #   (`uso`, `condicion_predio`, `tipo_vivienda`) no tienen una categoría
 #   exclusiva de un estrato (cap. 6: V ≤ 0.33).
 # - La variable individual más informativa en zonas no vistas es **`y_km`**
-#   (AUC = 0.76), seguida de **baños** (0.69), distancia al centro, área
-#   construida y `condicion_predio` (≈ 0.63 cada una). Es coherente con el EDA
-#   (cap. 6: η² = 0.50 para y_km y 0.31 para baños).
+#   (AUC = 0.75), seguida de **baños** (0.70), `condicion_predio` (0.68),
+#   `uso` (0.64), área construida (0.63) y piso de ubicación (0.62). Es
+#   coherente con el EDA (cap. 6: η² = 0.46 para y_km y 0.33 para baños).
+#   `condicion_predio` sube respecto a la versión anterior del libro (0.63):
+#   la categoría `Informal`, que ahora incluye las viviendas ubicadas por su
+#   manzana, es casi exclusiva de los estratos 1 y 2.
 # - **Aleatoria frente a espacial:** en `y_km` la brecha es pequeña (0.78
-#   frente a 0.76), porque el gradiente norte-sur es de gran escala y se
-#   transfiere entre zonas. En cambio, `x_km` (0.67 frente a 0.57) y la
-#   distancia al centro (0.71 frente a 0.63) pierden mucho más: por sí solas
+#   frente a 0.75), porque el gradiente norte-sur es de gran escala y se
+#   transfiere entre zonas. En cambio, `x_km` (0.65 frente a 0.57) y la
+#   distancia al centro (0.70 frente a 0.53) pierden mucho más: por sí solas
 #   mezclan el norte (estratos altos) con el sur (bajos) a la misma longitud o
 #   distancia, y solo discriminan cuando hay vecinos de la misma zona en
 #   entrenamiento. Esa diferencia es la "ventaja" que la validación por
 #   bloques elimina.
-# - **`area_catastral_terreno` queda por debajo de 0.5** (0.48 ± 0.04): por
-#   sí sola, lo que el modelo aprende de ella en unas zonas se invierte en
-#   otras. Es coherente con su relación no monótona con el estrato (cap. 6:
-#   medianas de 66, 91 y 72 m² en los estratos 1–3 frente a 38, 46 y 52 m² en
-#   los 4–6) y con la heterogeneidad espacial del cap. 8.5.
+# - **`area_catastral_terreno` aporta poco por sí sola** (0.56 ± 0.05): lo
+#   que el modelo aprende de ella en unas zonas casi no se transfiere a otras.
+#   Es coherente con su relación no monótona con el estrato (cap. 6: medianas
+#   de 32, 78 y 72 m² en los estratos 1–3 frente a 38, 46 y 52 m² en los 4–6)
+#   y con la heterogeneidad espacial del cap. 8.5. En la versión anterior del
+#   libro quedaba por debajo de 0.5 (0.48); los ceros de las mejoras en
+#   terreno ajeno (cap. 5.6), casi todas de estratos 1 y 2, le dan ahora algo
+#   de señal.
 # - Las variables constantes o casi constantes (`tipo_planta`,
 #   `destinacion_economica`, `altura`) dan **exactamente 0.500** (desviación
 #   0 entre folds), como debe ser con una variable sin información: el
@@ -283,9 +289,9 @@ plt.show()
 #   degeneradas (cap. 5) y se excluyen en la lista final (9.4); `altura`, casi
 #   constante (cap. 5: vale 3 en más del 99 % de las filas), se mantiene,
 #   pero no aporta información.
-# - `centroide_fuente` (0.61) se excluye aunque no sea despreciable: es un
-#   metadato del pipeline de descarga (propagado = apartamento), redundante
-#   con `condicion_predio`.
+# - `centroide_fuente` (0.66) se excluye aunque no sea despreciable: es un
+#   metadato del pipeline de descarga (propagado = apartamento; centroide de
+#   manzana = mejora informal), redundante con `condicion_predio`.
 # ```
 
 # %% [markdown]
@@ -327,10 +333,12 @@ pd.Series(ids, name="conteo").to_frame()
 #   entre train y test: ningún apartamento tiene un "gemelo" del mismo edificio
 #   al otro lado de la partición. El único bloque que aparece en ambos es el
 #   del edificio que se movió completo a test (cap. 2).
-# - **80 631 unidades de train** (el 37 %) están a menos de 1 km de algún
+# - **112 687 unidades de train** (el 44 %) están a menos de 1 km de algún
 #   punto de test. En el modelo final (cap. 10) se excluyen del
 #   entrenamiento: es el costo de que el test evalúe de verdad zonas no
-#   vistas. Train pasa de 218 870 a 138 239 filas.
+#   vistas. Train pasa de 257 273 a 144 586 filas. La fracción es mayor que en
+#   la versión anterior del libro (37 %): cambiaron los bloques de test
+#   (cap. 2) y, con ellos, las zonas de train que quedan a menos de 1 km.
 # ```
 
 # %% [markdown]

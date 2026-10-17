@@ -1,26 +1,42 @@
 # Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
 
 **Primer entregable del proyecto de investigación — Machine Learning**
-Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Septiembre de 2026
+Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Versión 2, octubre de 2026
+
+```{admonition} Versión 2: viviendas ubicadas por su manzana
+:class: important
+Esta es la **versión 2** del libro. La diferencia con la versión 1 está en un
+solo paso de la preparación de los datos: las viviendas que llegan sin
+coordenadas (16.2 %, casi todas informales de estratos 1 y 2) se ubican con
+el **centroide de su manzana** cuando la manzana es compacta (capítulo 1,
+sección 1.7.2). Con ello el universo de modelado pasa del 83.8 % al 96.9 % de
+las viviendas, cambia la partición en entrenamiento y prueba, y se recalculan
+todos los análisis y el modelo. La **versión 1**, tal como se entregó, sigue
+publicada en
+[mcarocantillo.github.io/entregable1-ml-barranquilla](https://mcarocantillo.github.io/entregable1-ml-barranquilla/),
+y su código, en la etiqueta `v1` del repositorio.
+```
 
 ```{admonition} Resumen
 :class: tip
 A partir del servicio abierto de catastro de Barranquilla se construye una
-base de **332 718 unidades de vivienda** con estrato residencial válido, de
-las cuales **278 824 tienen coordenadas** y forman el universo de modelado. Se
+base de **332 718 unidades de vivienda** con estrato residencial válido. Las
+viviendas sin coordenadas propias (16.2 %, casi todas informales) se ubican
+con el centroide de su manzana cuando la manzana es compacta, de modo que
+**322 418 (96.9 %) tienen coordenadas** y forman el universo de modelado. Se
 realiza un análisis exploratorio uni, bi, multivariado y espacial, y se entrena
 una regresión logística multinomial para predecir el estrato socioeconómico
 (1–6), comparada con líneas base triviales y espaciales bajo validación por
 bloques espaciales de 2 km con buffer de 1 km. El estrato está extremadamente
-autocorrelacionado en el espacio (Moran's I = 0.91) y casi no varía dentro de
+autocorrelacionado en el espacio (Moran's I = 0.92) y casi no varía dentro de
 un edificio (ICC = 0.99). El modelo base (variables físicas de la vivienda y
-ubicación) logra un F1 macro de 0.30 en validación cruzada espacial y de 0.45
-en test (IC 95 % [0.16, 0.46]), con 94 % de aciertos a ±1 estrato. Supera con
-claridad a las líneas base triviales (F1 de 0.07 a 0.17) y, de forma
+ubicación) logra un F1 macro de 0.32 en validación cruzada espacial y de 0.49
+en test (IC 95 % [0.28, 0.51]), con 96 % de aciertos a ±1 estrato. Supera con
+claridad a las líneas base triviales (F1 de 0.09 a 0.16) y, de forma
 descriptiva, a una regla puramente geográfica (la clase más frecuente en una
-zona de 2 km; F1 0.33), aunque esa diferencia no es significativa con 7
-bloques de prueba. Una validación aleatoria habría duplicado el desempeño
-estimado (F1 0.60).
+zona de 4 km; F1 0.35), aunque esa diferencia no es significativa con 7
+bloques de prueba. Una validación aleatoria habría casi duplicado el
+desempeño estimado (F1 0.62).
 ```
 
 ## Cómo está organizado este libro
@@ -67,7 +83,7 @@ se puede rastrear a un hallazgo concreto del EDA.
 ```{admonition} Sobre las cifras del texto
 :class: note
 Los cuadros de interpretación citan las cifras de la ejecución con los datos
-reales (septiembre de 2026, semilla 42). Si se vuelve a ejecutar el libro con
+reales (octubre de 2026, con la ubicación por manzana; semilla 42). Si se vuelve a ejecutar el libro con
 otra descarga del catastro, hay que revisar esas cifras frente a las salidas de
 cada celda.
 ```

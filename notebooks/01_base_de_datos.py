@@ -44,6 +44,12 @@
 # Guía de lectura). Lo que sí aprende de los datos (medianas para imputar,
 # umbrales de outliers, escalado) se calcula después y solo con el conjunto de
 # entrenamiento.
+#
+# Hay **una excepción deliberada**: las viviendas sin coordenadas reciben el
+# centroide de su **manzana**, calculado con las demás viviendas ubicadas de
+# esa manzana (paso 6, sección 1.7.2). Ese paso sí mira otras filas, pero solo
+# su **posición**, nunca su estrato: equivale a leer dónde está la manzana en
+# la cartografía, un dato que existiría igual para un predio nuevo.
 # ```
 
 # %% tags=["hide-input"]
@@ -247,6 +253,7 @@ def enmascarar_npn(s):
 vista = df.drop(columns=df.filter(like="flag_").columns).head(5).copy()
 vista["numero_predial_nacional"] = enmascarar_npn(vista["numero_predial_nacional"])
 vista["npn_edificio"] = enmascarar_npn(vista["npn_edificio"])
+vista["npn_manzana"] = enmascarar_npn(vista["npn_manzana"])
 vista.T  # transpuesta: una fila por variable, más fácil de leer con muchas columnas
 
 # %% [markdown]
@@ -269,6 +276,7 @@ vista.T  # transpuesta: una fila por variable, más fácil de leer con muchas co
 dicc = pd.DataFrame([
     ("numero_predial_nacional", "texto (30 dígitos)", "—", "Número predial nacional (IGAC): depto, municipio, zona, sector, comuna, barrio, manzana, terreno, condición, edificio, piso, unidad (sección 1.3)", "identificador"),
     ("npn_edificio", "texto (22 dígitos)", "—", "Prefijo del NPN que identifica el predio matriz: edificio, conjunto o lote (derivada)", "identificador / grupo"),
+    ("npn_manzana", "texto (17 dígitos)", "—", "Prefijo del NPN que identifica la manzana (derivada; sirve para ubicar viviendas sin coordenadas)", "identificador"),
     ("estrato", "categórica ordinal (texto)", "—", "Estrato socioeconómico tal como llega de ArcGIS (Bajo_Bajo_1 … Alto_6, No_Aplica, Otro)", "origen del objetivo"),
     ("estrato_num", "categórica ordinal", "1–6", "Estrato numérico extraído del texto", "OBJETIVO"),
     ("area_construida", "numérica continua", "m²", "Área construida de la unidad", "predictora"),
@@ -285,10 +293,11 @@ dicc = pd.DataFrame([
     ("condicion_predio", "categórica nominal", "—", "Régimen: NPH (no propiedad horizontal), PH_Matriz, PH_Unidad_Predial, Informal…", "predictora"),
     ("destinacion_economica", "categórica nominal", "—", "Destinación económica del predio", "predictora"),
     ("tipo_planta", "categórica nominal", "—", "Tipo de planta (Piso, Sótano, Mezanine…)", "predictora"),
-    ("centroide_lat / centroide_lon", "numérica continua", "grados (WGS84, EPSG:4326)", "Centroide del terreno del predio (o de su predio matriz)", "espacial"),
+    ("centroide_lat / centroide_lon", "numérica continua", "grados (WGS84, EPSG:4326)", "Centroide del terreno del predio (o de su predio matriz; o de su manzana si no tiene ninguno de los dos)", "espacial"),
     ("x_km / y_km", "numérica continua", "km", "Coordenadas proyectadas localmente, origen en el centro histórico (derivada)", "predictora espacial"),
     ("dist_centro_km", "numérica continua", "km", "Distancia al centro histórico (derivada)", "predictora espacial"),
-    ("centroide_fuente", "categórica nominal", "—", "Cómo se obtuvo el centroide: directo / propagado_matriz / sin_dato (metadato del pipeline)", "metadato (excluida)"),
+    ("centroide_fuente", "categórica nominal", "—", "Cómo se obtuvo el centroide: directo / propagado_matriz / centroide_manzana / sin_dato (metadato del pipeline)", "metadato (excluida)"),
+    ("ubicado_por_manzana", "booleana", "—", "True si la coordenada es el centroide de la manzana (paso 6 del embudo)", "metadato (excluida)"),
     ("flag_imposible_*", "booleana", "—", "Marca si el valor original era físicamente imposible y se convirtió en NaN", "auditoría"),
     ("flag_incoherente_*", "booleana", "—", "Marca si el valor era incoherente con el resto de la fila (baños o habitaciones) y se convirtió en NaN", "auditoría"),
 ], columns=["variable", "tipo", "unidad", "significado", "rol"])
@@ -325,6 +334,9 @@ dicc
 #   vivienda; el valor faltante se rellena después, dentro del modelo y solo
 #   con el conjunto de entrenamiento (capítulos 3 y 10).
 #
+# Un último paso (6) tampoco elimina filas: ubica por el centroide de su
+# manzana a las viviendas que llegan sin coordenadas (sección 1.7.2).
+#
 # ### 1.5.1 Las reglas, una por una
 #
 # | Paso | Regla | Qué hace con la fila | Por qué | Ejemplo |
@@ -336,6 +348,7 @@ dicc
 # | 3 | Excluir estrato no residencial o vacío | elimina | el estrato es la respuesta que se quiere predecir: no se puede inventar | `No_Aplica`, `Otro`, vacío |
 # | 4 | Valores imposibles → `NaN` | conserva | el valor es un error o un código, no un dato | año de construcción 2500 |
 # | 5 | Incoherencias dentro de la fila → `NaN` | conserva | cada valor por separado es posible, pero juntos no | 82 baños en un apartamento de 2 habitaciones y 82 m² |
+# | 6 | Sin coordenadas → centroide de su manzana | conserva | la manzana está en el NPN y casi siempre tiene otras viviendas ubicadas | una mejora en terreno ajeno sin terreno propio |
 #
 # Los umbrales de los pasos 2b, 2c, 4 y 5 salieron de un **diagnóstico de
 # rangos** (`diagnostico_rangos.py`, bitácora A.10; reporte en
@@ -631,13 +644,13 @@ dup
 #   reales el nivel 1 es **0 filas** en los dos universos.
 # - Nivel 2: **22 707 filas (6.8 %)** comparten NPN con otra fila (varias
 #   construcciones registradas bajo un mismo predio); en el universo con
-#   coordenadas son 16 192 (5.8 %).
+#   coordenadas son 22 047 (6.8 %).
 # - Nivel 3: **127 601 filas (38.4 %)** son casi-duplicados, apartamentos en
 #   serie con idénticas características dentro del mismo predio matriz. En el
-#   universo con coordenadas el porcentaje **sube a 44.4 %** (123 874 filas):
-#   las filas sin coordenadas son casas informales sueltas, mientras que los
-#   apartamentos en serie de propiedad horizontal tienen casi todos
-#   coordenadas.
+#   universo con coordenadas el porcentaje casi no cambia (38.6 %, 124 392
+#   filas): tras ubicar por su manzana a la mayoría de las casas informales
+#   sueltas (sección 1.7.2), los dos universos tienen una composición
+#   parecida.
 # - Los niveles 2 y 3 **no son errores**: son viviendas reales distintas.
 #   Eliminarlas borraría viviendas que existen. **Decisión:** se conservan, pero
 #   se tratan como una misma *entidad* al partir los datos (capítulo 2), para
@@ -675,8 +688,10 @@ nulos
 # ```{admonition} Interpretación
 # :class: note
 # - **El único faltante importante es la coordenada:** el **16.2 %** de las
-#   filas limpias no tiene ubicación. Todas las demás variables tienen menos
-#   de 0.13 % de nulos, en los dos universos.
+#   filas limpias llega sin ubicación propia; tras ubicar por su manzana a la
+#   mayoría (paso 6, sección 1.7.2), sigue sin coordenadas el **3.1 %**. Todas
+#   las demás variables tienen menos de 0.13 % de nulos, en los dos
+#   universos.
 # - Casi todos esos nulos pequeños los crearon las propias reglas de limpieza.
 #   Los de `planta_ubicacion` (0.105 %), `anio_construccion` (0.039 %) y
 #   `total_plantas` (0.001 %) son valores imposibles; los de
@@ -691,43 +706,46 @@ nulos
 # ```
 
 # %% [markdown]
-# ## 1.7 Las filas sin coordenadas: ¿quitarlas o no?
+# ## 1.7 Las filas sin coordenadas: ¿ubicarlas, quitarlas o no?
 #
 # Esta es la decisión más importante del capítulo, porque define con qué filas
 # se trabaja en el resto del libro. Se responde en cuatro pasos: (1) quiénes
-# son esas filas, (2) si quitarlas cambia las estadísticas, (3) si de verdad
-# hay que quitarlas y (4) qué cifras se reportan entonces.
+# son las filas que llegan sin coordenadas, (2) si se pueden ubicar con la
+# manzana a la que pertenecen, (3) si quitar las que quedan cambia las
+# estadísticas y (4) qué cifras se reportan entonces.
 #
-# ### 1.7.1 ¿Quiénes son las filas sin coordenadas?
+# ### 1.7.1 ¿Quiénes son las filas que llegan sin coordenadas?
 #
 # La coordenada de cada vivienda es el centroide del terreno de su predio (o
 # de su predio matriz, si la unidad no tiene terreno propio). La columna
 # `centroide_fuente` dice de dónde salió: `directo` (del terreno del propio
-# predio), `propagado_matriz` (copiado del predio matriz) o `sin_dato`.
+# predio), `propagado_matriz` (copiado del predio matriz), `centroide_manzana`
+# (ubicada por su manzana, sección 1.7.2) o `sin_dato`. Aquí se describen las
+# filas que **no traen** coordenadas propias: las dos últimas categorías.
 
 # %%
-# Perfil de las filas sin coordenadas: de dónde salió el centroide, régimen del
-# predio y condición de propiedad (dígito 22 del NPN). Explica POR QUÉ faltan.
-sin_coord = df[~df["tiene_coordenadas"]]
-print(f"Filas limpias:   {len(df):,}")
-print(f"con coordenadas: {len(con_coord):,} ({100 * len(con_coord) / len(df):.1f}%)")
-print(f"sin coordenadas: {len(sin_coord):,} ({100 * len(sin_coord) / len(df):.1f}%)")
+# Perfil de las filas que llegan sin coordenadas propias (antes de ubicarlas por
+# su manzana): de dónde salió el centroide, régimen del predio y condición de
+# propiedad (dígito 22 del NPN). Explica POR QUÉ faltan.
+sin_propias = df[df["centroide_fuente"].isin(["sin_dato", "centroide_manzana"])]
+con_propias = df.drop(index=sin_propias.index)
+print(f"Filas limpias:                   {len(df):,}")
+print(f"con coordenadas propias:         {len(con_propias):,} ({100 * len(con_propias) / len(df):.1f}%)")
+print(f"sin coordenadas propias:         {len(sin_propias):,} ({100 * len(sin_propias) / len(df):.1f}%)")
 perfil = pd.DataFrame({
-    "sin coordenadas": sin_coord["condicion_predio"].value_counts(),
-    "con coordenadas": con_coord["condicion_predio"].value_counts(),
+    "sin coordenadas propias": sin_propias["condicion_predio"].value_counts(),
+    "con coordenadas propias": con_propias["condicion_predio"].value_counts(),
 }).fillna(0).astype(int)
-perfil["% del régimen con coordenadas"] = 100 * perfil["con coordenadas"] / (perfil["con coordenadas"]
-                                                                              + perfil["sin coordenadas"])
-print("\nFilas sin coordenadas según el origen del centroide:")
-print("  ", sin_coord["centroide_fuente"].value_counts(dropna=False).to_dict())
-print("Filas sin coordenadas según la condición de propiedad (dígito 22 del NPN):")
-print("  ", sin_coord["numero_predial_nacional"].str[21].value_counts().to_dict())
-perfil.sort_values("sin coordenadas", ascending=False)
+perfil["% del régimen con coordenadas propias"] = 100 * perfil["con coordenadas propias"] / (
+    perfil["con coordenadas propias"] + perfil["sin coordenadas propias"])
+print("Filas sin coordenadas propias según la condición de propiedad (dígito 22 del NPN):")
+print("  ", sin_propias["numero_predial_nacional"].str[21].value_counts().to_dict())
+perfil.sort_values("sin coordenadas propias", ascending=False)
 
 # %% [markdown]
 # ```{admonition} Lectura
 # :class: note
-# - Son **53 894 filas (16.2 %)**, todas con `centroide_fuente = sin_dato`.
+# - Son **53 894 filas (16.2 %)**.
 # - El **99.5 %** (53 646) tiene régimen `Informal`, y casi todas (53 623)
 #   tienen **condición de propiedad 5** en el dígito 22 del NPN: son **mejoras
 #   en terreno ajeno** (sección 1.3). Las 248 restantes son unidades en
@@ -735,19 +753,117 @@ perfil.sort_values("sin coordenadas", ascending=False)
 # - La razón es estructural: la coordenada sale del polígono del terreno, y una
 #   mejora no tiene terreno propio registrado ni un predio matriz del cual
 #   heredar el centroide.
-# - Visto al revés: solo el **25.7 %** de las viviendas `Informal` tiene
-#   coordenadas, frente a prácticamente el 100 % de las `NPH` y de las unidades
-#   en propiedad horizontal.
+# - Visto al revés: solo el **25.7 %** de las viviendas `Informal` trae
+#   coordenadas propias, frente a prácticamente el 100 % de las `NPH` y de las
+#   unidades en propiedad horizontal.
 # ```
 #
-# ### 1.7.2 ¿Quitarlas cambia las estadísticas?
+# ### 1.7.2 Ubicarlas por su manzana
+#
+# El NPN de esas viviendas sí dice en qué **manzana** están (primeros 17
+# dígitos, sección 1.3), y casi todas esas manzanas tienen otras viviendas con
+# coordenadas. El paso 6 del embudo (sección 1.5) le asigna a cada vivienda sin
+# coordenadas el **centroide de su manzana**: el promedio de los puntos
+# distintos (edificios o lotes) ya ubicados en ella. Un edificio de 300
+# apartamentos cuenta como un solo punto, para no arrastrar el centro hacia él.
+#
+# El código de manzana no siempre describe un lugar compacto. La manzana
+# `0000` es un comodín (zona rural o predio sin manzana asignada): hay
+# prefijos con ese código que reúnen 820 edificios repartidos en 7 km. Por eso
+# se aplican dos reglas fijas (`src/config.py`): (i) no se usa la manzana
+# `0000` y (ii) no se usa una manzana si alguno de sus puntos ubicados está a
+# más de **250 m** del centroide (una manzana de Barranquilla mide entre 80 y
+# 120 m de lado). Las reglas solo miran coordenadas, nunca el estrato.
+#
+# **¿Por qué no hay fuga?** El centroide usa la posición de otras viviendas, no
+# su estrato. Es un dato cartográfico (dónde está la manzana) que también
+# existiría para un predio nuevo, y se calcula antes de la partición, igual
+# que la grilla de bloques del capítulo 2.
+
+# %%
+# Destino de las filas que llegan sin coordenadas y precisión de la aproximación.
+# Se reconstruye la tabla de manzanas con las coordenadas ANTES del paso 6 (las
+# filas recuperadas vuelven a NaN) para describir cada manzana con sus puntos reales.
+base = df.copy()
+base.loc[base["ubicado_por_manzana"], ["centroide_lat", "centroide_lon"]] = np.nan
+_, manz = L.recuperar_por_manzana(base)
+mz = base.loc[base["centroide_lat"].isna(), "npn_manzana"]
+tiene = mz.isin(manz.index).to_numpy()   # la manzana tiene viviendas ubicadas
+valida = mz.isin(manz.index[manz["valida"]]).to_numpy()
+generica = mz.isin(manz.index[manz["generica"]]).to_numpy()
+destino = np.select(
+    [valida, generica, tiene],
+    ["recuperada: centroide de su manzana", "sin ubicar: manzana genérica (0000)",
+     f"sin ubicar: manzana dispersa (> {C.DISPERSION_MAX_MANZANA_M} m)"],
+    default="sin ubicar: manzana sin viviendas ubicadas")
+tabla_destino = pd.Series(destino).value_counts().rename("filas").to_frame()
+tabla_destino["% de las filas sin coordenadas propias"] = 100 * tabla_destino["filas"] / len(mz)
+tabla_destino["% del dataset"] = 100 * tabla_destino["filas"] / len(df)
+print(f"Filas con coordenadas tras el paso 6: {int(df['tiene_coordenadas'].sum()):,} "
+      f"({100 * df['tiene_coordenadas'].mean():.1f} %)")
+tabla_destino
+
+# %%
+# ¿Qué error introduce poner una vivienda en el centroide de su manzana? Se prueba
+# con los puntos que SÍ están ubicados: a cada edificio de una manzana válida (con
+# al menos 2 puntos) se le quita su coordenada y se le asigna el centroide de los
+# DEMÁS puntos de la manzana (dejar uno fuera). La distancia entre su posición real
+# y ese centroide es el error que tendría si hubiera llegado sin coordenadas.
+pts = (base.loc[base["centroide_lat"].notna(), ["npn_manzana", "x_km", "y_km"]]
+       .drop_duplicates())
+pts = pts[pts["npn_manzana"].isin(manz.index[manz["valida"]])]
+n_pts = pts.groupby("npn_manzana")["x_km"].transform("size")
+pts, n_pts = pts[n_pts >= 2], n_pts[n_pts >= 2]
+# Centroide de los demás puntos: (suma de la manzana - el punto) / (n - 1)
+cx = (pts.groupby("npn_manzana")["x_km"].transform("sum") - pts["x_km"]) / (n_pts - 1)
+cy = (pts.groupby("npn_manzana")["y_km"].transform("sum") - pts["y_km"]) / (n_pts - 1)
+error_m = 1000 * np.hypot(pts["x_km"] - cx, pts["y_km"] - cy)
+print(f"Puntos evaluados: {len(error_m):,} en {pts['npn_manzana'].nunique():,} manzanas válidas")
+print(f"Error de posición (m): mediana {error_m.median():.0f}, p90 {error_m.quantile(0.9):.0f}, "
+      f"p99 {error_m.quantile(0.99):.0f}, máximo {error_m.max():.0f}")
+print(f"Puntos a menos de 100 m de su centroide: {100 * (error_m < 100).mean():.1f} %")
+print(f"Comparación: bloque de la partición = {1000 * C.TAM_BLOQUE_KM:.0f} m de lado")
+# Cuántas viviendas recuperadas comparten un mismo punto (todas las de su manzana)
+por_punto = df[df["ubicado_por_manzana"]].groupby("npn_manzana").size()
+print(f"Viviendas recuperadas por manzana: mediana {por_punto.median():.0f}, "
+      f"p90 {por_punto.quantile(0.9):.0f}, máximo {por_punto.max()} ({len(por_punto):,} manzanas)")
+
+# %% [markdown]
+# ```{admonition} Lectura
+# :class: important
+# - De las **53 894 filas** sin coordenadas propias, el **92.7 %** comparte
+#   manzana con viviendas ubicadas, pero no todas esas manzanas son lugares
+#   compactos. Con las dos reglas, el paso 6 ubica **43 594 (80.9 %)**. Con
+#   ello el **96.9 %** de las viviendas tiene coordenadas, frente al 83.8 %
+#   sin este paso. Quedan **10 300 filas (3.1 %)** sin ubicar: 3 913 en
+#   manzanas sin ninguna vivienda ubicada, 3 502 en manzanas dispersas y
+#   2 885 con la manzana genérica `0000`.
+# - **La aproximación es buena.** Dejando fuera cada uno de los 128 314
+#   edificios o lotes ubicados de las manzanas válidas y poniéndolo en el
+#   centroide de los demás puntos de su manzana, el error mediano es de
+#   **31 m**, el p90 de 68 m y el p99 de 122 m; el 97.5 % queda a menos de
+#   100 m. Es muy poco frente a los bloques de 2 km de la partición
+#   (capítulo 2) y al buffer de 1 km (capítulo 8): una vivienda recuperada cae
+#   casi siempre en el mismo bloque y del mismo lado del buffer que si se
+#   conociera su terreno.
+# - **El costo: varias viviendas en un mismo punto.** Todas las viviendas
+#   recuperadas de una manzana comparten coordenada (3 483 manzanas; mediana
+#   de 7 viviendas por manzana, máximo 329). Es el mismo caso de un edificio de
+#   apartamentos, y se trata igual: en los análisis espaciales (Moran, LISA,
+#   correlograma) las viviendas recuperadas de una manzana cuentan como **un
+#   solo punto** (`espacial.deduplicar_por_edificio`), para no fabricar
+#   vecinos a distancia 0 con el mismo estrato.
+# ```
+#
+# ### 1.7.3 ¿Quitar las que quedan cambia las estadísticas?
 #
 # Si las coordenadas faltaran **al azar** (por ejemplo, por un error técnico
 # que afecta a cualquier vivienda por igual), quitar esas filas no cambiaría la
 # distribución del estrato: sería como sacar una muestra aleatoria más
 # pequeña. Si no faltan al azar, las estadísticas cambian. La tabla compara
-# la distribución del estrato en las dos poblaciones y añade la **cobertura**:
-# qué porcentaje de las viviendas de cada estrato tiene coordenadas.
+# la distribución del estrato en las dos poblaciones (todas las filas limpias y
+# las que tienen coordenadas tras el paso 6) y añade la **cobertura**: qué
+# porcentaje de las viviendas de cada estrato tiene coordenadas.
 
 # %%
 # Distribución del estrato en los dos universos y cobertura de coordenadas por
@@ -790,22 +906,22 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Lectura
 # :class: important
-# **Sí cambia, y mucho.** Las coordenadas **no faltan al azar**:
+# **Cambia poco, pero no faltan al azar.**
 #
-# - El **estrato 1** pasa de **32.8 %** de todas las filas a **26.3 %** de las
-#   que tienen coordenadas (−6.5 puntos porcentuales). El estrato 2 baja de
-#   21.8 % a 20.2 %, y los estratos 3 a 6 ganan peso.
-# - La cobertura de coordenadas es de **67.2 %** en el estrato 1 y **77.6 %**
-#   en el 2, frente a **97.7 % o más** en los estratos 3 a 6. Dicho de forma
-#   sencilla: a **1 de cada 3** viviendas de estrato 1 le falta la ubicación;
-#   en el estrato 4, a **1 de cada 1 000**.
-# - Consecuencia: cualquier estadística calculada solo con las filas con
-#   coordenadas describe la **ciudad ubicable**, que tiene menos estrato 1 que
-#   la ciudad completa. Por eso importa decir siempre con qué universo se
-#   calculó cada cifra.
+# - El **estrato 1** pasa de **32.8 %** de todas las filas a **31.1 %** de las
+#   que tienen coordenadas (−1.7 puntos porcentuales); los estratos 2 a 6 ganan
+#   menos de un punto cada uno. Sin la ubicación por manzana, la caída del
+#   estrato 1 habría sido de 6.5 puntos (a 26.3 %).
+# - La cobertura de coordenadas es de **92.1 %** en el estrato 1, frente a
+#   **98.7 % o más** en los estratos 2 a 6. Dicho de forma sencilla: a **1 de
+#   cada 13** viviendas de estrato 1 le falta la ubicación; sin la ubicación
+#   por manzana habría sido 1 de cada 3.
+# - Consecuencia: las estadísticas calculadas solo con las filas con
+#   coordenadas describen casi toda la ciudad, pero con algo menos de estrato 1
+#   informal. Por eso se sigue diciendo con qué universo se calculó cada cifra.
 # ```
 #
-# ### 1.7.3 ¿Hace falta quitarlas?
+# ### 1.7.4 ¿Hace falta quitar las que quedan?
 #
 # **Para el modelo, sí.** Una vivienda sin ubicación no puede usarse en este
 # estudio por tres razones, cada una suficiente por sí sola:
@@ -815,83 +931,47 @@ plt.show()
 #    asignar a ningún bloque, así que no se sabría si va a entrenamiento o a
 #    prueba.
 # 2. **La ubicación es una predictora.** El modelo principal usa `x_km`,
-#    `y_km` y la distancia al centro. Rellenar coordenadas inventadas sería
-#    darle al modelo un dato falso justo en la variable más informativa.
+#    `y_km` y la distancia al centro. Rellenar coordenadas sin una regla con
+#    fundamento sería darle al modelo un dato falso justo en la variable más
+#    informativa. (La ubicación por manzana sí tiene ese fundamento: es la
+#    posición real de la manzana, con un error medido de unos 30 m.)
 # 3. **El análisis espacial las necesita.** Los mapas, el índice de Moran y la
 #    elección del buffer (capítulo 8) se calculan con distancias entre
 #    viviendas.
 #
 # **Para describir la base, no.** Las 332 718 filas limpias son la población
-# real de viviendas con estrato del catastro. Quitarlas de la descripción
-# escondería el sesgo: el lector creería que la ciudad tiene un 26 % de
-# estrato 1, cuando tiene un 33 %.
-#
-# **¿Se podrían recuperar?** El NPN de esas viviendas trae la **manzana**
-# (primeros 17 dígitos, sección 1.3), y muchas otras viviendas de la misma
-# manzana sí tienen coordenadas. Se podría asignar a cada vivienda sin
-# coordenadas el centroide de su manzana. La celda siguiente mide cuántas se
-# recuperarían y con qué precisión.
-
-# %%
-# Alternativa evaluada (NO aplicada en este entregable): ubicar las filas sin
-# coordenadas con el centroide de su manzana (primeros 17 dígitos del NPN),
-# calculado con las viviendas de esa manzana que sí tienen coordenadas.
-manzana = df["numero_predial_nacional"].str[:17]
-man_con = manzana[df["tiene_coordenadas"]]
-# Centroide (media de x, y) y dispersión de cada manzana con viviendas ubicadas.
-cent = con_coord.groupby(man_con)[["x_km", "y_km"]].agg(["mean", "std"])
-radio_m = 1000 * np.hypot(cent[("x_km", "std")], cent[("y_km", "std")])   # metros
-recuperables = manzana[~df["tiene_coordenadas"]].isin(cent.index)
-print("Filas sin coordenadas cuya manzana tiene viviendas ubicadas:")
-print(f"   {int(recuperables.sum()):,} de {len(sin_coord):,} ({100 * recuperables.mean():.1f}%)")
-print("Filas ubicables si se imputara el centroide de la manzana:")
-print(f"   {len(con_coord) + int(recuperables.sum()):,} de {len(df):,} "
-      f"({100 * (len(con_coord) + recuperables.sum()) / len(df):.1f}%)")
-print("Dispersión típica de una manzana (mediana de la desviación de x, y):")
-print(f"   {np.nanmedian(radio_m):.0f} m")
-print("Estrato de las filas recuperables:")
-print("  ", sin_coord.loc[recuperables.to_numpy(), C.OBJETIVO].value_counts().sort_index().to_dict())
+# real de viviendas con estrato del catastro, y se siguen usando para
+# describirla.
 
 # %% [markdown]
-# ```{admonition} Decisión: se reportan los dos universos
+# ```{admonition} Decisión: se ubican por manzana y se reportan los dos universos
 # :class: important
-# **Respuesta a la pregunta de esta sección:** no conviene elegir uno solo de
-# los dos universos; se usan los dos, cada uno para lo que sirve.
-#
-# 1. **Para describir la base** (este capítulo) se usan las **332 718 filas
+# 1. **Ubicación por manzana.** Las viviendas sin coordenadas propias reciben
+#    el centroide de su manzana cuando la manzana es compacta (paso 6 del
+#    embudo): 43 594 viviendas, con un error mediano estimado de 31 m.
+# 2. **Para describir la base** (este capítulo) se usan las **332 718 filas
 #    limpias**, y las cifras clave se muestran al lado de las del universo con
-#    coordenadas (tablas de 1.6, 1.7.2, 1.8 y 1.9). Así el lector ve la
+#    coordenadas (tablas de 1.6, 1.7.3, 1.8 y 1.9). Así el lector ve la
 #    población real y, a la vez, cuánto cambia al quitar las filas sin
 #    ubicación.
-# 2. **Para todo lo que viene después** (partición, análisis exploratorio y
-#    modelo) se usan solo las **278 824 filas con coordenadas** (83.8 %),
-#    porque sin ubicación no se puede partir, ni calcular variables espaciales,
-#    ni hacer el análisis espacial. Cada capítulo indica al inicio con qué
-#    universo trabaja.
-# 3. **El sesgo se declara y se cuantifica.** Quitar las filas sin coordenadas
-#    saca del modelo sobre todo vivienda informal de estratos 1 y 2. El
-#    capítulo 3.3 lo mide, y las conclusiones (11.2) lo declaran como
-#    limitación: los resultados del modelo aplican a la ciudad formal.
-# 4. **La recuperación por manzana queda como alternativa evaluada.** El
-#    **92.7 %** de las filas sin coordenadas (**49 981**, casi todas de
-#    estratos 1 y 2) comparte manzana con viviendas ubicadas. Con el centroide
-#    de su manzana, el universo de modelado pasaría del 83.8 % al **98.8 %** de
-#    las viviendas. La aproximación sería buena: una manzana típica mide unos
-#    **30 m** de dispersión, muy poco frente a los bloques de 2 km
-#    (capítulo 2) y al buffer de 1 km (capítulo 8). No se aplica en este entregable porque cambiaría
-#    la partición y todos los resultados, y porque todas las viviendas de una
-#    manzana quedarían en un mismo punto, lo que habría que tratar con cuidado
-#    en el análisis espacial. Es el primer paso propuesto para el Entregable 2
-#    (11.3).
+# 3. **Para todo lo que viene después** (partición, análisis exploratorio y
+#    modelo) se usan las **322 418 filas con coordenadas** (96.9 %), porque sin
+#    ubicación no se puede partir, ni calcular variables espaciales, ni hacer
+#    el análisis espacial. Cada capítulo indica al inicio con qué universo
+#    trabaja.
+# 4. **El sesgo que queda se declara y se cuantifica.** Las 10 300 filas que
+#    siguen sin coordenadas (3.1 %) son casi todas vivienda informal de
+#    estrato 1. El capítulo 3.3 lo mide, y las conclusiones (11.2) lo declaran
+#    como limitación.
 # ```
 #
 # | Universo | Filas | Dónde se usa |
 # |---|---|---|
 # | **Todas las filas limpias** | 332 718 | Capítulo 1: descripción de la base, calidad y tamaño; capítulo 3.3: sesgo de cobertura |
-# | **Con coordenadas (universo de modelado)** | 278 824 | Capítulo 2: partición en entrenamiento (218 870) y prueba (59 954) |
-# | **Entrenamiento** | 218 870 | Capítulos 3 a 9 (todo el análisis exploratorio) |
-# | **Entrenamiento tras el buffer** | 138 239 | Capítulo 10: modelo final |
-# | **Prueba** | 59 954 | Capítulo 10: evaluación final, una sola vez |
+# | **Con coordenadas (universo de modelado)** | 322 418 | Capítulo 2: partición en entrenamiento (257 273) y prueba (65 145) |
+# | **Entrenamiento** | 257 273 | Capítulos 3 a 9 (todo el análisis exploratorio) |
+# | **Entrenamiento tras el buffer** | 144 586 | Capítulo 10: modelo final |
+# | **Prueba** | 65 145 | Capítulo 10: evaluación final, una sola vez |
 
 # %% [markdown]
 # ## 1.8 Tamaño de la muestra y relación n/p
@@ -955,18 +1035,20 @@ tam
 # :class: note
 # - **Tamaño bruto.** Tras el embudo quedan **332 718 viviendas** en **320 792
 #   predios** y **168 044 predios matriz** (edificios, conjuntos o lotes). En
-#   el universo con coordenadas son **278 824 viviendas**, 270 299 predios y
-#   132 276 predios matriz. Los dos universos superan con holgura el mínimo de
+#   el universo con coordenadas son **322 418 viviendas**, 310 831 predios y
+#   165 954 predios matriz. Los dos universos superan con holgura el mínimo de
 #   20 000 observaciones de las instrucciones del proyecto.
 # - **Relación n/p.** Tras one-hot hay **35 columnas**: n/p ≈ **9 500** filas
-#   por columna con todas las filas y ≈ **8 000** con coordenadas. La clase
-#   menos frecuente (estrato 6) tiene 13 207 y 13 185 casos, unos **377 por
-#   columna**, muy por encima de la referencia de 10. No faltan datos para el
-#   número de variables.
+#   por columna con todas las filas y ≈ **9 200** con coordenadas. La clase
+#   menos frecuente (estrato 6) tiene 13 207 casos en los dos universos (todas
+#   sus viviendas tienen coordenadas), unos **377 por columna**, muy por
+#   encima de la referencia de 10. No faltan datos para el número de
+#   variables.
 # - **Grupos para el ICC.** Al separar las mejoras en terreno ajeno (sección
 #   1.3), los 168 044 predios matriz pasan a **182 524 grupos**. En el
-#   universo con coordenadas casi no cambia (132 276 → 132 282), porque las
-#   mejoras casi nunca tienen coordenadas (sección 1.7.1).
+#   universo con coordenadas pasan de 165 954 a 172 757: la mayoría de las
+#   mejoras también tienen ahora coordenadas, por su manzana (sección
+#   1.7.2).
 # ```
 
 # %% [markdown]
@@ -1101,12 +1183,13 @@ tabla_icc
 #   del suroccidente con 3 045 viviendas informales independientes; el
 #   tamaño efectivo quedaría subestimado (≈ 1 870 en vez de ≈ 2 300).
 # - *En el universo con coordenadas*, el ICC es el mismo (0.992), pero
-#   $\tilde m$ sube a 173.2 y el tamaño efectivo baja a **≈ 1 620**: al quitar
-#   muchas casas informales sueltas, una parte mayor de las filas vive en
-#   conjuntos grandes. Aquí la excepción casi no importa, porque las mejoras
-#   casi nunca tienen coordenadas.
+#   $\tilde m$ sube a 149.9 y el tamaño efectivo baja a **≈ 2 170**: al quitar
+#   las 10 300 casas informales sueltas que siguen sin ubicación, una parte
+#   algo mayor de las filas vive en conjuntos grandes. Aquí la excepción
+#   importa poco (≈ 2 160 sin ella), porque el lote con miles de mejoras
+#   independientes no tiene coordenadas.
 #
-# **Cómo leer ese 2 300 (o 1 620).** No es un conteo de viviendas, de predios
+# **Cómo leer ese 2 300 (o 2 170).** No es un conteo de viviendas, de predios
 # ni de edificios, ni quiere decir que haya 2 300 filas "reales" y el resto
 # sobre. Es una medida de **precisión**: las estimaciones sobre el estrato
 # tienen la precisión de unas 2 300 observaciones independientes, no de
@@ -1128,9 +1211,10 @@ tabla_icc
 # pero tiene sesgos conocidos:
 #
 # 1. **Viviendas sin coordenadas** (16.2 % de las filas limpias, sección 1.7):
-#    casi todas son mejoras en terreno ajeno de estratos 1 y 2. Quedan fuera
-#    del modelo, así que el modelo representa sobre todo la ciudad
-#    **formal**. El capítulo 3.3 cuantifica este sesgo con la V de Cramér.
+#    casi todas son mejoras en terreno ajeno de estratos 1 y 2. La mayoría se
+#    ubica con el centroide de su manzana; el 3.1 % que no se puede ubicar
+#    queda fuera del modelo y es casi todo informal de estrato 1. El capítulo
+#    3.3 cuantifica este sesgo con la V de Cramér.
 # 2. **Predios sin estrato residencial** (`No_Aplica`/`Otro`/vacío: 12 093
 #    filas en el paso 3 del embudo, 3.2 % del crudo): quedan fuera por ser la
 #    variable objetivo.
@@ -1152,9 +1236,10 @@ tabla_icc
 #   propósito aquí es analítico y de apoyo a la política pública; se declara
 #   explícitamente que el modelo **no** debe usarse para decisiones sobre
 #   personas.
-# - **Sesgo de cobertura:** los asentamientos informales quedan
-#   sub-representados (sección 1.7); cualquier conclusión aplica a la ciudad
-#   formal.
+# - **Sesgo de cobertura:** la ubicación por manzana incorpora al modelo la
+#   mayoría de los predios informales, pero el 3.1 % que no se pudo ubicar es
+#   casi todo informal y de estrato 1 (sección 1.7); las conclusiones sobre
+#   esos asentamientos deben leerse con cautela.
 
 # %% [markdown]
 # ## 1.12 Resumen del capítulo
@@ -1165,16 +1250,18 @@ tabla_icc
 #   estrato residencial (−36 497 garajes/depósitos, −11 sin área, −1 044
 #   unidades de menos de 10 m², −234 registros agregados, −12 093 sin estrato
 #   residencial), en 320 792 predios y 168 044 predios matriz.
-# - **Dos universos.** El 16.2 % de las viviendas (53 894, casi todas mejoras
-#   en terreno ajeno de estratos 1 y 2) no tiene coordenadas. Se describe la
-#   base con las 332 718 filas y se modela con las **278 824 que tienen
-#   coordenadas**; las cifras clave se presentan en los dos universos. Quitar
-#   las filas sin coordenadas baja el estrato 1 de 32.8 % a 26.3 %. Recuperarlas
-#   con el centroide de su manzana (92.7 % recuperables) queda propuesto para
-#   el Entregable 2.
-# - **Tamaño.** Muy por encima del mínimo de 20 000 y con ~8 000–9 500 filas
+# - **Ubicación por manzana y dos universos.** El 16.2 % de las viviendas
+#   (53 894, casi todas mejoras en terreno ajeno de estratos 1 y 2) llega sin
+#   coordenadas. El paso 6 ubica a 43 594 de ellas en el centroide de su
+#   manzana (error mediano de 31 m, medido con los edificios ubicados), y
+#   quedan sin ubicar 10 300 (3.1 %). Se describe la base con las 332 718
+#   filas y se modela con las **322 418 que tienen coordenadas**; las cifras
+#   clave se presentan en los dos universos. Quitar las que siguen sin
+#   coordenadas baja el estrato 1 de 32.8 % a 31.1 % (sin la ubicación por
+#   manzana habría bajado a 26.3 %).
+# - **Tamaño.** Muy por encima del mínimo de 20 000 y con ~9 200–9 500 filas
 #   por columna. La precisión, sin embargo, está gobernada por los edificios y
-#   conjuntos: ICC = 0.992 y tamaño efectivo ≈ 2 300 (≈ 1 620 con
+#   conjuntos: ICC = 0.992 y tamaño efectivo ≈ 2 300 (≈ 2 170 con
 #   coordenadas).
 # - **Calidad.** No hay duplicados exactos; las unidades repetidas (6.8 % por
 #   NPN, 38.4 % casi-duplicados) son viviendas reales y se manejan agrupando

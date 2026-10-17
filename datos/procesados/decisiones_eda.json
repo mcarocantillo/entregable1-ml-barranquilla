@@ -24,7 +24,7 @@
   },
   "metrica_principal": {
     "valor": "f1_macro",
-    "motivo": "Desbalance 4.6:1 y 6 clases (cap. 4.1): el accuracy premia a la clase mayoritaria."
+    "motivo": "Desbalance 6.2:1 y 6 clases (cap. 4.1): el accuracy premia a la clase mayoritaria."
   },
   "metricas_ordinales": {
     "valor": [
@@ -83,14 +83,14 @@
   },
   "outliers_multivariados": {
     "valor": "conservar (sin eliminar filas)",
-    "motivo": "0.57% marcados por ambos métodos; 25% de ellos son estrato 5-6 (vs 12% en el resto): eliminarlos sesgaría las clases altas (cap. 7.2)."
+    "motivo": "0.43% marcados por ambos métodos; 21% de ellos son estrato 5-6 (vs 10% en el resto): eliminarlos sesgaría las clases altas (cap. 7.2)."
   },
   "buffer_km": {
     "valor": 1.0,
-    "motivo": "Correlograma en train (cap. 8.4): Moran's I del estrato cae por debajo de 0.3 a ~2.88 km; se recorta a [0.25, 1.0] km para no perder demasiado entrenamiento."
+    "motivo": "Correlograma en train (cap. 8.4): Moran's I del estrato cae por debajo de 0.3 a ~2.62 km; se recorta a [0.25, 1.0] km para no perder demasiado entrenamiento."
   },
   "alcance_correlograma_km": {
-    "valor": 2.875,
+    "valor": 2.625,
     "motivo": "Distancia a la que el Moran's I del estrato baja de 0.3 (cap. 8.4); referencia para el análisis de sensibilidad del buffer (cap. 10)."
   },
   "k_vecinos": {
@@ -136,6 +136,7 @@
       "tipo_planta",
       "numero_predial_nacional",
       "npn_edificio",
+      "npn_manzana",
       "id_fila",
       "centroide_fuente"
     ],

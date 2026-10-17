@@ -21,7 +21,7 @@
 # vez**, ¿qué estructura tienen las viviendas, hay combinaciones raras y se
 # forman grupos naturales?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento** (algunas técnicas
+# **Datos:** las **257 273 viviendas de entrenamiento** (algunas técnicas
 # usan una submuestra por costo de cómputo).
 #
 # **Conceptos nuevos:** PCA, outliers multivariados (Mahalanobis robusta,
@@ -196,28 +196,31 @@ corr_pc
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - **Dimensionalidad.** PC1 explica 28.8 % y PC2 23.3 % (52.1 % entre las dos).
+# - **Dimensionalidad.** PC1 explica 29.2 % y PC2 17.8 % (47.0 % entre las dos).
 #   Hacen falta **5 componentes para el 80 %** y 6 para el 90 %; el criterio de
 #   Kaiser retiene 3 y la dimensionalidad efectiva (participation ratio) es
-#   **5.41 de 8**. Hay algo de redundancia, pero moderada, coherente con VIF < 3
+#   **5.89 de 8**. Hay algo de redundancia, pero moderada, coherente con VIF < 2
 #   (cap. 6): las variables físicas no se reducen a uno o dos ejes.
-# - **PC1 = "tamaño"**: cargas positivas en área construida (0.58),
-#   habitaciones (0.51), terreno (0.42) y baños (0.34).
-# - **PC2 = "apartamento moderno frente a casa con lote"**: positiva en piso de
-#   ubicación (0.59) y baños (0.53), negativa en terreno (−0.46) y antigüedad
-#   (−0.28). Es un eje de tipología: unidades en altura, más nuevas y con más
-#   baños frente a casas antiguas con terreno propio.
+# - **PC1 = "tamaño"**: cargas positivas en área construida (0.53),
+#   habitaciones (0.53), baños (0.51), terreno (0.32) y plantas (0.25).
+# - **PC2 = "apartamento moderno frente a casa antigua con lote"**: positiva
+#   en piso de ubicación (0.67) y baños (0.33), negativa en antigüedad
+#   (−0.54) y terreno (−0.27). Es un eje de tipología: unidades en altura,
+#   más nuevas y con más baños frente a casas antiguas con terreno propio.
 # - **PC3 es prácticamente `altura` sola** (carga 0.98): recoge la poca
-#   variación de una variable casi constante, y PC4 combina plantas (0.68) y
-#   antigüedad (0.64).
-# - **Relación con el estrato:** es **PC2** y no PC1 la más asociada
-#   (Spearman 0.476 frente a 0.251). PC3 tiene Spearman 0.189 pese a ser casi
-#   solo `altura` (Spearman 0.048 con el estrato, cap. 6): como `altura` vale 3
-#   en más del 99 % de las filas, el orden de PC3 dentro de esa masa lo fijan
-#   sus cargas pequeñas (plantas, piso). Distingue mejor el estrato el *tipo* de
-#   vivienda (apartamento moderno en altura) que su tamaño. No se usa PCA
-#   dentro del modelo base: las variables originales son interpretables y n/p
-#   es enorme.
+#   variación de una variable casi constante, y PC4 es sobre todo plantas
+#   (0.86) frente a terreno (−0.40).
+# - **Relación con el estrato:** **PC1** es la más asociada (Spearman 0.512,
+#   frente a 0.240 de PC2). En la versión anterior del libro, sin las
+#   viviendas informales ubicadas por su manzana, era al revés (PC2 0.476,
+#   PC1 0.251): las 34 892 viviendas informales que entran a train (cap. 3.3)
+#   son pequeñas, con pocos baños y sin terreno propio, y casi todas de
+#   estratos 1 y 2, así que ahora el tamaño separa mejor el extremo bajo que
+#   la tipología. PC3 tiene Spearman 0.169 pese a ser casi solo `altura`
+#   (Spearman 0.041 con el estrato, cap. 6): como `altura` vale 3 en más del
+#   99 % de las filas, el orden de PC3 dentro de esa masa lo fijan sus cargas
+#   pequeñas (plantas, piso). No se usa PCA dentro del modelo base: las
+#   variables originales son interpretables y n/p es enorme.
 # ```
 
 # %% [markdown]
@@ -306,21 +309,21 @@ perfil
 # %% [markdown]
 # ```{admonition} Interpretación y decisión
 # :class: note
-# - Mahalanobis robusta marca 2.44 % de train e Isolation Forest 0.94 % (cerca
+# - Mahalanobis robusta marca 1.52 % de train e Isolation Forest 0.93 % (cerca
 #   del 1 % fijado con `contamination`, que se calibra en la submuestra de
-#   ajuste). Solo **0.57 %** coincide en ambos, y la coincidencia es baja
-#   (Jaccard = 0.20): los dos métodos miran cosas distintas (forma elíptica
+#   ajuste). Solo **0.43 %** coincide en ambos, y la coincidencia es baja
+#   (Jaccard = 0.21): los dos métodos miran cosas distintas (forma elíptica
 #   frente a aislamiento), así que "outlier" depende mucho del criterio.
 # - Los marcados por ambos son **combinaciones raras, no errores evidentes**:
-#   mediana de **0 habitaciones y 0 baños**, 92.5 m² construidos y **256 m² de
-#   terreno** (frente a 3, 1, 76 y 71 en el resto). Parecen lotes con
+#   mediana de **0 habitaciones y 0 baños**, 103.5 m² construidos y **180 m² de
+#   terreno** (frente a 3, 1, 74 y 54 en el resto). Parecen lotes con
 #   construcciones menores o unidades sin espacios habitables registrados
 #   (p. ej. en obra o con ficha incompleta). Las reglas de limpieza del cap. 1
 #   no los tocan: los ceros en habitaciones y baños quedaron como limitación
 #   abierta (sección 1.5.4).
-# - Están **sobre-representados en estratos altos**: el 25.3 % son estratos
-#   5–6, frente al 11.7 % del resto (y solo 11.0 % son estrato 1 frente a
-#   25.6 %). Eliminarlos quitaría justo casos de las clases minoritarias.
+# - Están **sobre-representados en estratos altos**: el 20.9 % son estratos
+#   5–6, frente al 10.0 % del resto (y solo 20.9 % son estrato 1 frente a
+#   30.1 %). Eliminarlos quitaría justo casos de las clases minoritarias.
 # - **Decisión:** se conservan; su influencia ya se limita con log1p +
 #   winsorización dentro del Pipeline.
 # ```
@@ -428,22 +431,25 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - **K-Means** elige k = 4, pero la silueta es baja y casi igual en todos
-#   los k (0.205–0.250; k = 3, 4 y 5 quedan en 0.244–0.250): no hay grupos
-#   naturales bien separados, sino un continuo de tipologías.
+# - **K-Means** elige k = 5, pero la silueta es baja (0.19–0.26 para k de 2
+#   a 8; k = 5 queda en 0.26 y k = 6 en 0.25): no hay grupos naturales bien
+#   separados, sino un continuo de tipologías.
 # - Los clústeres se alinean sobre todo con la **tipología**: dos grupos NPH
-#   (casas pequeñas y casas grandes), uno PH (apartamentos) y un grupo
-#   diminuto de 86 unidades PH con `altura` anómala (centroide de −17.4
-#   desviaciones, es decir, altura ≈ 1 frente al 3 casi universal, cap. 5),
-#   91 % estrato 1. Con el estrato la asociación es apenas moderada
-#   (V = 0.31):
-#   - clúster 1 (casas pequeñas, NPH, n = 12 341; área, habitaciones y baños
-#     por debajo de la media): 72 % estratos 1–2;
-#   - clúster 3 (casas grandes, NPH, n = 7 496; área, terreno, habitaciones,
+#   (casas pequeñas y casas grandes), uno PH (apartamentos), uno de
+#   **viviendas informales sin terreno propio** y un grupo diminuto de 74
+#   unidades PH con `altura` anómala (centroide de −18.7 desviaciones, es
+#   decir, altura ≈ 1 frente al 3 casi universal, cap. 5), 88 % estrato 1.
+#   Con el estrato la asociación es apenas moderada (V = 0.31):
+#   - clúster 3 (informales, n = 4 057; terreno 2.2 desviaciones por debajo
+#     de la media, es decir, terreno 0, y pocos baños): **97 % estratos 1–2**.
+#     Es el grupo nuevo que aportan las viviendas ubicadas por su manzana;
+#   - clúster 2 (casas pequeñas, NPH, n = 12 360; área, habitaciones y baños
+#     por debajo de la media, con terreno propio): 68 % estratos 1–2;
+#   - clúster 0 (casas grandes, NPH, n = 6 016; área, terreno, habitaciones,
 #     baños y plantas por encima de la media): mezcla de todos los estratos,
-#     centrada en 2–4 (con 20 % en 5–6);
-#   - clúster 0 (apartamentos PH, n = 10 077; piso alto, poco terreno, más
-#     nuevos): 59 % en estratos 3–4 y 18 % en 5–6, pero también 20 % en
+#     centrada en 2–4 (con 21 % en 5–6);
+#   - clúster 1 (apartamentos PH, n = 7 493; piso alto, poco terreno, más
+#     nuevos): 60 % en estratos 3–4 y 21 % en 5–6, pero también 17 % en
 #     estrato 1.
 # - Dentro de cada tipología hay varios estratos: las variables físicas
 #   separan razonablemente los extremos, pero no las clases intermedias.

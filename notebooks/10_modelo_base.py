@@ -21,8 +21,8 @@
 # logística construida con las decisiones del análisis exploratorio, y supera
 # a las reglas triviales?
 #
-# **Datos:** entrenamiento tras el buffer de 1 km (**138 239 viviendas**)
-# para ajustar el modelo final, y el conjunto de **prueba (59 954)**, que se
+# **Datos:** entrenamiento tras el buffer de 1 km (**144 586 viviendas**)
+# para ajustar el modelo final, y el conjunto de **prueba (65 145)**, que se
 # abre aquí por primera y única vez.
 #
 # **Recorrido:** se preparan los datos y el buffer (10.1); se eligen los
@@ -181,17 +181,18 @@ def pipeline_logistica(conj, **kw):
 # ($\text{SE} = \text{desv. entre folds}/\sqrt{k}$) de la mejor, y entre
 # ellas la de mayor F1 (Breiman et al., 1984; Hastie, Tibshirani y Friedman,
 # 2009, §7.10). Motivo: en la CV espacial la superficie de F1 es plana y el
-# error estándar entre folds (≈0.03–0.04) es del mismo orden que las
+# error estándar entre folds (≈0.03–0.05) es del mismo orden que las
 # diferencias entre combinaciones. Por ejemplo, en el conjunto B sin pesos,
-# C = 0.1, 1 y 10 dan 0.312, 0.308 y 0.311 (mapa de calor más abajo):
-# elegir el máximo a ciegas sería elegir por diferencias de milésimas, que son
-# ruido, y podría llevar a un modelo casi sin regularización, con coeficientes
-# más grandes y peor calibrado. La regla 1-SE hace la elección estable y
-# prefiere el modelo más simple cuando los datos no distinguen entre ellos.
-# Con los datos reales, la regla **actuó en B** (el máximo de la rejilla era
-# C = 0.1 sin pesos y se eligió C = 0.01 sin pesos) y **no fue necesaria en
-# A**, cuyo máximo ya era la combinación más regularizada (ver la salida de
-# la celda siguiente).
+# C = 0.1, 1 y 10 dan 0.341, 0.332 y 0.313 (mapa de calor más abajo):
+# elegir el máximo a ciegas sería elegir por diferencias de centésimas que
+# están dentro del ruido, y podría llevar a un modelo menos regularizado,
+# con coeficientes más grandes y peor calibrado. La regla 1-SE hace la
+# elección estable y prefiere el modelo más simple cuando los datos no
+# distinguen entre ellos. Con los datos reales, la regla **actuó en los dos
+# conjuntos**: en A el máximo de la rejilla era C = 0.1 sin pesos y se eligió
+# C = 0.01 sin pesos; en B el máximo era C = 0.1 sin pesos y se eligió
+# C = 0.01 con `class_weight="balanced"` (ver la salida de la celda
+# siguiente).
 #
 # ```{note}
 # **Sobre la reproducibilidad de la CV.** Tanto la partición train/test
@@ -206,7 +207,7 @@ def pipeline_logistica(conj, **kw):
 # espacial, aun con los mismos datos. Esa sensibilidad es en sí misma un
 # hallazgo: con pocos bloques, **la cifra de CV depende de qué bloques caen
 # en cada fold** y tiene una incertidumbre del orden de la desviación entre
-# folds (≈0.08–0.09 con los datos reales; tabla de comparación más abajo),
+# folds (≈0.06–0.08 con los datos reales; tabla de comparación más abajo),
 # así que diferencias entre modelos de 0.01–0.02 no se interpretan.
 # ```
 
@@ -363,30 +364,33 @@ tabla_cv
 # ```{admonition} Resultado de la validación cruzada espacial
 # :class: note
 # - El buffer de 1 km excluye una fracción desigual del entrenamiento de
-#   cada fold: **de 30.8 % a 51.6 %** (40.9 % en promedio). Los folds 0 y 4
-#   son los más recortados (51.1 % y 51.6 %): el fold 0, el que tiene más
-#   bloques de validación (10), queda con solo 54 062 unidades de
-#   entrenamiento. En el modelo final, train pasa de 218 870 a **138 239**
-#   filas (80 631 excluidas por cercanía a test). Estos porcentajes difieren
-#   del cap. 8.4 (35.7 %) porque aquí los folds se construyen sobre el train
-#   ya depurado de la zona de test.
+#   cada fold: **de 30.6 % a 60.9 %** (42.8 % en promedio). El fold 3 es el
+#   más recortado y queda con solo 42 656 unidades de entrenamiento. En el
+#   modelo final, train pasa de 257 273 a **144 586** filas (112 687
+#   excluidas por cercanía a test). Estos porcentajes difieren del cap. 8.4
+#   (33.1 %) porque aquí los folds se construyen sobre el train ya depurado
+#   de la zona de test.
 # - Ambas logísticas quedan con **C = 0.01** (la regularización más fuerte de
-#   la rejilla); A con **`class_weight="balanced"`** y B sin pesos. En A esa
-#   combinación es directamente el máximo de la rejilla (0.2832); en B la
-#   **regla 1-SE actuó**: el máximo era C = 0.1 sin pesos (0.3118,
-#   SE = 0.030) y se prefirió C = 0.01 sin pesos (0.2988), indistinguible
-#   dentro del ruido y más simple. La superficie de F1 es plana (0.246–0.283
-#   en A y 0.243–0.312 en B, mapa de calor), del orden de uno o dos SE.
-# - F1 macro en CV: Dummy mayoritaria 0.057, estratificada 0.143, uniforme
-#   0.138, moda por zona (2 km) 0.193, **logística A 0.283, logística B
-#   0.299**. Las dos logísticas superan a las Dummy con holgura y a la moda
-#   por zona por ≈0.09–0.11, una diferencia del orden de la desviación entre
-#   folds (0.076–0.086); entre A y B la diferencia (0.016) está muy por debajo
-#   de ese ruido. El desempeño depende mucho de la zona de validación.
+#   la rejilla); A sin pesos y B con **`class_weight="balanced"`**. En los dos
+#   casos **actuó la regla 1-SE**: en A el máximo era C = 0.1 sin pesos
+#   (0.2934, SE = 0.028) y se prefirió C = 0.01 sin pesos (0.2859); en B el
+#   máximo era C = 0.1 sin pesos (0.3413, SE = 0.046) y se prefirió C = 0.01
+#   con pesos (0.3219), indistinguible dentro del ruido y más simple. Con
+#   C = 0.01, en B la versión con pesos y sin pesos casi empatan (0.322 frente
+#   a 0.321): la regla elige la de mayor F1, pero la diferencia es ruido. La
+#   superficie de F1 es plana (0.285–0.293 en A y 0.266–0.341 en B, mapa de
+#   calor), del orden de uno o dos SE.
+# - F1 macro en CV: Dummy mayoritaria 0.072, estratificada 0.153, uniforme
+#   0.141, moda por zona (4 km, el tamaño elegido por CV) 0.187, **logística
+#   A 0.286, logística B 0.322**. Las dos logísticas superan a las Dummy con
+#   holgura y a la moda por zona por ≈0.10–0.14, una diferencia algo mayor
+#   que la desviación entre folds (0.059–0.085); entre A y B la diferencia
+#   (0.036) está por debajo de ese ruido. El desempeño depende mucho de la
+#   zona de validación.
 # - Por la regla fijada de antemano (mayor F1 macro en CV espacial de la
 #   combinación elegida, sin mirar test), el **modelo principal es B**
-#   (variables físicas + ubicación). La diferencia con A (0.299 frente a
-#   0.283) es ruido, y A se evalúa igual en test como comparación.
+#   (variables físicas + ubicación). La diferencia con A (0.322 frente a
+#   0.286) es ruido en la CV, y A se evalúa igual en test como comparación.
 # ```
 
 # %% [markdown]
@@ -458,20 +462,21 @@ pd.DataFrame(sens)
 # optimismo espacial que se quiere quitar) y (ii) se entrena con menos datos y
 # se obliga al modelo a **extrapolar** a zonas más lejanas.
 #
-# Con los datos reales (modelo principal B): **sin buffer 0.404 → 0.351 con
-# 0.5 km → 0.299 con 1 km (elegido) → 0.178 con el alcance completo (2.9 km)**,
-# que deja fuera el 88 % del entrenamiento de los folds (frente al 41 % con
+# Con los datos reales (modelo principal B): **sin buffer 0.408 → 0.372 con
+# 0.5 km → 0.322 con 1 km (elegido) → 0.146 con el alcance completo (2.6 km)**,
+# que deja fuera el 87 % del entrenamiento de los folds (frente al 43 % con
 # 1 km). Ese último valor es un escenario pesimista (el modelo casi no tiene
-# datos), no una estimación realista. La caída de 0.105 entre 0 y 1 km mide
+# datos), no una estimación realista. La caída de 0.086 entre 0 y 1 km mide
 # cuánto del desempeño depende de tener vecinos del mismo barrio en
-# entrenamiento; es mayor que la desviación entre folds (0.039 sin buffer,
-# 0.086 con 1 km), así que el efecto del buffer es claro, aunque su tamaño
-# exacto dependa de los folds. Comparado con la validación **aleatoria**
-# (0.602, sección anterior), el optimismo total de ignorar el espacio es de
-# **0.30 puntos de F1**: la validación aleatoria **duplicaría** el desempeño
-# reportado (0.602 frente a 0.299, con desviación de solo 0.004 entre folds
-# aleatorios). Como B incluye las coordenadas, con folds aleatorios el modelo
-# puede "reconocer" la zona a través de x e y en lugar de generalizar.
+# entrenamiento. Es del mismo orden que la desviación entre folds (0.120 sin
+# buffer, 0.085 con 1 km): el F1 baja de forma monótona con el buffer, pero
+# su tamaño exacto depende de los folds. Comparado con la validación
+# **aleatoria** (0.620, sección anterior), el optimismo total de ignorar el
+# espacio es de **0.30 puntos de F1**: la validación aleatoria **casi
+# duplicaría** el desempeño reportado (0.620 frente a 0.322, con desviación
+# de solo 0.002 entre folds aleatorios). Como B incluye las coordenadas, con
+# folds aleatorios el modelo puede "reconocer" la zona a través de x e y en
+# lugar de generalizar.
 # ```
 
 # %% [markdown]
@@ -517,20 +522,21 @@ pd.DataFrame({"n": tam, "F1 train": sc_tr.mean(1), "F1 validación": sc_va.mean(
 #   moderada que no cierra puede venir del **cambio de dominio espacial**:
 #   validar en barrios no vistos es más difícil que entrenar.
 #
-# **Con los datos reales (modelo B):** la validación es **casi plana**: pasa
-# de 0.272 con 2 703 unidades a 0.295 con 54 062, es decir, multiplicar por
-# 20 los datos mejora el F1 en solo 0.02 (menos que la desviación entre
-# folds, banda roja). El eje llega a 54 062 unidades porque `learning_curve`
-# toma como 100 % el entrenamiento del primer fold, el más pequeño tras el
-# buffer. El F1 de entrenamiento **sube** con n (de 0.48 a 0.59) en lugar de
-# bajar, y la brecha crece de 0.21 a 0.30. Una explicación probable es que en
-# scikit-learn `C` multiplica la **suma** de las pérdidas: con C fijo, a más
-# filas el peso relativo de la penalización L2 disminuye y el modelo ajusta
-# más el entrenamiento. Con n ≫ p la brecha no es sobreajuste clásico: es
-# **cambio de dominio**. Lo que el modelo aprende en unas zonas no se
-# transfiere a otras (cap. 8.5: heterogeneidad espacial). **Conclusión:** más
-# filas ayudan poco; para mejorar hace falta un modelo más flexible o mejores
-# variables (del entorno).
+# **Con los datos reales (modelo B):** la validación es **plana**: pasa de
+# 0.325 con 4 016 unidades a 0.322 con 80 338 (máximo 0.331 con 20 084), es
+# decir, multiplicar por 20 los datos no mejora el F1 (las diferencias son
+# mucho menores que la desviación entre folds, banda roja). El eje llega a
+# 80 338 unidades porque `learning_curve` toma como 100 % el entrenamiento
+# del primer fold; en los folds con menos entrenamiento (42 656 en el fold 3)
+# los últimos puntos usan todo el que tienen. El F1 de entrenamiento **sube**
+# con n (de 0.53 a 0.58) en lugar de bajar, y la brecha crece de 0.20 a 0.25.
+# Una explicación probable es que en scikit-learn `C` multiplica la **suma**
+# de las pérdidas: con C fijo, a más filas el peso relativo de la
+# penalización L2 disminuye y el modelo ajusta más el entrenamiento. Con
+# n ≫ p la brecha no es sobreajuste clásico: es **cambio de dominio**. Lo que
+# el modelo aprende en unas zonas no se transfiere a otras (cap. 8.5:
+# heterogeneidad espacial). **Conclusión:** más filas no ayudan; para mejorar
+# hace falta un modelo más flexible o mejores variables (del entorno).
 # ```
 
 # %% [markdown]
@@ -585,21 +591,21 @@ ic
 # :class: important
 # El bootstrap remuestrea **bloques** completos porque las filas de un mismo
 # bloque no son independientes. Con solo **7 bloques de prueba**, los
-# intervalos son muy anchos: para el modelo principal (B), F1 macro **0.450
-# con IC 95 % [0.16, 0.46]**, accuracy 0.598 [0.36, 0.81], MAE ordinal 0.46
-# [0.21, 0.74] y kappa cuadrático 0.81 [0.14, 0.91]. Es la forma honesta de
+# intervalos son muy anchos: para el modelo principal (B), F1 macro **0.492
+# con IC 95 % [0.28, 0.51]**, accuracy 0.611 [0.43, 0.85], MAE ordinal 0.44
+# [0.18, 0.68] y kappa cuadrático 0.84 [0.50, 0.88]. Es la forma honesta de
 # decir que el resultado depende mucho de qué zonas de la ciudad quedaron en
 # test.
 #
 # El intervalo del F1 es **asimétrico** (el valor observado está casi en el
-# límite superior, 0.450 frente a 0.463): cuando una réplica bootstrap no
+# límite superior, 0.492 frente a 0.514): cuando una réplica bootstrap no
 # incluye los bloques que concentran el estrato 6 o el 5, el F1 de esa clase
-# cae a 0 y arrastra el promedio macro. Además, el F1 en test (0.450) es
-# bastante mayor que el de la CV espacial (0.299 ± 0.086). Dos razones
+# cae a 0 y arrastra el promedio macro. Además, el F1 en test (0.492) es
+# bastante mayor que el de la CV espacial (0.322 ± 0.085). Dos razones
 # probables: el test es una realización favorable (7 bloques con pocas
-# unidades de estrato 6, 1.3 % frente a 5.7 % en train, cap. 2), y el modelo
-# final se entrena con 138 239 unidades, entre 1.9 y 2.6 veces las de los
-# folds (54 062–73 690). **La cifra más representativa del desempeño en zonas
+# unidades de estrato 6, 1.2 % frente a 4.8 % en train, cap. 2), y el modelo
+# final se entrena con 144 586 unidades, entre 1.8 y 3.4 veces las de los
+# folds (42 656–80 338). **La cifra más representativa del desempeño en zonas
 # nuevas es la de la CV espacial**, y la de test es una realización
 # favorable.
 # ```
@@ -721,16 +727,19 @@ plt.show()
 # de la clase ("base"), no 0.5. Para los estratos 5 y 6 (minoritarios) la PR
 # es la curva a mirar.
 #
-# **Con los datos reales (modelo B):** el AUC por estrato va de 0.81 (estrato
-# 3, el de ordenamiento más débil) a 0.96 (estrato 1, con AP 0.94). Los
-# estratos 5 y 6 tienen AUC de 0.88 y 0.89, pero su precisión promedio (AP)
-# es de solo 0.24 y 0.22, frente a prevalencias de 0.06 y 0.01: ordenan bien,
+# **Con los datos reales (modelo B):** el AUC por estrato va de 0.83 (estrato
+# 3, el de ordenamiento más débil) a 0.95 (estrato 1, con AP 0.92). Los
+# estratos 5 y 6 tienen AUC de 0.91 y 0.93, pero su precisión promedio (AP)
+# es de solo 0.27 y 0.24, frente a prevalencias de 0.05 y 0.01: ordenan bien,
 # pero no alcanzan para decidir con confianza. El caso llamativo es el
-# **estrato 2**: AUC 0.86 y AP 0.57 (base 0.21), es decir, sus probabilidades
-# lo ordenan razonablemente, y sin embargo su recall con la regla del
-# argmax es de solo 0.06 (reporte por clase). El problema del estrato 2 no
-# es de ordenamiento sino de **umbral y calibración**: su probabilidad queda
-# casi siempre por debajo de la del estrato 3 (ver calibración).
+# **estrato 4**: AUC 0.93 y AP 0.65 (base 0.19), es decir, sus probabilidades
+# lo ordenan muy bien, y sin embargo su recall con la regla del argmax es de
+# solo 0.28 (reporte por clase). El problema del estrato 4 no es de
+# ordenamiento sino de **umbral y calibración**: su probabilidad queda casi
+# siempre por debajo de la del estrato 3 o la del 5 (ver calibración). En la
+# versión anterior del libro, sin pesos de clase, el mismo problema lo tenía
+# el estrato 2; con `class_weight="balanced"` el estrato 2 se recupera
+# (recall 0.60) y el que queda absorbido es el 4.
 # ```
 
 # %% [markdown]
@@ -811,7 +820,8 @@ for nombre in [f"Logística {k}" for k in busquedas]:
     t = test.assign(residuo=y_te - esperado)
     # Una fila por edificio (residuo promedio): las unidades de un mismo edificio
     # comparten coordenada y casi siempre estrato, e inflarían artificialmente I.
-    e = S.deduplicar_por_edificio(t[["npn_edificio", "x_km", "y_km", "residuo"]])
+    # Las viviendas ubicadas por su manzana cuentan como un punto por manzana.
+    e = S.deduplicar_por_edificio(t[["npn_edificio", "x_km", "y_km", "ubicado_por_manzana", "residuo"]])
     # Matriz de pesos W de k vecinos más cercanos, estandarizada por filas: kNN y no
     # banda fija porque la densidad de edificios es muy desigual en la ciudad.
     Wt, _, _ = S.pesos_knn(e[["x_km", "y_km"]].to_numpy(), k=C.K_VECINOS)
@@ -843,35 +853,32 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - **Los errores se agrupan por zonas**: Moran's I de los residuos = **0.70**
-#   en el modelo principal B y **0.34** en el A (ambos con p = 0.002, sobre
-#   27 239 edificios de test). Hay barrios enteros que el modelo sobreestima o
-#   subestima: el estrato depende del **entorno** (vías, espacio público,
+# - **Los errores se agrupan por zonas**: Moran's I de los residuos = **0.56**
+#   en el modelo principal B y **0.47** en el A (ambos con p = 0.002, sobre
+#   25 031 edificios de test; las viviendas ubicadas por su manzana cuentan
+#   como un punto por manzana). Hay barrios enteros que el modelo sobreestima
+#   o subestima: el estrato depende del **entorno** (vías, espacio público,
 #   servicios, historia del barrio) que las variables de la vivienda no
 #   describen.
 # - Que B tenga **más** autocorrelación residual que A no significa que la
-#   ubicación empeore el modelo (B tiene menor sesgo medio y mejores métricas
-#   ordinales en test). A predice unidad por unidad con variables
-#   físicas "ruidosas", y ese ruido diluye el patrón espacial de sus
-#   residuos. B suaviza sus predicciones con la tendencia norte-sur, y lo que
-#   queda como residuo son justamente las **desviaciones locales** respecto a
-#   esa tendencia, que son muy espaciales. La tendencia lineal capta la gran
-#   escala, pero no los barrios.
-# - **Sesgo:** el residuo medio es **−0.14 estratos** en B (sobreestima
-#   levemente en promedio) y −0.26 en A, cuyo `class_weight="balanced"` sube
-#   la probabilidad de las clases altas (minoritarias en train) y contribuye
-#   a una sobreestimación mayor. En el mapa de B se ven tres patrones: (i) el
-#   bloque central del test (x ≈ −5 a −3 km) se parte en dos, con su mitad
-#   norte (y > 0 km) **subestimada** (rojo, hasta ≈ +1 estrato en el borde
-#   norte) y su mitad sur (y < −0.5 km) mayormente **sobreestimada** (azul):
-#   dentro de esa zona el estrato cambia más rápido de lo que permite la
-#   tendencia lineal; (ii) la franja oriental (x ≈ −1 a 1 km) está casi toda
-#   **sobreestimada**, con la sobreestimación más fuerte (azul oscuro, hasta
-#   −1.5 estratos) en su borde este, entre y ≈ −1 y −3.5 km; y (iii) el grupo
-#   aislado del suroccidente (x ≈ −9 a −7 km) queda cerca de 0, salvo un
-#   pequeño núcleo subestimado hacia x ≈ −7 km, y ≈ −2.5 km. La
-#   sobreestimación dominante es coherente con la matriz de confusión: el
-#   83 % del estrato 2 se predice como 3.
+#   ubicación empeore el modelo (B tiene mejores métricas en test). A predice
+#   unidad por unidad con variables físicas "ruidosas", y ese ruido diluye el
+#   patrón espacial de sus residuos. B suaviza sus predicciones con la
+#   tendencia norte-sur, y lo que queda como residuo son justamente las
+#   **desviaciones locales** respecto a esa tendencia, que son muy
+#   espaciales. La tendencia lineal capta la gran escala, pero no los barrios.
+# - **Sesgo:** el residuo medio es prácticamente 0 en B (+0.003 estratos) y
+#   +0.03 en A: ninguno sobreestima o subestima en promedio. Los errores se
+#   compensan entre zonas. En el mapa de B se ven tres patrones: (i) el bloque
+#   central del test (x ≈ −5 a −3 km) se parte en dos, con su mitad norte
+#   (y > −0.5 km) **subestimada** (rojo, hasta ≈ +1.5 estratos en la esquina
+#   noroccidental) y su mitad sur (y < −1 km) mayormente **sobreestimada**
+#   (azul), salvo su borde oriental: dentro de esa zona el estrato cambia más
+#   rápido de lo que permite la tendencia lineal; (ii) el bloque aislado del
+#   norte (x ≈ −3 km, y ≈ 4.5 km) está fuertemente **sobreestimado** (hasta
+#   −1.5 estratos): la tendencia norte-sur le asigna estratos altos que no
+#   tiene; y (iii) el grupo del sureste (x ≈ −1 a 1 km) queda levemente
+#   subestimado y los del suroccidente (x ≈ −9 a −7 km), cerca de 0.
 # - Mejoras (entregable 2): rezagos espaciales de variables **físicas**
 #   (nunca del objetivo), interacciones o modelos no lineales (árboles,
 #   boosting) y variables del entorno.
@@ -982,6 +989,7 @@ salida = {
     # str() para que None y los floats de la rejilla se guarden sin problemas.
     "mejores_hiperparametros": {k: {kk: str(vv) for kk, vv in v.best_params_.items()} for k, v in busquedas.items()},
     "n_train_final": int(len(train)), "n_test": int(len(test)), "buffer_km": buffer_km,
+    "tam_zona_moda_km": float(tam_zona),
 }
 (C.CARPETA_PROCESADOS / "resultados_modelo.json").write_text(json.dumps(salida, indent=2, ensure_ascii=False),
                                                               encoding="utf-8")
@@ -996,104 +1004,109 @@ resultados.loc[:, ["accuracy", "balanced_accuracy", "f1_macro", "AUC_OvR_macro",
 # **1. ¿Supera a las líneas base?** A las triviales, con claridad; a la
 # espacial, en todas las métricas, pero en F1 macro sin significancia
 # estadística. El modelo principal (B: variables físicas + ubicación;
-# C = 0.01, sin pesos de clase) logra en test **F1 macro 0.450**, balanced
-# accuracy 0.469, AUC OvR 0.886 y accuracy 0.598, frente a 0.075 de F1 de la
-# Dummy mayoritaria (Δ = +0.375, IC 95 % [0.11, 0.39], p = 0.002) y 0.167 de
-# la estratificada (Δ = +0.283, IC [0.03, 0.31], p = 0.028). Frente a la
-# **moda por zona de 2 km** (una regla sin variables físicas: "predice el
-# estrato más común de tu zona en train"; F1 0.328) la diferencia de F1 es
-# +0.122, pero su IC [−0.01, 0.19] incluye 0 (p = 0.124): con 7 bloques de
+# C = 0.01, `class_weight="balanced"`) logra en test **F1 macro 0.492**,
+# balanced accuracy 0.499, AUC OvR 0.901 y accuracy 0.611, frente a 0.087 de
+# F1 de la Dummy mayoritaria (Δ = +0.405, IC 95 % [0.10, 0.44], p = 0.012) y
+# 0.165 de la estratificada (Δ = +0.327, IC [0.14, 0.35], p = 0.002). Frente
+# a la **moda por zona de 4 km** (una regla sin variables físicas: "predice
+# el estrato más común de tu zona en train"; F1 0.351) la diferencia de F1 es
+# +0.141, pero su IC [−0.12, 0.17] incluye 0 (p = 0.50): con 7 bloques de
 # test no alcanza para declararla significativa. Descriptivamente, B la
-# supera en todo: accuracy 0.598 frente a 0.481, MAE ordinal 0.46 frente a
-# 0.94, kappa cuadrático 0.81 frente a 0.43, accuracy ±1 0.94 frente a 0.75 y
-# log loss 1.03 frente a 2.58. En CV espacial ocurre lo mismo: 0.299 frente a
-# 0.193, con desviaciones entre folds de 0.086 y 0.076.
+# supera en todo: accuracy 0.611 frente a 0.584, MAE ordinal 0.44 frente a
+# 0.52, kappa cuadrático 0.84 frente a 0.77, accuracy ±1 0.96 frente a 0.91
+# y log loss 0.91 frente a 1.49. En CV espacial ocurre lo mismo: 0.322 frente
+# a 0.187, con desviaciones entre folds de 0.085 y 0.059.
 #
-# **2. ¿Cuánto aporta la ubicación?** CV y test apuntan en la misma
-# dirección, con distinta fuerza. En la CV espacial la ventaja de B sobre A
-# es mínima (0.299 frente a 0.283, dentro del ruido). En test, B supera a A
-# por 0.10 de F1 (0.450 frente a 0.349), aunque esa diferencia tiene IC
-# [−0.05, 0.14], que incluye 0 (p = 0.31); la ventaja es más nítida en
-# accuracy (0.60 frente a 0.42), error ordinal (MAE 0.46 frente a 0.82;
-# accuracy ±1 0.94 frente a 0.80), kappa (0.81 frente a 0.65), AUC (0.89
-# frente a 0.80), log loss (1.03 frente a 1.35) y Brier (0.55 frente a 0.69).
-# La importancia por permutación (punto 7) va en la misma línea: las tres
-# variables de ubicación son las más importantes. Lectura prudente: las
-# coordenadas, como tendencia lineal, ayudan sobre todo a no equivocarse "por
-# mucho"; con 7 bloques de test y una CV tan variable, el tamaño de su aporte
-# al F1 macro no puede fijarse con precisión. Aun sin ubicación, A iguala o
-# supera a la moda por zona en F1 (0.349 frente a 0.328), MAE (0.82 frente a
-# 0.94) y kappa (0.65 frente a 0.43), aunque no en accuracy (0.42 frente a
-# 0.48).
+# **2. ¿Cuánto aporta la ubicación?** En test, B supera a A por 0.12 de F1
+# (0.492 frente a 0.370), con IC [0.03, 0.15] que **excluye 0** (p = 0.008);
+# la ventaja también es clara en accuracy (0.61 frente a 0.47), error ordinal
+# (MAE 0.44 frente a 0.71; accuracy ±1 0.96 frente a 0.84), kappa (0.84
+# frente a 0.67), AUC (0.90 frente a 0.82), log loss (0.91 frente a 1.20) y
+# Brier (0.50 frente a 0.64). En la CV espacial la ventaja es menor y queda
+# dentro del ruido (0.322 frente a 0.286). La importancia por permutación
+# (punto 7) matiza esta lectura: en el fold 0 de la CV, permutar `x_km` o
+# `y_km` **mejora** el F1. Lectura prudente: las coordenadas, como tendencia
+# lineal, ayudan sobre todo a no equivocarse "por mucho", pero lo que aportan
+# depende de la zona; con 7 bloques de test y una CV tan variable, el tamaño
+# de su aporte no puede fijarse con precisión. Sin ubicación, A supera a la
+# moda por zona en F1 (0.370 frente a 0.351), pero no en accuracy (0.47
+# frente a 0.58), MAE (0.71 frente a 0.52) ni kappa (0.67 frente a 0.77).
 #
 # **3. ¿Dónde se equivoca?** Según la matriz de confusión normalizada, el
-# modelo reconoce muy bien el estrato 1 (recall 0.87, precisión 0.91; de sus
-# errores, el grueso, 11 % del estrato, se predice como 3) y razonablemente el 4 (recall 0.60; el 30 % se
-# predice como 3 y el 10 % como 5). Los problemas son dos desplazamientos
-# hacia el centro de la escala: (i) **el estrato 2 casi nunca se predice**
-# (recall 0.06): el **83 %** de sus unidades (10 515 de 12 744) se clasifica
-# como 3 y el 11 % como 1. El estrato 3 funciona como clase "refugio": el
-# modelo lo predice para 28 622 unidades (48 % del test, cuando el 22 % es
-# realmente estrato 3), de ahí su recall alto (0.88) y su precisión baja
-# (0.42). (ii) Los estratos altos se "bajan" a 4: el **56 %** del estrato 5 y
-# el **56 %** del 6 se predicen como 4; el 5 acierta solo el 19 % y el 6 el
-# 21 %. Los errores son casi siempre entre estratos adyacentes: accuracy ±1
-# de 0.94 (solo ≈6 % de las unidades se equivoca por dos estratos o más),
-# frente a 0.80 de A y 0.75 de la moda por zona. Entre los estratos 2 y 3
-# (26 203 unidades) el 89 % se predice como 2 o 3, pero casi todo como 3: se
-# separan bien de los extremos, no entre sí. En 5 y 6 la precisión es baja
-# (0.29 y 0.38): el AP del estrato 6 es 0.22 frente a una prevalencia de
-# 1.3 % en test (unas 17 veces el azar), insuficiente aún para usarlo como
-# clasificador.
+# modelo reconoce bien el estrato 1 (recall 0.79, precisión 0.85; el 18 % se
+# predice como 2), el 2 (recall 0.60; el 24 % se predice como 1 y el 14 %
+# como 3) y el 3 (recall 0.70; el 23 % se predice como 2). Los problemas
+# están en la mitad alta de la escala: (i) **el estrato 4 casi nunca gana**
+# (recall 0.28): el **48 %** de sus unidades (5 925 de 12 250) se clasifica
+# como 3 y el 22 % como 5. El estrato 3 funciona como clase "refugio": el
+# modelo lo predice para 18 218 unidades (28 % del test, cuando el 19 % es
+# realmente estrato 3), de ahí su recall alto (0.70) y su precisión baja
+# (0.48). (ii) Los estratos 5 y 6 se confunden entre sí y con el 4: el 5
+# acierta el 42 % (28 % va a 3 y 26 % a 4) y el 6 solo el 21 % (36 % va a 5
+# y 30 % a 4). Los errores son casi siempre entre estratos adyacentes:
+# accuracy ±1 de 0.96 (solo ≈4 % de las unidades se equivoca por dos
+# estratos o más), frente a 0.84 de A y 0.91 de la moda por zona. Entre los
+# estratos 2 y 3 (25 644 unidades) el 83 % se predice como 2 o 3. En 5 y 6
+# la precisión es baja (0.29 y 0.38): el AP del estrato 6 es 0.24 frente a
+# una prevalencia de 1.2 % en test (unas 20 veces el azar), insuficiente aún
+# para usarlo como clasificador.
 #
-# **4. ¿Confianza en las probabilidades?** Limitada: ECE = 0.14 y Brier 0.55.
-# Sin reponderado de clases, la distorsión no viene de `balanced` sino del
-# desplazamiento hacia el estrato 3: en las curvas de calibración el estrato
-# 3 está **sobreestimado** (cuando el modelo promete 70–90 %, se observa
-# 44–49 %) y el 2 **subestimado** (con ≈20 % prometido se observa ≈61 %, y
-# con ≈41 %, ≈64 %). Eso explica que el 2 pierda casi siempre el argmax frente
-# al 3 pese a su AUC de 0.86. El estrato 1 está bien calibrado; el 4,
-# ligeramente subestimado (promete ≈63 %, se observa ≈72 %); el 5,
-# sobreestimado en su tramo alto (promete ≈36 %, se observa ≈26 %), y el 6
-# nunca recibe más de ≈15 % de probabilidad (se observa ≈7 %). Si se van a
-# usar como probabilidades, o para ajustar umbrales por clase (lo que
-# podría recuperar parte del estrato 2), hay que recalibrarlas (entregable 2).
+# **4. ¿Confianza en las probabilidades?** Aceptable en conjunto, desigual
+# por clase: ECE = 0.03 (la probabilidad de la clase predicha corresponde a
+# su tasa de acierto) y Brier 0.50. Por clase, la reponderación
+# `class_weight="balanced"` deja su huella: el estrato 1, el más frecuente
+# en train y el de menor peso, está **subestimado** (con ≈43 % prometido se
+# observa ≈61 %, y con ≈71 %, ≈88 %), y el 4 también (con ≈14 % prometido se
+# observa ≈43 %, y con ≈47 %, ≈70 %). En cambio, el 2 y el 3 están
+# **sobreestimados** en su tramo medio (el 2 promete ≈44 % y se observa
+# ≈30 %; el 3 promete ≈32 % y se observa ≈17 %), igual que el 5 (promete
+# ≈48 %, se observa ≈28 %) y el 6 (promete ≈13 %, se observa ≈8 %). Eso
+# explica que el 4 pierda casi siempre el argmax frente al 3 y al 5 pese a
+# su AUC de 0.93. Si se van a usar como probabilidades, o para ajustar
+# umbrales por clase (lo que podría recuperar parte del estrato 4), hay que
+# recalibrarlas por clase (entregable 2).
 #
-# **5. ¿Queda estructura?** Sí: Moran de residuos 0.70 (B) y 0.34 (A), ambos
+# **5. ¿Queda estructura?** Sí: Moran de residuos 0.56 (B) y 0.47 (A), ambos
 # con p = 0.002, con errores agrupados por zonas (sección 10.5): mitad norte
-# del bloque central subestimada y franja oriental sobreestimada.
+# del bloque central subestimada, mitad sur y bloque del norte
+# sobreestimados.
 #
-# **6. ¿Más datos ayudarían?** Poco: en la curva de aprendizaje el F1 de
-# validación pasa de 0.27 a 0.29 al multiplicar por 20 los datos (de 2 703 a
-# 54 062 unidades). El límite es el modelo lineal y la falta de variables del
+# **6. ¿Más datos ayudarían?** No: en la curva de aprendizaje el F1 de
+# validación queda en 0.32–0.33 al multiplicar por 20 los datos (de 4 016 a
+# 80 338 unidades). El límite es el modelo lineal y la falta de variables del
 # entorno.
 #
 # **7. Coeficientes e importancia.** En B, la señal más fuerte es la
-# **posición norte-sur** (`y_km`: β6−β1 = 5.1 por DE; OR 165), coherente con
-# el gradiente norte-sur del estrato (cap. 4.3 y 8.2); `x_km` (0.8) y
-# `dist_centro_km` (−1.1) completan la tendencia espacial y, por la cautela
-# (ii), se leen en conjunto con ella. Entre las físicas, hacia estratos altos
-# empujan el **área construida** (3.4; OR 30), más **baños** (1.4), ser
-# unidad predial en PH (1.4), apartamento en edificio PH de 4 o más pisos
-# (1.3) y un piso más alto (`planta_ubicacion`, 0.7). Con el área fija, **más
-# habitaciones** empuja hacia estratos bajos (−1.1: habitaciones más
-# pequeñas), igual que ser vivienda de hasta 3 pisos (−1.3), predio
-# `Informal` (−1.1) o tener más área de terreno (−1.0). La importancia por
-# permutación (fold 0 de la CV, 54 062 unidades de entrenamiento) pone
-# primero a las tres variables de ubicación (caídas de F1 de 0.13, 0.12 y
-# 0.10 para distancia al centro, x e y), seguidas de `condicion_predio`, área
-# construida y `uso` (≈0.05 cada una) y área de terreno (0.04); planta,
-# habitaciones, baños y tipo de vivienda aportan 0.01–0.02, y total de
-# plantas, altura y antigüedad prácticamente nada (antigüedad −0.002 ± 0.004,
-# indistinguible de 0). Se calculó en un solo fold y debe leerse como pista,
-# no como resultado firme.
+# **posición norte-sur** (`y_km`: β6−β1 = 6.1 por DE; OR 451), coherente con
+# el gradiente norte-sur del estrato (cap. 4.3 y 8.2); `dist_centro_km`
+# (−1.0) completa la tendencia espacial y `x_km` casi no separa el 6 del 1
+# (≈0); por la cautela (ii), se leen en conjunto. Entre las físicas, hacia
+# estratos altos empujan el **área construida** (2.9; OR 18), ser
+# apartamento en edificio PH de 4 o más pisos (1.8), unidad predial en PH
+# (1.7), más **baños** (1.4), vivienda No VIS (`tv_3`, 0.9) y un piso más
+# alto (`planta_ubicacion`, 0.7). Hacia estratos bajos empujan ser predio
+# **`Informal`** (−2.0; OR 0.13), vivienda de hasta 3 pisos (−1.5) y, con el
+# área fija, **más habitaciones** (−1.4: habitaciones más pequeñas). El
+# terreno, que en la versión anterior empujaba hacia estratos bajos (−1.0),
+# ahora casi no separa el 6 del 1: los ceros de las mejoras en terreno ajeno
+# (cap. 5.6) y la categoría `Informal` se reparten esa información. La
+# importancia por permutación (fold 0 de la CV: 80 338 unidades de
+# entrenamiento y 9 bloques de validación) pone primero a la distancia al
+# centro (caída de F1 de 0.054) y a `uso` (0.028); antigüedad y
+# `condicion_predio` aportan menos de 0.01 y el resto prácticamente nada. Lo
+# llamativo es que `x_km` (−0.059) e `y_km` (−0.042) tienen importancia
+# **negativa**: en esas zonas de validación, desordenar las coordenadas
+# **mejora** el F1, porque la tendencia lineal aprendida en el resto de la
+# ciudad no se cumple allí. Es la misma heterogeneidad espacial del cap. 8.5.
+# Se calculó en un solo fold y debe leerse como pista, no como resultado
+# firme.
 #
-# **8. ¿Desempeño sospechoso?** No. El accuracy (0.598) está lejos del umbral
+# **8. ¿Desempeño sospechoso?** No. El accuracy (0.611) está lejos del umbral
 # de alerta de 0.80, la auditoría de fuga no encontró proxies (cap. 9) y la
-# validación respeta edificios y bloques. El accuracy ±1 (0.94) y el kappa
-# (0.81) son altos porque casi todos los errores son de un solo estrato, no
+# validación respeta edificios y bloques. El accuracy ±1 (0.96) y el kappa
+# (0.84) son altos porque casi todos los errores son de un solo estrato, no
 # por fuga. La cifra más honesta del desempeño esperado en zonas nuevas es
-# la de la CV espacial, **F1 macro ≈ 0.30 ± 0.09**, con la advertencia de que
+# la de la CV espacial, **F1 macro ≈ 0.32 ± 0.09**, con la advertencia de que
 # esa cifra depende de cómo se asignen los bloques a los folds (sección
-# 10.2); el 0.45 de test es una realización favorable.
+# 10.2); el 0.49 de test es una realización favorable.
 # ```

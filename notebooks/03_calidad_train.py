@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿cómo tratar los datos faltantes y los valores
 # extremos, y a quién deja fuera el modelo?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento** (capítulo 2). A
+# **Datos:** las **257 273 viviendas de entrenamiento** (capítulo 2). A
 # partir de aquí y hasta el capítulo 9 no se mira el conjunto de prueba.
 #
 # **Conceptos nuevos:** mecanismos de faltantes (MCAR, MAR, MNAR), diferencia
@@ -235,36 +235,39 @@ mecanismo
 # ```{admonition} Interpretación y decisión
 # :class: note
 # - **Los faltantes son mínimos.** En train, la variable con más nulos es
-#   `total_habitaciones` con **271 (0.12 %)**; luego `planta_ubicacion` con
-#   237 (0.11 %), `antiguedad` con 129 (0.06 %), baños con 28 (0.01 %) y
-#   plantas con 1. Todos provienen de las reglas del capítulo 1, no de celdas
-#   vacías en origen: pisos codificados (97–99) y años centinela (paso 4), e
-#   incoherencias dentro de la fila (paso 5). La columna "origen principal"
-#   lo confirma: planta y plantas salen como "valor imposible", antigüedad
-#   como "año imposible", y habitaciones y baños como "incoherencia en la
-#   fila" (bandera `flag_incoherente_*`), igual que en el dataset completo,
-#   donde todos los nulos de habitaciones (0.107 %) y de baños (0.012 %) son
-#   incoherencias (cap. 1, columna "de ellos, por incoherencia"). Las
-#   variables sin nulos aparecen como "faltante en origen" solo porque es la
-#   etiqueta por defecto de la tabla.
+#   `total_habitaciones` con **320 (0.12 %)**; luego `planta_ubicacion` con
+#   237 (0.09 %), `antiguedad` con 128 (0.05 %), baños con 29 (0.01 %),
+#   terreno con 4 y plantas con 3. Casi todos provienen de las reglas del
+#   capítulo 1, no de celdas vacías en origen: pisos codificados (97–99) y
+#   años centinela (paso 4), e incoherencias dentro de la fila (paso 5). La
+#   columna "origen principal" lo confirma: planta y plantas salen como
+#   "valor imposible", antigüedad como "año imposible", y habitaciones y
+#   baños como "incoherencia en la fila" (bandera `flag_incoherente_*`),
+#   igual que en el dataset completo, donde todos los nulos de habitaciones
+#   (0.107 %) y de baños (0.012 %) son incoherencias (cap. 1, columna "de
+#   ellos, por incoherencia"). Los 4 nulos de `area_catastral_terreno` sí
+#   vienen vacíos en origen: son viviendas informales, 3 de ellas ubicadas
+#   por su manzana (sección 1.7.2). Las variables sin
+#   nulos aparecen como "faltante en origen" solo porque es la etiqueta por
+#   defecto de la tabla.
 # - **Baños** tiene menos de 30 nulos y queda fuera del diagnóstico de
 #   mecanismo: no hay base para evaluarlo.
 # - **Habitaciones** es **MAR**, pero por construcción: su nulo se predice casi
 #   perfectamente (AUC = 0.997) y la mayor diferencia está en
-#   `area_construida` (|SMD| = 1.63), porque la regla anula las habitaciones
+#   `area_construida` (|SMD| = 1.62), porque la regla anula las habitaciones
 #   cuando el área por habitación es menor de 6 m². El faltante depende de
 #   una variable observada (el área), no del azar.
 # - **Piso de ubicación** es **MAR**: su nulo se predice casi perfectamente
-#   (AUC = 0.963) y la mayor diferencia está en `total_habitaciones`
-#   (|SMD| = 1.65); el 0.3 % de las unidades de estrato 3 tiene un código de
+#   (AUC = 0.969) y la mayor diferencia está en `total_habitaciones`
+#   (|SMD| = 1.59); el 0.3 % de las unidades de estrato 3 tiene un código de
 #   piso, frente a ≤ 0.2 % en el resto. El código se concentra en ciertos
 #   edificios o sectores, no al azar.
 # - **Antigüedad** es **MAR**: su nulo se predice casi perfectamente con las
-#   variables observadas (AUC = 0.971) y la mayor diferencia estandarizada
-#   está en `y_km` (|SMD| = 1.96), es decir, los años faltantes se concentran
+#   variables observadas (AUC = 0.984) y la mayor diferencia estandarizada
+#   está en `y_km` (|SMD| = 2.10), es decir, los años faltantes se concentran
 #   en una zona concreta de la ciudad (0.3 % de nulos en estrato 4 frente a
-#   ~0 % en el resto). Los 129 años imposibles del dataset completo (cap. 1)
-#   caen todos en train, lo que es coherente con esa concentración espacial.
+#   ~0 % en el resto). 128 de los 129 años imposibles del dataset completo
+#   (cap. 1) caen en train, lo que es coherente con esa concentración espacial.
 #   No es un faltante al azar: parece un proyecto o un sector cuyo año no se
 #   registró.
 # - **Decisión:** mediana + indicador de faltante, dentro del Pipeline (el
@@ -347,14 +350,14 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación y decisión
 # :class: note
-# - La regla de Tukey marca entre **3 % y 6 %** de las filas en áreas,
-#   habitaciones y baños (8 % en piso de ubicación), pero muy pocas son "lejanas" (3·IQR): 2.1 % en
-#   área construida, 1.3 % en terreno, < 1 % en habitaciones y baños. Las
+# - La regla de Tukey marca entre **3 % y 7 %** de las filas en áreas,
+#   habitaciones y baños (11 % en piso de ubicación), pero muy pocas son "lejanas" (3·IQR): 2.1 % en
+#   área construida, 1.9 % en terreno, < 1 % en habitaciones y baños. Las
 #   distribuciones son muy **asimétricas a la derecha**; esos puntos son
 #   viviendas grandes, no errores.
 # - En `total_plantas` y `altura` la regla es **inservible**: su IQR es 0 (Q1 =
 #   Q3 = 1 planta; Q1 = Q3 = 3 m). En plantas, *cualquier* casa de dos pisos
-#   queda marcada como outlier (11.1 % de train); en altura, cualquier valor
+#   queda marcada como outlier (10.0 % de train); en altura, cualquier valor
 #   distinto de 3 (0.3 %). Es un ejemplo de por qué no se debe eliminar filas
 #   con una regla automática sin mirarla.
 # - Los máximos que quedan son grandes pero posibles: 1 971 m² construidos,
@@ -362,8 +365,8 @@ plt.show()
 #   área construida, habitaciones y baños quedan dentro de los topes de la
 #   regla de registros agregados del cap. 1 (paso 2c: más de 2 000 m², 20
 #   habitaciones o 15 baños es un edificio entero en una fila). El p99.9 (los
-#   umbrales que usará la winsorización) está en 692 m² de área construida,
-#   5 193 m² de terreno, 12 habitaciones, 6 baños y 12 plantas.
+#   umbrales que usará la winsorización) está en 678 m² de área construida,
+#   4 195 m² de terreno, 12 habitaciones, 6 baños y 11 plantas.
 # - En `planta_ubicacion`, los códigos 97–99 ya se trataron como faltantes
 #   (cap. 1, techo del rango en 60): el p99.9 queda en 20 y el máximo en 41,
 #   un piso real de las torres más altas, no un código.
@@ -392,12 +395,16 @@ C.guardar_decision("winsorizacion_cuantiles", [0.001, 0.999],
 # %% [markdown]
 # ## 3.3 Sesgo de muestreo y representatividad
 #
-# ¿A quién deja fuera el modelo? En la sección 1.7 se decidió modelar solo
-# con las viviendas que tienen coordenadas. Aquí se mide el costo de esa
-# decisión: se comparan las filas **con** coordenadas (población de
-# modelado) contra las **53 894 sin coordenadas**, casi todas mejoras en
-# terreno ajeno. Para no mirar el conjunto de prueba, la comparación usa solo
-# train frente a las filas no ubicables.
+# ¿A quién deja fuera el modelo? En la sección 1.7 se ubicaron por el
+# centroide de su manzana la mayoría de las viviendas que llegaban sin
+# coordenadas, y se decidió modelar solo con las viviendas que tienen
+# coordenadas. Aquí se mide el costo de esa decisión: se comparan las filas
+# **con** coordenadas (población de modelado) contra las **10 300 que siguen
+# sin coordenadas**, casi todas mejoras en terreno ajeno. Para no mirar el
+# conjunto de prueba, la comparación usa solo train frente a las filas no
+# ubicables. Se muestra aparte el subconjunto de train ubicado por el
+# centroide de su manzana: es la parte del sesgo que el paso 6 del embudo
+# corrige.
 #
 # La fuerza de la diferencia se mide con la **V de Cramér**, una medida de
 # asociación entre dos variables categóricas que va de 0 (las proporciones de
@@ -413,8 +420,12 @@ ruta_sin = C.CARPETA_PROCESADOS / "sin_coordenadas.parquet"
 # Se lee el formato con que se guardó en el cap. 2 (parquet o, si no, CSV).
 sin = pd.read_parquet(ruta_sin) if ruta_sin.exists() else pd.read_csv(ruta_sin.with_suffix(".csv"))
 # % de cada estrato dentro de cada grupo; fillna(0) por si a un grupo le falta un estrato.
+por_manzana = train["ubicado_por_manzana"].astype(bool)
+print(f"Train: {len(train):,} filas, de ellas {int(por_manzana.sum()):,} ubicadas por manzana "
+      f"({100 * por_manzana.mean():.1f} %) | sin coordenadas: {len(sin):,}")
 comp = pd.concat({
     "modelado (train)": train[C.OBJETIVO].value_counts(normalize=True),
+    "de ellas: ubicadas por manzana": train.loc[por_manzana, C.OBJETIVO].value_counts(normalize=True),
     "sin coordenadas": sin[C.OBJETIVO].value_counts(normalize=True),
 }, axis=1).sort_index().fillna(0).mul(100)
 comp.index = [C.NOMBRES_CLASES[i] for i in comp.index]
@@ -431,15 +442,17 @@ comp
 # explicar POR QUÉ faltan coordenadas (se espera que dominen los predios informales).
 cond = pd.concat({
     "modelado (train)": train["condicion_predio"].value_counts(normalize=True),
+    "de ellas: ubicadas por manzana": train.loc[por_manzana, "condicion_predio"].value_counts(normalize=True),
     "sin coordenadas": sin["condicion_predio"].value_counts(normalize=True),
 }, axis=1).fillna(0).mul(100)
 cond
 
 # %% tags=["hide-input"]
-# Barras pareadas del % de cada estrato en la población modelada (azul) y en las
-# filas sin coordenadas (naranja): visualiza el sesgo de cobertura hacia estratos bajos.
+# Barras del % de cada estrato en la población modelada (azul), en su parte ubicada
+# por manzana (azul claro) y en las filas sin coordenadas (naranja): visualiza el
+# sesgo de cobertura hacia estratos bajos y cuánto lo reduce el paso 6.
 fig, ax = plt.subplots(figsize=(11, 4.5))
-comp.plot.barh(ax=ax, color=["#4c72b0", "#dd8452"])
+comp.plot.barh(ax=ax, color=["#4c72b0", "#8fb3d9", "#dd8452"])
 ax.invert_yaxis()   # estrato 1 arriba, 6 abajo
 ax.set_xlabel("% de filas del grupo")
 ax.set_title("Distribución de estrato: población modelada vs. filas sin coordenadas")
@@ -449,22 +462,24 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: important
-# - El sesgo de cobertura es **fuerte**: de las filas sin coordenadas, el
-#   **66.3 % son estrato 1 y el 30.2 % estrato 2** (96.5 % en los dos estratos
-#   más bajos), frente a 25.5 % y 19.9 % en la población modelada. La V de
-#   Cramér entre "tener o no coordenadas" y el estrato es **0.42**: una
-#   asociación moderada en la escala de arriba, cerca del límite de "fuerte"
-#   (0.5). Para comparar, ninguna predictora categórica del capítulo 6 supera
-#   0.33 con el estrato.
-# - La razón es estructural: el **99.5 %** de las filas sin coordenadas son
-#   predios `Informal` (sin lote propio ni edificio matriz de donde tomar un
-#   centroide). En train, lo informal pesa solo 7.6 %.
-# - Consecuencia: el modelo representa la **ciudad formal**. Aprenderá del
-#   estrato 1 sobre todo su versión formal, y sus métricas no deben
-#   extrapolarse a asentamientos informales. Se declara como limitación en las
-#   conclusiones (11.2).
-# - Mejora evaluada en la sección 1.7.3: el 92.7 % de estas viviendas comparte
-#   manzana (primeros 17 dígitos del NPN) con viviendas ubicadas, así que se
-#   podrían ubicar con el centroide de su manzana. Queda como primer paso del
-#   Entregable 2 (11.3).
+# - Sin la ubicación por manzana, el sesgo de cobertura era **moderado**,
+#   cerca del límite de "fuerte": las 53 894 filas sin coordenadas propias
+#   eran 96.5 % de estratos 1 y 2, y la V de Cramér entre "tener o no
+#   coordenadas" y el estrato era 0.42 (versión anterior del libro). El paso 6
+#   del embudo (sección 1.7.2) incorpora a train **34 892 viviendas ubicadas
+#   por su manzana (13.6 % de train)**: 99.8 % informales, 64.6 % de estrato 1
+#   y 33.2 % de estrato 2. Con ellas, lo informal pasa del 7.6 % al **19.9 %**
+#   de train, y el estrato 1 del 25.5 % al 30.0 %.
+# - El sesgo que queda es **débil** en la escala de arriba: las **10 300
+#   filas** que siguen sin coordenadas (3.1 % del dataset) son 84.1 % de
+#   estrato 1 y 9.0 % de estrato 2, frente a 30.0 % y 22.7 % en train. La V de
+#   Cramér baja a **0.22**. El 98.1 % de esas filas son predios `Informal`:
+#   viviendas cuya manzana no tiene ninguna vivienda ubicada, tiene el código
+#   genérico `0000` o está demasiado dispersa para usar su centroide.
+# - Consecuencia: el modelo ya ve buena parte de la ciudad informal, pero no
+#   toda. Sus métricas deben extrapolarse con cautela a los asentamientos
+#   informales que siguen sin ubicar, sobre todo los de estrato 1. Se declara
+#   como limitación en las conclusiones (11.2). Mejora futura: ubicar las
+#   10 300 filas restantes con otra fuente (cartografía oficial de manzanas o
+#   geocodificación de direcciones).
 # ```

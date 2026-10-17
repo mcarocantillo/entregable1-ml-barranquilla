@@ -75,7 +75,7 @@ LIMITES_PLAUSIBLES = {
     # torres reales y sigue atrapando los códigos.
     "planta_ubicacion": (1, 60),
     "area_construida": (1, 20_000),          # m2
-    "area_catastral_terreno": (0, 50_000),   # m2 (en los datos reales no hay ceros; PH = cuota del lote)
+    "area_catastral_terreno": (0, 50_000),   # m2 (PH = cuota del lote; 0 solo en mejoras en terreno ajeno)
 }
 
 # --- Alcance: qué fila cuenta como UNA unidad de vivienda ----------------------
@@ -156,14 +156,26 @@ ESPACIALES = ["x_km", "y_km", "dist_centro_km"]
 #   de aprender relaciones generalizables (npn_edificio identifica el edificio).
 # - METADATOS_PIPELINE: 'estrato' es el objetivo en texto (fuga directa) y
 #   'bloque'/'particion' son artefactos de la validación, no atributos del predio.
-IDENTIFICADORES = ["numero_predial_nacional", "npn_edificio", "id_fila"]
-METADATOS_PIPELINE = ["centroide_fuente", "estrato", "bloque", "particion"]
+IDENTIFICADORES = ["numero_predial_nacional", "npn_edificio", "npn_manzana", "id_fila"]
+METADATOS_PIPELINE = ["centroide_fuente", "ubicado_por_manzana", "estrato", "bloque", "particion"]
 
 # --- Espacial -----------------------------------------------------------------
 # Barranquilla: caja aproximada para validar coordenadas (WGS84, EPSG:4326)
 # Un centroide fuera de esta caja es un error de georreferenciación y se anula.
 LAT_MIN, LAT_MAX = 10.85, 11.15
 LON_MIN, LON_MAX = -74.90, -74.65
+# Recuperación de coordenadas por manzana (limpieza.recuperar_por_manzana).
+# Una vivienda sin centroide recibe el de su manzana (17 primeros dígitos del
+# NPN) si en esa manzana hay viviendas ubicadas y la manzana es "compacta".
+# - CODIGO_MANZANA_GENERICA: "0000" no es una manzana sino un comodín (zona
+#   rural o predio sin manzana asignada); hay prefijos con este código que
+#   reúnen 820 edificios repartidos en 7 km.
+# - DISPERSION_MAX_MANZANA_M: si algún edificio ubicado de la manzana está a
+#   más de esta distancia del centroide, el código no describe un lugar
+#   compacto y no se usa. Una manzana de Barranquilla mide ~80-120 m de lado:
+#   250 m deja pasar manzanas alargadas y descarta los códigos dispersos.
+CODIGO_MANZANA_GENERICA = "0000"
+DISPERSION_MAX_MANZANA_M = 250
 # Punto de referencia para 'dist_centro_km': Paseo Bolívar / centro histórico
 # (aproximado; verificar en un mapa si se quiere más precisión).
 CENTRO_LAT, CENTRO_LON = 10.9837, -74.7766

@@ -33,15 +33,15 @@ con un subconjunto distinto. Esta tabla resume de dónde sale cada cifra:
 |---|---|---|---|
 | CSV descargado del catastro | 382 597 | — | 1 |
 | Viviendas limpias con estrato 1–6 | 332 718 | garajes y depósitos, unidades de menos de 10 m², edificios completos en una fila, predios sin estrato | 1 |
-| Viviendas con coordenadas (**universo de modelado**) | 278 824 | 53 894 viviendas sin ubicación, casi todas vivienda informal de estratos 1 y 2 | 1.7, 2 |
-| Conjunto de **entrenamiento** | 218 870 | se separa el conjunto de prueba (7 zonas de la ciudad) | 2 |
-| Conjunto de **prueba** | 59 954 | se guarda sin mirar hasta el final | 2, 10 |
-| Entrenamiento del modelo final | 138 239 | viviendas de entrenamiento a menos de 1 km de la zona de prueba (buffer) | 8, 10 |
+| Viviendas con coordenadas (**universo de modelado**) | 322 418 | 10 300 viviendas sin ubicación, casi todas vivienda informal de estrato 1. Incluye 43 594 viviendas que llegaron sin coordenadas y se ubicaron con el centroide de su manzana | 1.7, 2 |
+| Conjunto de **entrenamiento** | 257 273 | se separa el conjunto de prueba (7 zonas de la ciudad) | 2 |
+| Conjunto de **prueba** | 65 145 | se guarda sin mirar hasta el final | 2, 10 |
+| Entrenamiento del modelo final | 144 586 | viviendas de entrenamiento a menos de 1 km de la zona de prueba (buffer) | 8, 10 |
 
 El capítulo 1 describe la base con las 332 718 viviendas y, al lado, con las
-278 824 que tienen coordenadas. Los capítulos 3 a 9 usan solo las 218 870 de
-entrenamiento. El capítulo 10 entrena con 138 239 y evalúa una sola vez con
-las 59 954 de prueba.
+322 418 que tienen coordenadas. Los capítulos 3 a 9 usan solo las 257 273 de
+entrenamiento. El capítulo 10 entrena con 144 586 y evalúa una sola vez con
+las 65 145 de prueba.
 
 ## Conceptos clave, con ejemplos
 
@@ -106,7 +106,7 @@ Es la tendencia de los lugares cercanos a parecerse. En Barranquilla el
 estrato está muy autocorrelacionado: si una casa es estrato 1, sus vecinas
 casi seguro también lo son. Se mide con el **índice de Moran**, que vale
 cerca de 0 si no hay patrón y cerca de 1 si los vecinos son casi idénticos
-(capítulo 8; aquí da 0.91).
+(capítulo 8; aquí da 0.92).
 
 ### Bloques espaciales y buffer
 

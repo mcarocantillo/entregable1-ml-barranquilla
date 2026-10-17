@@ -76,14 +76,15 @@ print(f"\nSEED = {C.SEED} | CSV = {C.ruta_csv().name}")
 # ```{admonition} Dónde se ejecutó esta copia del libro
 # :class: note
 # Según la salida anterior, el libro se ejecutó completo (todos los cuadernos,
-# capítulos 1–10 y este apéndice) en un entorno Linux en la nube (kernel
-# 6.18.44), con Python 3.13.16,
-# scikit-learn 1.9.1, pandas 3.0.5 y numpy 2.5.3, sobre el CSV real
+# capítulos 1–10 y este apéndice) en Windows 11 con Python 3.14.6,
+# scikit-learn 1.9.1, pandas 3.0.3 y numpy 2.5.1, sobre el CSV real
 # (`predios_residenciales_barranquilla.csv`) y con `SEED = 42`. Gracias a la
 # función propia de partición, ejecutarlo con otra versión de scikit-learn no
 # cambia qué bloques quedan en train y en test; otras salidas (p. ej. el
 # ajuste de los modelos) sí pueden variar ligeramente entre versiones, por eso
-# se documentan aquí.
+# se documentan aquí. Como comprobación, el Entregable 2 vuelve a ajustar los
+# modelos con scikit-learn 1.8.0 y pandas 3.0.2 y obtiene los mismos F1 de
+# test con cuatro decimales.
 # ```
 
 # %% [markdown]

@@ -1,0 +1,390 @@
+{
+ "tabla_cv": {
+  "f1_macro (media)": {
+   "Dummy (mayoritaria)": 0.0569,
+   "Dummy (estratificada)": 0.1429,
+   "Dummy (uniforme)": 0.1379,
+   "Moda por zona": 0.1931,
+   "Logística A_fisicas": 0.2832,
+   "Logística B_fisicas+ubicacion": 0.2988,
+   "XGBoost": 0.2960351968779947,
+   "XGBoost geográfico": 0.2860668256171147,
+   "Rotation Forest": 0.2681765557970781,
+   "SVM RBF (Nyström) + TPE": 0.3223184563763775
+  },
+  "accuracy (media)": {
+   "Dummy (mayoritaria)": 0.2153,
+   "Dummy (estratificada)": 0.2159,
+   "Dummy (uniforme)": 0.1662,
+   "Moda por zona": 0.334,
+   "Logística A_fisicas": 0.3874,
+   "Logística B_fisicas+ubicacion": 0.4635
+  },
+  "balanced_accuracy (media)": {
+   "Dummy (mayoritaria)": 0.1667,
+   "Dummy (estratificada)": 0.1593,
+   "Dummy (uniforme)": 0.1771,
+   "Moda por zona": 0.2606,
+   "Logística A_fisicas": 0.3608,
+   "Logística B_fisicas+ubicacion": 0.3687
+  },
+  "F1 macro (desv. entre folds)": {
+   "Dummy (mayoritaria)": 0.0253,
+   "Dummy (estratificada)": 0.0131,
+   "Dummy (uniforme)": 0.0129,
+   "Moda por zona": 0.0757,
+   "Logística A_fisicas": 0.0862,
+   "Logística B_fisicas+ubicacion": 0.0856,
+   "XGBoost": 0.07148486525589781,
+   "XGBoost geográfico": 0.0819150573477912,
+   "Rotation Forest": 0.09637626779317275,
+   "SVM RBF (Nyström) + TPE": 0.12636568051816333
+  }
+ },
+ "resultados_test": {
+  "accuracy": {
+   "Dummy (mayoritaria)": 0.2892,
+   "Dummy (estratificada)": 0.2251,
+   "Dummy (uniforme)": 0.165,
+   "Moda por zona": 0.4807,
+   "Logística A_fisicas": 0.4203,
+   "Logística B_fisicas+ubicacion": 0.598,
+   "XGBoost": 0.477933082029556,
+   "XGBoost geográfico": 0.4831537512092604,
+   "Rotation Forest": 0.5513727190846316,
+   "SVM RBF (Nyström) + TPE": 0.5408479834539814
+  },
+  "balanced_accuracy": {
+   "Dummy (mayoritaria)": 0.1667,
+   "Dummy (estratificada)": 0.1703,
+   "Dummy (uniforme)": 0.1648,
+   "Moda por zona": 0.3748,
+   "Logística A_fisicas": 0.4112,
+   "Logística B_fisicas+ubicacion": 0.4691,
+   "XGBoost": 0.3197218906412866,
+   "XGBoost geográfico": 0.32367707064599144,
+   "Rotation Forest": 0.45956517590002083,
+   "SVM RBF (Nyström) + TPE": 0.474991535359782
+  },
+  "precision_macro": {
+   "Dummy (mayoritaria)": 0.0482,
+   "Dummy (estratificada)": 0.1691,
+   "Dummy (uniforme)": 0.1655,
+   "Moda por zona": 0.3295,
+   "Logística A_fisicas": 0.3808,
+   "Logística B_fisicas+ubicacion": 0.5402,
+   "XGBoost": 0.36991029721041474,
+   "XGBoost geográfico": 0.35902057613077937,
+   "Rotation Forest": 0.4429846185522917,
+   "SVM RBF (Nyström) + TPE": 0.523045841406978
+  },
+  "recall_macro": {
+   "Dummy (mayoritaria)": 0.1667,
+   "Dummy (estratificada)": 0.1703,
+   "Dummy (uniforme)": 0.1648,
+   "Moda por zona": 0.3748,
+   "Logística A_fisicas": 0.4112,
+   "Logística B_fisicas+ubicacion": 0.4691,
+   "XGBoost": 0.3197218906412866,
+   "XGBoost geográfico": 0.32367707064599144,
+   "Rotation Forest": 0.45956517590002083,
+   "SVM RBF (Nyström) + TPE": 0.474991535359782
+  },
+  "f1_macro": {
+   "Dummy (mayoritaria)": 0.0748,
+   "Dummy (estratificada)": 0.1667,
+   "Dummy (uniforme)": 0.1458,
+   "Moda por zona": 0.328,
+   "Logística A_fisicas": 0.349,
+   "Logística B_fisicas+ubicacion": 0.45,
+   "XGBoost": 0.3039981151462504,
+   "XGBoost geográfico": 0.3067953841199324,
+   "Rotation Forest": 0.4077032486849921,
+   "SVM RBF (Nyström) + TPE": 0.4279464247697789
+  },
+  "f1_weighted": {
+   "Dummy (mayoritaria)": 0.1298,
+   "Dummy (estratificada)": 0.2244,
+   "Dummy (uniforme)": 0.1844,
+   "Moda por zona": 0.396,
+   "Logística A_fisicas": 0.426,
+   "Logística B_fisicas+ubicacion": 0.5536,
+   "XGBoost": 0.45375376064799267,
+   "XGBoost geográfico": 0.4573280596988065,
+   "Rotation Forest": 0.504707701602281,
+   "SVM RBF (Nyström) + TPE": 0.5007378943608077
+  },
+  "MAE_ordinal": {
+   "Dummy (mayoritaria)": 1.5654,
+   "Dummy (estratificada)": 1.5007,
+   "Dummy (uniforme)": 1.8977,
+   "Moda por zona": 0.9363,
+   "Logística A_fisicas": 0.8182,
+   "Logística B_fisicas+ubicacion": 0.4637,
+   "XGBoost": 0.6562531273976715,
+   "XGBoost geográfico": 0.6503986389565334,
+   "Rotation Forest": 0.5083564065783768,
+   "SVM RBF (Nyström) + TPE": 0.5400974080128098
+  },
+  "accuracy_±1": {
+   "Dummy (mayoritaria)": 0.5018,
+   "Dummy (estratificada)": 0.5543,
+   "Dummy (uniforme)": 0.4479,
+   "Moda por zona": 0.7471,
+   "Logística A_fisicas": 0.8027,
+   "Logística B_fisicas+ubicacion": 0.9411,
+   "XGBoost": 0.8928845448176935,
+   "XGBoost geográfico": 0.8934182873536378,
+   "Rotation Forest": 0.9427394335657338,
+   "SVM RBF (Nyström) + TPE": 0.9240751242619342
+  },
+  "kappa_cuadrático": {
+   "Dummy (mayoritaria)": 0.0,
+   "Dummy (estratificada)": 0.0066,
+   "Dummy (uniforme)": -0.0014,
+   "Moda por zona": 0.4296,
+   "Logística A_fisicas": 0.6546,
+   "Logística B_fisicas+ubicacion": 0.8137,
+   "XGBoost": 0.6583516677532388,
+   "XGBoost geográfico": 0.6611140059230152,
+   "Rotation Forest": 0.8168107788492397,
+   "SVM RBF (Nyström) + TPE": 0.7983306679418373
+  },
+  "AUC_OvR_macro": {
+   "Dummy (mayoritaria)": 0.5,
+   "Dummy (estratificada)": 0.5021,
+   "Dummy (uniforme)": 0.5,
+   "Moda por zona": 0.6636,
+   "Logística A_fisicas": 0.7965,
+   "Logística B_fisicas+ubicacion": 0.886,
+   "XGBoost": 0.7440012594021596,
+   "XGBoost geográfico": 0.7854497747035319,
+   "Rotation Forest": 0.8613730793165623,
+   "SVM RBF (Nyström) + TPE": 0.8369868542161121
+  },
+  "log_loss": {
+   "Dummy (mayoritaria)": 19.6391,
+   "Dummy (estratificada)": 21.4107,
+   "Dummy (uniforme)": 1.7918,
+   "Moda por zona": 2.5752,
+   "Logística A_fisicas": 1.351,
+   "Logística B_fisicas+ubicacion": 1.0345,
+   "XGBoost": 1.7495595305075224,
+   "XGBoost geográfico": 1.4995274527587674,
+   "Rotation Forest": 1.0977315302049084,
+   "SVM RBF (Nyström) + TPE": 1.1286632530900942
+  },
+  "brier_multiclase": {
+   "Dummy (mayoritaria)": 1.4215,
+   "Dummy (estratificada)": 1.5498,
+   "Dummy (uniforme)": 0.8333,
+   "Moda por zona": 0.7389,
+   "Logística A_fisicas": 0.6863,
+   "Logística B_fisicas+ubicacion": 0.5479,
+   "XGBoost": 0.7682179762766743,
+   "XGBoost geográfico": 0.7265708573525083,
+   "Rotation Forest": 0.5802404574646057,
+   "SVM RBF (Nyström) + TPE": 0.5520732578684806
+  }
+ },
+ "ic_modelo_principal": {
+  "valor en test": {
+   "accuracy": 0.598,
+   "f1_macro": 0.45,
+   "MAE_ordinal": 0.4637,
+   "kappa_cuadrático": 0.8137
+  },
+  "IC95_inf": {
+   "accuracy": 0.3559,
+   "f1_macro": 0.1631,
+   "MAE_ordinal": 0.2083,
+   "kappa_cuadrático": 0.1428
+  },
+  "IC95_sup": {
+   "accuracy": 0.8098,
+   "f1_macro": 0.4627,
+   "MAE_ordinal": 0.7361,
+   "kappa_cuadrático": 0.9119
+  },
+  "desv_boot": {
+   "accuracy": 0.1182,
+   "f1_macro": 0.0884,
+   "MAE_ordinal": 0.1386,
+   "kappa_cuadrático": 0.2094
+  }
+ },
+ "comparaciones_f1": {
+  "diferencia": {
+   "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.3753",
+   "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.2834",
+   "Logística B_fisicas+ubicacion − Moda por zona": "0.1221",
+   "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.101"
+  },
+  "IC95_inf": {
+   "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.1144",
+   "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.0264",
+   "Logística B_fisicas+ubicacion − Moda por zona": "-0.0134",
+   "Logística B_fisicas+ubicacion − Logística A_fisicas": "-0.0538"
+  },
+  "IC95_sup": {
+   "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.3921",
+   "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.3076",
+   "Logística B_fisicas+ubicacion − Moda por zona": "0.188",
+   "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.1406"
+  },
+  "p_bootstrap": {
+   "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "0.002",
+   "Logística B_fisicas+ubicacion − Dummy (estratificada)": "0.028",
+   "Logística B_fisicas+ubicacion − Moda por zona": "0.124",
+   "Logística B_fisicas+ubicacion − Logística A_fisicas": "0.312"
+  },
+  "¿IC excluye 0?": {
+   "Logística B_fisicas+ubicacion − Dummy (mayoritaria)": "True",
+   "Logística B_fisicas+ubicacion − Dummy (estratificada)": "True",
+   "Logística B_fisicas+ubicacion − Moda por zona": "False",
+   "Logística B_fisicas+ubicacion − Logística A_fisicas": "False"
+  }
+ },
+ "optimismo_validacion_aleatoria": {
+  "F1 macro CV": {
+   "aleatoria (StratifiedKFold)": 0.6022,
+   "espacial (bloques + buffer)": 0.2988
+  },
+  "desv.": {
+   "aleatoria (StratifiedKFold)": 0.0039,
+   "espacial (bloques + buffer)": 0.0856
+  },
+  "diferencia vs espacial": {
+   "aleatoria (StratifiedKFold)": 0.3034,
+   "espacial (bloques + buffer)": 0.0
+  }
+ },
+ "mejores_hiperparametros": {
+  "A_fisicas": {
+   "clf__C": "0.01",
+   "clf__class_weight": "balanced"
+  },
+  "B_fisicas+ubicacion": {
+   "clf__C": "0.01",
+   "clf__class_weight": "None"
+  }
+ },
+ "n_train_final": 138239,
+ "n_test": 59954,
+ "buffer_km": 1.0,
+ "n_train": 138239,
+ "n_train_antes_buffer": 218870,
+ "bloques_test": 7,
+ "variables_modelo": {
+  "numericas": [
+   "area_construida",
+   "area_catastral_terreno",
+   "total_habitaciones",
+   "total_banios",
+   "total_plantas",
+   "antiguedad",
+   "planta_ubicacion",
+   "altura"
+  ],
+  "categoricas": [
+   "tipo_vivienda",
+   "uso",
+   "condicion_predio"
+  ],
+  "espaciales": [
+   "x_km",
+   "y_km",
+   "dist_centro_km"
+  ]
+ },
+ "decisiones": {
+  "tam_bloque_km": 2.0,
+  "semilla": 42,
+  "imputacion_numericas": "mediana + indicador de faltante (SimpleImputer(add_indicator=True)), dentro del Pipeline",
+  "imputacion_categoricas": "categoría explícita 'faltante'",
+  "winsorizacion_cuantiles": [
+   0.001,
+   0.999
+  ],
+  "metrica_principal": "f1_macro",
+  "metricas_ordinales": [
+   "MAE_ordinal",
+   "accuracy_±1",
+   "kappa_cuadrático"
+  ],
+  "num_log": [
+   "area_construida",
+   "area_catastral_terreno",
+   "total_habitaciones",
+   "total_banios",
+   "total_plantas",
+   "antiguedad",
+   "planta_ubicacion"
+  ],
+  "num_lineal": [
+   "altura"
+  ],
+  "onehot_min_frecuencia": 0.01,
+  "excluir_multicolinealidad": [],
+  "categoricas_preliminares": [
+   "tipo_vivienda",
+   "uso",
+   "condicion_predio"
+  ],
+  "numericas_preliminares": [
+   "area_construida",
+   "area_catastral_terreno",
+   "total_habitaciones",
+   "total_banios",
+   "total_plantas",
+   "antiguedad",
+   "planta_ubicacion",
+   "altura"
+  ],
+  "outliers_multivariados": "conservar (sin eliminar filas)",
+  "buffer_km": 1.0,
+  "alcance_correlograma_km": 2.875,
+  "k_vecinos": 8,
+  "espaciales": [
+   "x_km",
+   "y_km",
+   "dist_centro_km"
+  ],
+  "variables_modelo": {
+   "numericas": [
+    "area_construida",
+    "area_catastral_terreno",
+    "total_habitaciones",
+    "total_banios",
+    "total_plantas",
+    "antiguedad",
+    "planta_ubicacion",
+    "altura"
+   ],
+   "categoricas": [
+    "tipo_vivienda",
+    "uso",
+    "condicion_predio"
+   ],
+   "espaciales": [
+    "x_km",
+    "y_km",
+    "dist_centro_km"
+   ]
+  },
+  "variables_excluidas": [
+   "destinacion_economica",
+   "tipo_planta",
+   "numero_predial_nacional",
+   "npn_edificio",
+   "id_fila",
+   "centroide_fuente"
+  ]
+ },
+ "modelos_avanzados": [
+  "XGBoost",
+  "XGBoost geográfico",
+  "Rotation Forest",
+  "SVM RBF (Nyström) + TPE"
+ ]
+}

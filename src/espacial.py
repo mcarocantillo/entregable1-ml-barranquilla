@@ -137,12 +137,20 @@ def deduplicar_por_edificio(df):
     idénticos, lo que fabrica autocorrelación (pseudo-replicación). Tomar una
     fila por edificio mide la dependencia ENTRE edificios, que es la
     relevante. Si falta el NPN, la clave de respaldo es la coordenada
-    redondeada a 4 decimales de km (0.1 m).
+    redondeada a 4 decimales de km (0.1 m). Si df trae la columna
+    'ubicado_por_manzana', las viviendas ubicadas por el centroide de su
+    manzana se agrupan por ese punto (una fila por manzana).
     """
     d = df.copy()
+    punto = d["x_km"].round(4).astype(str) + "_" + d["y_km"].round(4).astype(str)
     # clave = NPN del edificio; si es nulo, "x_y" de la coordenada redondeada
-    clave = d["npn_edificio"].astype("string").fillna(
-        d["x_km"].round(4).astype(str) + "_" + d["y_km"].round(4).astype(str))
+    clave = d["npn_edificio"].astype("string").fillna(punto)
+    # Viviendas ubicadas por el centroide de su manzana: todas comparten un
+    # punto aunque sean edificios distintos. Se cuentan como UN punto por
+    # manzana; si no, decenas de "vecinos" a distancia 0 inflarían Moran.
+    if "ubicado_por_manzana" in d:
+        por_manzana = d["ubicado_por_manzana"].fillna(False).astype(bool)
+        clave = clave.where(~por_manzana, "manzana_" + punto)
     d["_clave_edificio"] = clave
     # se promedian todas las columnas numéricas dentro de cada edificio
     agg = {c: "mean" for c in d.select_dtypes("number").columns if c != "_clave_edificio"}

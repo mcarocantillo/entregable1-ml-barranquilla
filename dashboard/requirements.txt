@@ -1,0 +1,12 @@
+# Dashboard del Entregable 2 — versiones fijadas (el modelo guardado con joblib
+# necesita la MISMA versión de scikit-learn con que se entrenó).
+dash==4.4.1
+dash-bootstrap-components==2.0.4
+plotly==7.1.0
+pandas==3.0.2
+numpy==2.4.4
+scipy==1.17.1
+scikit-learn==1.8.0
+joblib==1.5.3
+pyarrow==25.0.1
+gunicorn==26.2.0

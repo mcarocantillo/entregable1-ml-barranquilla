@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿cómo se reparte el estrato entre las
 # viviendas, y qué implica eso para medir el desempeño del modelo?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento**.
+# **Datos:** las **257 273 viviendas de entrenamiento**.
 #
 # **Conceptos nuevos:** razón de desbalance, entropía normalizada y métricas
 # ordinales (MAE ordinal, accuracy ±1, kappa cuadrático).
@@ -116,17 +116,19 @@ plt.show()
 # %% [markdown]
 # ```{admonition} Interpretación
 # :class: note
-# - En train la clase más frecuente es el **estrato 3 (26.0 %)**, muy cerca
-#   del 1 (25.5 %); luego 2 (19.9 %), 4 (16.9 %), 5 (6.1 %) y 6 (5.7 %). En el
-#   dataset completo el 1 es mayoritario (32.8 %, cap. 1): la diferencia se debe
-#   a que train excluye las filas sin coordenadas (66 % de ellas son estrato 1,
-#   cap. 3) y los bloques de test.
-# - El desbalance es **moderado: 4.6 : 1**, y la entropía normalizada es 0.92
+# - En train la clase más frecuente es el **estrato 1 (30.0 %)**; luego
+#   3 (22.9 %), 2 (22.7 %), 4 (14.4 %), 5 (5.2 %) y 6 (4.8 %). En el dataset
+#   completo el 1 pesa algo más (32.8 %, cap. 1): train excluye las 10 300
+#   filas que siguen sin coordenadas (84 % de ellas son estrato 1, cap. 3) y
+#   los bloques de test. Las 34 892 viviendas informales ubicadas por su
+#   manzana (sección 1.7.2) son las que hacen del estrato 1 la clase mayoritaria
+#   de train.
+# - El desbalance es **moderado: 6.2 : 1**, y la entropía normalizada es 0.90
 #   (1 sería balance perfecto). La clase minoritaria (estrato 6) tiene
-#   **12 390 casos**, así que **no hace falta sobremuestreo (SMOTE)** para que
+#   **12 414 casos**, así que **no hace falta sobremuestreo (SMOTE)** para que
 #   el modelo vea suficientes ejemplos; lo que sí cambia el desbalance es
-#   **cómo se evalúa**: un modelo trivial que siempre dice "estrato 3" ya
-#   acierta 26 %, así que el accuracy solo no sirve.
+#   **cómo se evalúa**: un modelo trivial que siempre dice "estrato 1" ya
+#   acierta 30 %, así que el accuracy solo no sirve.
 # ```
 
 # %% [markdown]
@@ -195,11 +197,11 @@ tabla
 # %% [markdown]
 # ```{admonition} Interpretación del gradiente espacial
 # :class: note
-# El estrato medio sube de forma casi monótona de sur a norte: **1.55** en la
-# franja sur, 1.98 en centro-sur, 2.43 en el centro, **3.73** en centro-norte
-# y **4.08** en el norte. En el sur, el 96 % de las unidades son estratos 1–2
-# y prácticamente no hay estratos 5–6; en el norte, el 38 % son 5–6. El salto
-# más grande ocurre entre el centro y el centro-norte (+1.3 estratos). Es la
+# El estrato medio sube de forma casi monótona de sur a norte: **1.49** en la
+# franja sur, 1.85 en centro-sur, 2.15 en el centro, **3.39** en centro-norte
+# y **3.95** en el norte. En el sur, el 97 % de las unidades son estratos 1–2
+# y prácticamente no hay estratos 5–6; en el norte, el 36 % son 5–6. El salto
+# más grande ocurre entre el centro y el centro-norte (+1.2 estratos). Es la
 # señal espacial más fuerte del EDA y reaparece en el cap. 6 (`y_km` es la
 # variable más asociada con el estrato) y en el cap. 8 (Moran's I ≈ 0.9).
 # ```
@@ -213,7 +215,7 @@ tabla
 # 2. **Línea base:** `DummyClassifier` (mayoritaria, estratificada, uniforme)
 #    y una línea base espacial (clase más frecuente por zona).
 # 3. **Validación:** el estrato cambia de forma muy marcada en el espacio
-#    (estrato medio 4.1 en el norte frente a 1.5 en el sur), así que una validación
+#    (estrato medio 3.9 en el norte frente a 1.5 en el sur), así que una validación
 #    aleatoria sería optimista: se usa validación **por bloques espaciales
 #    estratificada** (capítulo 2) con buffer (capítulo 8).
 # 4. **Desbalance:** se compara `class_weight=None` contra `"balanced"` dentro

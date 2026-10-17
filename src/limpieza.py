@@ -23,6 +23,12 @@ Además se construyen variables derivadas que también son fila a fila
 (antigüedad, identificador de edificio, coordenadas proyectadas en km y
 distancia al centro). Como ninguna usa información de otras filas, pueden
 calcularse sobre el dataset completo sin contaminar el conjunto de prueba.
+
+Única excepción, deliberada: las viviendas sin coordenadas reciben el
+centroide de su MANZANA, calculado con las demás viviendas ubicadas de esa
+manzana (recuperar_por_manzana). Usa otras filas, pero solo su posición,
+nunca el estrato: equivale a leer la posición de la manzana en la
+cartografía, un dato que existiría igual para un predio nuevo.
 """
 
 import numpy as np
@@ -121,6 +127,67 @@ def proyectar_km(lat, lon):
     return x, y
 
 
+def recuperar_por_manzana(df):
+    """Asigna el centroide de su manzana a las viviendas sin coordenadas.
+
+    Parámetros
+    ----------
+    df : pandas.DataFrame
+        Datos con 'numero_predial_nacional' (30 dígitos), 'centroide_lat',
+        'centroide_lon' y 'centroide_fuente', ya con las coordenadas fuera de
+        la caja de Barranquilla anuladas.
+
+    Devuelve
+    --------
+    tuple(pandas.DataFrame, pandas.DataFrame)
+        - df con 'npn_manzana' (17 dígitos) y 'ubicado_por_manzana' (bool), y
+          con lat/lon y 'centroide_fuente' = "centroide_manzana" en las filas
+          recuperadas.
+        - manzanas: una fila por manzana con viviendas ubicadas: número de
+          puntos (edificios o lotes distintos), centroide, distancia máxima de
+          un punto al centroide (m) y si es válida para recuperar.
+
+    Por qué
+    -------
+    Los predios informales (mejoras en terreno ajeno) no tienen terreno propio
+    ni edificio matriz de donde heredar un centroide, pero su NPN sí dice en
+    qué manzana están, y casi todas esas manzanas tienen otras viviendas
+    ubicadas. El centroide se calcula con los puntos DISTINTOS de la manzana
+    (un edificio de 300 apartamentos cuenta una vez, para no arrastrar el
+    centro hacia él). Solo se usan coordenadas, nunca el estrato, y la
+    posición de una manzana es un dato cartográfico que también existiría
+    para una vivienda nueva; por eso puede hacerse antes de la partición sin
+    fuga. Dos reglas fijas (config.py) descartan los códigos que no
+    describen un lugar compacto: la manzana "0000" (comodín) y las manzanas
+    con algún punto a más de DISPERSION_MAX_MANZANA_M del centroide.
+    """
+    df = df.copy()
+    df["npn_manzana"] = df["numero_predial_nacional"].str[:17]
+    lat, lon = df["centroide_lat"], df["centroide_lon"]
+    ubicada = lat.notna() & lon.notna()
+    # Puntos distintos por manzana (un edificio = un punto)
+    pts = (df.loc[ubicada, ["npn_manzana", "centroide_lat", "centroide_lon"]]
+           .drop_duplicates())
+    manz = pts.groupby("npn_manzana").agg(n_puntos=("centroide_lat", "size"),
+                                          lat=("centroide_lat", "mean"),
+                                          lon=("centroide_lon", "mean"))
+    # Distancia de cada punto al centroide de su manzana (en km proyectados)
+    px, py = proyectar_km(pts["centroide_lat"], pts["centroide_lon"])
+    cx, cy = proyectar_km(manz.loc[pts["npn_manzana"], "lat"], manz.loc[pts["npn_manzana"], "lon"])
+    pts["d_m"] = 1000 * np.hypot(px - cx, py - cy)
+    manz["dist_max_m"] = pts.groupby("npn_manzana")["d_m"].max()
+    manz["generica"] = manz.index.str[13:17] == C.CODIGO_MANZANA_GENERICA
+    manz["valida"] = ~manz["generica"] & (manz["dist_max_m"] <= C.DISPERSION_MAX_MANZANA_M)
+    # Filas sin coordenadas cuya manzana es válida -> centroide de la manzana
+    validas = manz[manz["valida"]]
+    recuperar = ~ubicada & df["npn_manzana"].isin(validas.index)
+    df["ubicado_por_manzana"] = recuperar
+    df.loc[recuperar, "centroide_lat"] = df.loc[recuperar, "npn_manzana"].map(validas["lat"])
+    df.loc[recuperar, "centroide_lon"] = df.loc[recuperar, "npn_manzana"].map(validas["lon"])
+    df.loc[recuperar, "centroide_fuente"] = "centroide_manzana"
+    return df, manz
+
+
 def cargar_crudo(path=None):
     """Lee el CSV de catastro sin aplicar ninguna regla de limpieza.
 
@@ -168,7 +235,8 @@ def limpiar(df_crudo, verbose=True):
           'estrato_num' (int), banderas 'flag_imposible_<var>',
           'flag_incoherente_<var>' y
           'flag_coord_fuera_caja', y las variables derivadas (antiguedad,
-          npn_edificio, x_km, y_km, dist_centro_km, tiene_coordenadas).
+          npn_edificio, npn_manzana, ubicado_por_manzana, x_km, y_km,
+          dist_centro_km, tiene_coordenadas).
         - embudo: pasos de filtrado con filas restantes, cambio y % del total.
         - tabla_imposibles: por variable, rango plausible y cantidad/% de
           valores anulados por imposibles.
@@ -178,7 +246,8 @@ def limpiar(df_crudo, verbose=True):
     Todas las reglas son fila a fila y con umbrales fijados de antemano (en
     config.py), no estimados con los datos. Por eso pueden aplicarse ANTES de
     partir en train/test sin fuga: el resultado para una fila no depende de
-    ninguna otra. El embudo documenta cuánto se pierde en cada paso, lo que
+    ninguna otra. La excepción es el paso 6 (centroide de la manzana), que
+    usa las coordenadas de otras filas pero nunca su estrato. El embudo documenta cuánto se pierde en cada paso, lo que
     permite juzgar si la limpieza sesga la muestra.
     """
     df = df_crudo.copy()  # no se altera el DataFrame crudo del notebook
@@ -307,6 +376,14 @@ def limpiar(df_crudo, verbose=True):
     lat[fuera_caja] = np.nan
     lon[fuera_caja] = np.nan
     df["centroide_lat"], df["centroide_lon"] = lat, lon
+    # 6. Viviendas sin coordenadas -> centroide de su manzana (si es compacta)
+    n_sin = int((lat.isna() | lon.isna()).sum())
+    df, _ = recuperar_por_manzana(df)
+    n_rec = int(df["ubicado_por_manzana"].sum())
+    embudo.append(("6. Sin coordenadas -> centroide de su manzana", len(df),
+                   f"{n_rec} de {n_sin} filas sin coordenadas reciben el centroide de su manzana; "
+                   "no se elimina ninguna fila"))
+    lat, lon = df["centroide_lat"], df["centroide_lon"]
     # Coordenadas en km para poder usar distancia euclidiana (ver proyectar_km)
     x, y = proyectar_km(lat, lon)
     df["x_km"], df["y_km"] = x, y

@@ -1,0 +1,218 @@
+{
+ "filas_descargadas": 382597,
+ "viviendas": 332718,
+ "predios": 320792,
+ "predios_matriz": 168044,
+ "estratos": [
+  {
+   "estrato": 1,
+   "todas": 108985,
+   "con_coord": 100325
+  },
+  {
+   "estrato": 2,
+   "todas": 72493,
+   "con_coord": 71563
+  },
+  {
+   "estrato": 3,
+   "todas": 72000,
+   "con_coord": 71410
+  },
+  {
+   "estrato": 4,
+   "todas": 49190,
+   "con_coord": 49186
+  },
+  {
+   "estrato": 5,
+   "todas": 16843,
+   "con_coord": 16727
+  },
+  {
+   "estrato": 6,
+   "todas": 13207,
+   "con_coord": 13207
+  }
+ ],
+ "sin_coordenadas": 10300,
+ "faltantes": [
+  {
+   "variable": "area_construida",
+   "pct": 0.0,
+   "imposible": 0.0,
+   "incoherente": 0.0
+  },
+  {
+   "variable": "area_catastral_terreno",
+   "pct": 0.0012022192968219334,
+   "imposible": 0.0,
+   "incoherente": 0.0
+  },
+  {
+   "variable": "total_habitaciones",
+   "pct": 0.10669696259294659,
+   "imposible": 0.0,
+   "incoherente": 0.10669696259294659
+  },
+  {
+   "variable": "total_banios",
+   "pct": 0.012322747792424817,
+   "imposible": 0.0,
+   "incoherente": 0.012322747792424817
+  },
+  {
+   "variable": "total_plantas",
+   "pct": 0.0012022192968219334,
+   "imposible": 0.0012022192968219334,
+   "incoherente": 0.0
+  },
+  {
+   "variable": "planta_ubicacion",
+   "pct": 0.10549474329612464,
+   "imposible": 0.10549474329612464,
+   "incoherente": 0.0
+  },
+  {
+   "variable": "altura",
+   "pct": 0.0,
+   "imposible": 0.0,
+   "incoherente": 0.0
+  },
+  {
+   "variable": "anio_construccion",
+   "pct": 0.03877157232250735,
+   "imposible": 0.03877157232250735,
+   "incoherente": 0.0
+  }
+ ],
+ "filas_con_imposible": 484,
+ "filas_con_incoherente": 396,
+ "tabla_imposibles": [
+  {
+   "index": 0,
+   "variable": "total_habitaciones",
+   "rango plausible": "[0, 30]",
+   "n imposibles": 0,
+   "%": 0.0
+  },
+  {
+   "index": 1,
+   "variable": "total_banios",
+   "rango plausible": "[0, 20]",
+   "n imposibles": 0,
+   "%": 0.0
+  },
+  {
+   "index": 2,
+   "variable": "total_plantas",
+   "rango plausible": "[0, 40]",
+   "n imposibles": 4,
+   "%": 0.0012022193
+  },
+  {
+   "index": 3,
+   "variable": "planta_ubicacion",
+   "rango plausible": "[1, 60]",
+   "n imposibles": 351,
+   "%": 0.1054947433
+  },
+  {
+   "index": 4,
+   "variable": "area_construida",
+   "rango plausible": "[1, 20000]",
+   "n imposibles": 0,
+   "%": 0.0
+  },
+  {
+   "index": 5,
+   "variable": "area_catastral_terreno",
+   "rango plausible": "[0, 50000]",
+   "n imposibles": 0,
+   "%": 0.0
+  },
+  {
+   "index": 6,
+   "variable": "anio_construccion",
+   "rango plausible": "[1900, 2026]",
+   "n imposibles": 129,
+   "%": 0.0387715723
+  },
+  {
+   "index": 7,
+   "variable": "total_banios (coherencia)",
+   "rango plausible": "<= habitaciones + 3",
+   "n imposibles": 41,
+   "%": 0.0123227478
+  },
+  {
+   "index": 8,
+   "variable": "total_habitaciones (coherencia)",
+   "rango plausible": "área / habitación >= 6 m2",
+   "n imposibles": 355,
+   "%": 0.1066969626
+  }
+ ],
+ "mejoras": {
+  "viviendas": 53637,
+  "prefijos": 35754,
+  "grupos": 50234
+ },
+ "grupo": {
+  "con_excepcion": {
+   "grupos": 182524,
+   "max": 1860,
+   "media": 1.8228726085336724,
+   "m_pond": 145.4212997192818,
+   "icc": 0.9920539846678846,
+   "deff": 144.27372585742836,
+   "n_ef": 2306.157950954928,
+   "torres_mayor": 93,
+   "grupos_1": 162519,
+   "multi": 20005,
+   "filas_multi": 170199,
+   "multi_no_uniformes": 871,
+   "grupos_100": 225,
+   "filas_100": 82030
+  },
+  "sin_excepcion": {
+   "grupos": 168044,
+   "max": 3045,
+   "media": 1.9799457284996786,
+   "m_pond": 179.35704109786667,
+   "icc": 0.9910571880327632,
+   "deff": 177.7620276162957,
+   "n_ef": 1871.7045730271545
+  }
+ },
+ "viviendas_por_tamano": [
+  {
+   "tamano": "1",
+   "viviendas": 162519
+  },
+  {
+   "tamano": "2–4",
+   "viviendas": 38064
+  },
+  {
+   "tamano": "5–19",
+   "viviendas": 22105
+  },
+  {
+   "tamano": "20–49",
+   "viviendas": 16194
+  },
+  {
+   "tamano": "50–99",
+   "viviendas": 11806
+  },
+  {
+   "tamano": "100–499",
+   "viviendas": 38778
+  },
+  {
+   "tamano": "500 o más",
+   "viviendas": 43252
+  }
+ ]
+}

@@ -20,7 +20,7 @@
 # **Pregunta que responde:** ¿qué variables se relacionan con el estrato, con
 # qué fuerza, y cuáles dicen lo mismo entre sí?
 #
-# **Datos:** las **218 870 viviendas de entrenamiento**.
+# **Datos:** las **257 273 viviendas de entrenamiento**.
 #
 # **Conceptos nuevos:** correlación de Pearson y de Spearman, prueba de
 # Kruskal-Wallis y su tamaño de efecto η², información mutua, VIF y
@@ -44,7 +44,7 @@
 # | cualquiera – objetivo | — | información mutua (no lineal) | MI / H(Y) |
 # | multicolinealidad | heatmap | VIF | VIF |
 #
-# **Rigor estadístico.** Con n ≈ 220 000 casi toda diferencia es
+# **Rigor estadístico.** Con n ≈ 257 000 casi toda diferencia es
 # "significativa", así que la conclusión se basa en el **tamaño de efecto** y
 # los p-valores se corrigen por comparaciones múltiples (**Holm**). Además,
 # estas pruebas suponen filas **independientes**, y aquí no lo son (unidades
@@ -149,22 +149,23 @@ dif.head(12)  # los 12 pares con mayor discrepancia entre ambos coeficientes
 # :class: note
 # Regla de las notas de clase: si |Pearson − Spearman| > 0.2 la relación no es
 # lineal o está dominada por outliers, y se prioriza Spearman.
-# - Los **cuatro pares con diferencia notable (> 0.2) involucran el terreno**.
-#   El mayor es **terreno–piso de ubicación: Pearson −0.102 frente a Spearman
-#   −0.695**. La relación es fuerte y monótona (más alto el piso, menor la
-#   cuota de terreno de la unidad), pero no lineal: la cola de terreno (hasta
-#   36 022 m² en train, cap. 5) aplasta el Pearson. Lo mismo ocurre en área
-#   construida–terreno (0.139 frente a 0.560), terreno–habitaciones (0.058
-#   frente a 0.281) y terreno–antigüedad (−0.011 frente a 0.222).
+# - Los **tres pares con diferencia notable (> 0.2) involucran el terreno**.
+#   El mayor es **área construida–terreno: Pearson 0.151 frente a Spearman
+#   0.494**; le siguen terreno–piso de ubicación (−0.078 frente a −0.366: más
+#   alto el piso, menor la cuota de terreno de la unidad) y
+#   terreno–habitaciones (0.071 frente a 0.297). Son relaciones monótonas
+#   pero no lineales: la cola de terreno (hasta 36 022 m² en train, cap. 5)
+#   aplasta el Pearson, y los ceros de las mejoras en terreno ajeno (13.5 % de
+#   train, cap. 5.6) añaden una masa en 0 que el Pearson tampoco recoge.
 # - Entre las variables de la vivienda en sí, las relaciones son casi
-#   lineales: área construida–habitaciones (0.56 frente a 0.61) y
-#   habitaciones–baños (0.55 frente a 0.52) no aparecen entre las
+#   lineales: área construida–habitaciones (0.57 frente a 0.62) y
+#   habitaciones–baños (0.57 frente a 0.53) no aparecen entre las
 #   discrepancias destacadas. Las reglas de limpieza del cap. 1 (exclusión de
 #   registros agregados, paso 2c, e incoherencias baños/habitaciones → NaN,
 #   paso 5) retiran justamente los registros extremos que inflarían el
 #   Pearson de estos pares. El resto de discrepancias son moderadas
-#   (0.10–0.16, p. ej. área construida–baños, 0.471 frente a 0.362) o
-#   triviales (área construida–plantas y baños–piso, < 0.1).
+#   (0.10–0.18: terreno–antigüedad, terreno–plantas, baños–piso y área
+#   construida–baños, 0.480 frente a 0.375) o triviales (< 0.1).
 # - Consecuencia: para áreas y conteos se reporta Spearman, y el modelo usa
 #   `log1p` (cap. 5), que convierte buena parte de estas relaciones monótonas
 #   en aproximadamente lineales.
@@ -488,36 +489,38 @@ familia.sort_values("p")
 # :class: note
 # - **La ubicación domina.** Por tamaño de efecto (η²_H de Kruskal-Wallis),
 #   la variable más asociada al estrato es **`y_km`** (eje norte-sur,
-#   η² = 0.50, Spearman 0.66), seguida de la distancia al centro (0.32) y
-#   `x_km` (0.26). Entre las físicas destacan **baños** (η² = 0.31, Spearman
-#   0.52), **piso de ubicación** (0.21) y **área construida** (0.18): mediana
-#   de 54 m² en estrato 1 frente a 152 m² en estrato 6. Habitaciones (0.076) y
-#   terreno (0.074) tienen efectos medianos; antigüedad (0.056) y plantas
-#   (0.018) pequeños, y `altura` es trivial (0.005).
-# - **No todo es monótono.** El terreno tiene Spearman negativo (−0.15) y sus
-#   medianas por estrato suben de 1 a 2 (66 → 90.9 m²) y luego caen en 4–6
-#   (38–52 m²): en los estratos altos predominan apartamentos PH con cuotas de
-#   terreno pequeñas. Algo parecido pasa con `x_km` y la distancia al centro,
-#   cuyas medianas no siguen el orden del estrato. Una regresión logística con
-#   términos lineales no captura bien estas formas en U.
+#   η² = 0.46, Spearman 0.61). Entre las físicas destacan **baños**
+#   (η² = 0.33, Spearman 0.53), que supera a la distancia al centro (0.28) y a
+#   `x_km` (0.22); luego **piso de ubicación** (0.25) y **área construida**
+#   (0.17): mediana de 56 m² en estrato 1 frente a 152 m² en estrato 6.
+#   Habitaciones (0.079) tiene un efecto mediano; terreno (0.050), antigüedad
+#   (0.046) y plantas (0.017) pequeños, y `altura` es trivial (0.004).
+# - **No todo es monótono.** Las medianas de terreno por estrato suben de 1 a
+#   2 (32 → 78 m²) y luego caen en 4–6 (38–52 m²): en el estrato 1 pesan las
+#   mejoras en terreno ajeno, sin terreno propio (cap. 5.6), y en los estratos
+#   altos predominan apartamentos PH con cuotas de terreno pequeñas. Algo
+#   parecido pasa con `x_km` y la distancia al centro, cuyas medianas no
+#   siguen el orden del estrato. Una regresión logística con términos
+#   lineales no captura bien estas formas en U.
 # - **Información mutua.** Coincide en poner la ubicación arriba (MI/H(Y) de
-#   0.59–0.63) pero sube mucho al terreno (0.40). Hay que leer la MI con
+#   0.59–0.62) pero sube mucho al terreno (0.40). Hay que leer la MI con
 #   cautela: coordenadas y terreno se repiten exactamente en todas las unidades
-#   de un edificio, y como el estrato casi no varía dentro del edificio
+#   de un edificio (y, en las viviendas ubicadas por su manzana, en toda la
+#   manzana), y como el estrato casi no varía dentro del edificio
 #   (ICC = 0.992, sección 1.9), el estimador de MI por vecinos premia variables que
 #   "identifican el edificio", más que relaciones generalizables.
-# - **Categóricas.** `condicion_predio` (V = 0.33, moderada), `uso` (0.24) y
+# - **Categóricas.** `condicion_predio` (V = 0.33, moderada), `uso` (0.26) y
 #   `tipo_vivienda` (0.22) superan el umbral de 0.1; `destinacion_economica`
-#   tiene V = 0 (p = 0.47) y se descarta.
+#   tiene V = 0.001 (p = 0.44) y se descarta.
 # - **Redundancias.** `uso` y `condicion_predio` están muy asociadas: las
 #   categorías "…en_PH" son 99.9–100 % `PH_Unidad_Predial`. Con regularización L2 la
 #   logística tolera esta redundancia para predecir, pero sus coeficientes
 #   individuales se interpretan con cautela. Entre numéricas **no hay
-#   multicolinealidad preocupante**: todos los VIF < 3 (el mayor, terreno con
-#   2.76); solo `x_km` llega a 5.4 (y `dist_centro_km` a 5.0) cuando entran
+#   multicolinealidad preocupante**: todos los VIF < 2 (el mayor, baños con
+#   1.93); `x_km` llega a 6.1 (y `dist_centro_km` a 5.7) cuando entran
 #   las espaciales, por su relación geométrica.
 # - **Pruebas múltiples.** 18 de 21 pruebas siguen significativas tras Holm;
-#   con n ≈ 220 000 casi todo es "significativo", por eso las decisiones se
+#   con n ≈ 257 000 casi todo es "significativo", por eso las decisiones se
 #   toman con los **tamaños de efecto**, no con los p-valores. Además, la
 #   dependencia entre unidades de un mismo edificio hace que estos p-valores
 #   sean optimistas (el tamaño efectivo es mucho menor, sección 1.9).

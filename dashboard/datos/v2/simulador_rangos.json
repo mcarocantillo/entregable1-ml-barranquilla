@@ -1,0 +1,69 @@
+{
+ "area_construida": [
+  21.0,
+  68.0,
+  308.0
+ ],
+ "area_catastral_terreno": [
+  0.0,
+  41.0,
+  493.0
+ ],
+ "total_habitaciones": [
+  1.0,
+  3.0,
+  6.0
+ ],
+ "total_banios": [
+  0.0,
+  1.0,
+  4.0
+ ],
+ "total_plantas": [
+  1.0,
+  1.0,
+  3.0
+ ],
+ "antiguedad": [
+  1.0,
+  15.0,
+  64.0
+ ],
+ "planta_ubicacion": [
+  1.0,
+  1.0,
+  14.0
+ ],
+ "altura": [
+  3.0,
+  3.0,
+  3.0
+ ],
+ "categorias": {
+  "tipo_vivienda": [
+   "tv_1",
+   "tv_2",
+   "tv_3",
+   "tv_4"
+  ],
+  "uso": [
+   "Residencial_Apartamentos_4_y_mas_pisos",
+   "Residencial_Apartamentos_4_y_mas_pisos_en_PH",
+   "Residencial_Vivienda_Hasta_3_Pisos",
+   "Residencial_Vivienda_Hasta_3_Pisos_En_PH",
+   "Residencial_Vivienda_Recreacional"
+  ],
+  "condicion_predio": [
+   "Condominio_Unidad_Predial",
+   "Informal",
+   "NPH",
+   "PH_Matriz",
+   "PH_Unidad_Predial"
+  ]
+ },
+ "moda_categorias": {
+  "tipo_vivienda": "tv_4",
+  "uso": "Residencial_Vivienda_Hasta_3_Pisos",
+  "condicion_predio": "NPH"
+ }
+}
