@@ -324,7 +324,27 @@ conservan como registro del proceso. Las vigentes están en A.12.
   `resultados_modelo.json` (`tam_zona_moda_km`) para que el Entregable 2 use
   el mismo.
 
-## A.14 Pendientes
+## A.14 Versión 3: validación kNNDM y mejoras del modelo base (17-oct-2026)
+
+- **Motivo.** Sugerencia del profesor: revisar el buffer de 1 km con herramientas de vecinos más cercanos (libro
+  de Modelos Espacio-Temporales, cap. 2).
+- **Código nuevo.** `src/vecinos.py`: distancias al vecino más cercano y ECDF ponderada; `knndm` (K-Means sobre
+  edificios, grupos repartidos en folds estratificados, q elegido por Wasserstein); `LogisticaOrdinal` (odds
+  proporcionales con L2, gradiente comprobado con diferencias finitas, error relativo 6·10⁻⁷);
+  `ajustar_sesgos_f1`; lag espacial KNN. Capítulo nuevo `14_validacion_vecinos.py`; resultados en
+  `datos/procesados/resultados_v3.json`.
+- **Escenario.** Coordenadas de los edificios de test frente a todo train (zona nueva de 2 km con su entorno):
+  mediana 0.453 km. Test v2 (con buffer) 1.532 km; CV v2 1.406 km; CV aleatoria por edificios 0.010 km.
+- **kNNDM.** q = 30, Wasserstein 0.178 km (CV v2: 1.033; aleatoria: 0.428). Folds de 49 376 a 54 612 viviendas.
+- **Rejilla con kNNDM (B).** 0.451–0.466; regla 1-SE → C = 0.01 sin pesos (0.460). A: C = 0.01 balanceado (0.394).
+- **Test.** B v2 0.492 | B v2 sin buffer 0.531 (+0.039 [−0.017, +0.067]) | B v3 0.493 (+0.001; MAE 0.384, −0.055
+  [−0.113, −0.015]) | ordinal 0.457 (MAE 0.512) | B v3 + umbrales 0.516 (+0.023 [−0.013, +0.039]; en CV anidada
+  −0.011, SE 0.014). Recall B v3: E1 0.90, E2 0.40, E3 0.75, E4 0.58, E5 0.08, E6 0.26.
+- **Entorno.** El capítulo 14 se ejecutó con `venv_e2` (Python 3.11, scikit-learn 1.8.0); los capítulos 1–12
+  conservan sus salidas de la versión 2. La réplica de la versión 2 dentro del capítulo 14 da el mismo F1 de
+  test (0.4921).
+
+## A.15 Pendientes
 
 - (Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
   textos, conclusiones y resumen.

@@ -21,6 +21,7 @@ parts:
   - caption: Modelo base
     chapters:
       - file: notebooks/10_modelo_base
+      - file: notebooks/14_validacion_vecinos
       - file: notebooks/11_conclusiones
   - caption: Apéndices
     chapters:

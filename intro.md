@@ -1,7 +1,17 @@
 # Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
 
 **Primer entregable del proyecto de investigación — Machine Learning**
-Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Versión 2, octubre de 2026
+Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Versión 3, octubre de 2026
+
+```{admonition} Versión 3: validación por vecinos más cercanos
+:class: important
+Esta es la **versión 3** del libro. Agrega el **capítulo 14**: la validación cruzada se diseña emparejando
+distancias al vecino más cercano (kNNDM) en lugar de un buffer fijo de 1 km, se prueban una logística ordinal y
+umbrales de decisión para el F1 macro, y el modelo principal pasa a entrenarse con todo el entrenamiento
+(F1 macro de test 0.493, igual que en la versión 2, con un MAE ordinal más bajo: 0.384 frente a 0.439). La
+partición en entrenamiento y prueba y los capítulos 1 a 13 no cambian. La versión 2 sigue publicada en
+[/v2/](https://mcarocantillo.github.io/entregable1-ml-barranquilla/v2/).
+```
 
 ```{admonition} Versión 2: viviendas ubicadas por su manzana
 :class: important
@@ -59,6 +69,7 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 | 9. Fuga de datos | disponibilidad, identificadores, AUC univariado, entidades repetidas | 2.5 |
 | Resumen ejecutivo del EDA | calidad, variables prometedoras, problemas y decisiones preliminares | 2 (notas 9.10.4.1.5) |
 | 10. Modelo base | Pipeline, líneas base, CV espacial, métricas con IC, residuos, curva de aprendizaje | 2.9, 3 |
+| 14. Validación por vecinos más cercanos (versión 3) | distancia al vecino conocido, validación kNNDM, logística ordinal, umbrales para el F1 macro | 3 |
 | 11. Conclusiones | hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según las instrucciones del proyecto | Figura 1, nota crítica |
 | Apéndices | bitácora de decisiones, reproducibilidad, referencias | Entregables |
 

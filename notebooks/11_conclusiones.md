@@ -243,3 +243,27 @@ Las dos reservas son:
 En resumen, la base no necesita más filas ni otra fuente para seguir con el
 proyecto; necesita mejores variables derivadas (vecindad física) y modelos
 más flexibles.
+
+
+## 11.5 Versión 3: validación por vecinos más cercanos (capítulo 14)
+
+Tres de los próximos pasos de 11.3 se probaron en la versión 3, a partir de la sugerencia del profesor de usar
+herramientas de *k* vecinos más cercanos (libro de Modelos Espacio-Temporales, cap. 2):
+
+- **El buffer de 1 km medía un escenario más difícil que el declarado.** Una zona nueva de 2 km tiene su vecino
+  conocido a 0.45 km (mediana); con el buffer, la validación y el test de la versión 2 evaluaban a 1.4–1.5 km.
+  La validación **kNNDM** (Linnenbrink et al., 2024) arma los folds para reproducir esa distancia (q = 30 grupos,
+  Wasserstein 0.18 km frente a 1.03 km de la validación con buffer). Con ella la CV estima 0.46 y el test da
+  0.49: la brecha entre validación y test baja de +0.17 a +0.03.
+- **Modelo principal v3:** la misma logística B, con C = 0.01 sin pesos de clase y entrenada con todo el
+  entrenamiento. En test el F1 macro no cambia (0.493 frente a 0.492), pero el MAE ordinal baja de 0.439 a
+  0.384 (diferencia significativa), con mejor accuracy, kappa y log loss. A cambio, el estrato 5 casi no se
+  predice (recall 0.08).
+- **La logística ordinal y los umbrales por clase no mejoran.** La ordinal pierde 0.03 de F1 en CV y tiene un
+  MAE más alto, porque la ubicación no ordena los estratos a lo largo de un solo índice. Los umbrales para el F1
+  macro no ganan en la validación anidada (−0.01), aunque en test suben 0.02: no se adoptan.
+
+- **Con esta validación, describir el entorno sí ayuda.** En el Entregable 2 (capítulo 6), agregar al modelo B la vecindad física (promedios de área, baños, pisos y régimen de los vecinos, sin su estrato) sube el F1 de test de 0.49 a 0.57–0.60, con diferencias significativas; con el buffer de 1 km esa mejora no se veía. Un grafo de *k* vecinos más cercanos rinde igual que los radios fijos.
+
+La partición en entrenamiento y prueba no cambió: el test son los mismos 7 bloques. La conclusión principal se
+mantiene: la ubicación domina y el techo lo pone la información que falta dentro de cada zona.
