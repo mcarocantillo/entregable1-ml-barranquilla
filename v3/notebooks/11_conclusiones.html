@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>11. Conclusiones, limitaciones y próximos pasos &#8212; Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/11_conclusiones';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Apéndice A. Bitácora metodológica (decisiones y hallazgos)" href="A_bitacora.html" />
+    <link rel="prev" title="14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)" href="14_validacion_vecinos.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_validacion_vecinos.html">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/11_conclusiones.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>11. Conclusiones, limitaciones y próximos pasos</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-principales">11.1 Hallazgos principales</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">11.2 Limitaciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proximos-pasos-entregable-2">11.3 Próximos pasos (Entregable 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto">11.4 Veredicto: ¿la base de datos sirve para el proyecto?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-3-validacion-por-vecinos-mas-cercanos-capitulo-14">11.5 Versión 3: validación por vecinos más cercanos (capítulo 14)</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="conclusiones-limitaciones-y-proximos-pasos">
+<h1>11. Conclusiones, limitaciones y próximos pasos<a class="headerlink" href="#conclusiones-limitaciones-y-proximos-pasos" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<section id="hallazgos-principales">
+<h2>11.1 Hallazgos principales<a class="headerlink" href="#hallazgos-principales" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Base de datos.</strong> El catastro abierto de Barranquilla permitió construir
+una base de <strong>332 718 unidades de vivienda</strong> con estrato residencial válido
+(87.0 % de las 382 597 filas descargadas), en 320 792 predios y 168 044
+predios matriz (edificios, conjuntos o lotes). De ellas, <strong>322 418 (96.9 %)
+tienen coordenadas</strong> (278 824 propias y 43 594 ubicadas por su manzana) y
+son el universo con el que se parte y se modela; las 10 300 restantes son
+casi todas mejoras en terreno ajeno de estrato 1, y el capítulo 1 reporta
+las cifras clave en los dos universos (sección 1.7). Durante la construcción se corrigió un error de uniones
+muchos-a-muchos que duplicaba ~29 % de las filas. La limpieza distingue
+tres tipos de problema. (i) <strong>Códigos centinela</strong>: año de construcción
+2500 y 1512, y pisos 97–99; se tratan como faltantes. (ii) <strong>Filas que no
+describen una vivienda</strong>: unidades de menos de 10 m², probables
+parqueaderos o depósitos (1 044 filas), y <strong>registros agregados</strong> que
+describen un edificio completo en una sola fila (234 filas); se excluyen
+del alcance. (iii) <strong>Incoherencias dentro de la fila</strong>: más baños que
+habitaciones + 3, o menos de 6 m² por habitación (396 filas); se anula
+el valor y se conserva la fila. La regla de Tukey de las notas de clase se
+usa para <strong>describir</strong> outliers (cap. 3), no para limpiar: en variables de
+cola larga marca miles de viviendas reales.</p></li>
+<li><p><strong>Ubicación por manzana.</strong> El 16.2 % de las viviendas (casi todas mejoras
+informales en terreno ajeno, de estratos 1 y 2) llega sin coordenadas. Su
+número predial dice en qué manzana están, y el 92.7 % comparte manzana con
+viviendas ubicadas. Se ubicaron 43 594 de ellas con el <strong>centroide de su
+manzana</strong>, solo en manzanas compactas (código distinto de <code class="docutils literal notranslate"><span class="pre">0000</span></code> y todos
+sus puntos a menos de 250 m del centroide). El error de esa aproximación,
+medido con los edificios ya ubicados, es de <strong>31 m</strong> en la mediana (p90 de
+68 m), muy poco frente a los bloques de 2 km y al buffer de 1 km. Con ello,
+el <strong>96.9 %</strong> de las viviendas entra al modelado (antes, el 83.8 %), y la V
+de Cramér entre «tener coordenadas» y el estrato baja de 0.42 a 0.22
+(sección 1.7.2 y 3.3).</p></li>
+<li><p><strong>Estructura de dependencia.</strong> El estrato casi no varía dentro de un
+edificio o conjunto (ICC = 0.992), y hay conjuntos de hasta 1 860 unidades: la
+información sobre el estrato está gobernada por edificios, conjuntos y zonas, no por
+filas (tamaño efectivo ≈ 2 300 con todas las filas y ≈ 2 170 con las que
+tienen coordenadas). Esto obliga a partir los datos por grupos espaciales y
+a medir la incertidumbre remuestreando bloques.</p></li>
+<li><p><strong>Objetivo.</strong> El estrato está moderadamente desbalanceado (6.2:1 en
+train; el estrato 1 es la clase mayoritaria), es ordinal y tiene una
+<strong>autocorrelación espacial extremadamente fuerte</strong> (Moran’s I = 0.918 a
+nivel de edificio; casi la mitad de los edificios en clusters LISA y
+prácticamente ningún outlier espacial). La ciudad está segregada: estrato
+medio 1.5 en la franja sur frente a 3.9 en la norte.</p></li>
+<li><p><strong>Predictoras.</strong> La variable más asociada al estrato es la <strong>posición
+norte-sur</strong> (η² = 0.46). Entre las físicas destacan el número de <strong>baños</strong>
+(η² = 0.33), el piso de ubicación (0.25) y el <strong>área construida</strong> (0.17),
+con relaciones monótonas pero no lineales (justifican log1p). El régimen de
+propiedad (<code class="docutils literal notranslate"><span class="pre">condicion_predio</span></code>, V = 0.33) y el <code class="docutils literal notranslate"><span class="pre">uso</span></code> (0.26) aportan
+información, pero son redundantes entre sí. <code class="docutils literal notranslate"><span class="pre">destinacion_economica</span></code> y
+<code class="docutils literal notranslate"><span class="pre">tipo_planta</span></code> son degeneradas y se excluyeron. La relación entre variables
+físicas y estrato <strong>cambia por zona</strong> (Spearman área–estrato de 0.12 a
+0.49 según la macrozona).</p></li>
+<li><p><strong>Modelo base.</strong> El modelo principal, elegido por F1 macro en la
+validación cruzada espacial, es la regresión logística multinomial con
+variables físicas <strong>y</strong> de ubicación (modelo B; C = 0.01,
+<code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code>). Alcanza <strong>F1 macro 0.32 ± 0.08 en validación
+cruzada espacial</strong> y <strong>0.49 en test</strong> (IC 95 % por bloques [0.28, 0.51]; 7
+bloques no vistos), frente a 0.087 de la clase mayoritaria (Δ = +0.405, IC
+[0.10, 0.44]). Los errores son casi siempre entre estratos adyacentes
+(accuracy ±1 = 0.96, MAE ordinal = 0.44, kappa cuadrático = 0.84). El
+estrato que más falla es el <strong>4</strong> (recall 0.28): el 48 % se clasifica
+como 3 y el 22 % como 5. Los estratos 5 y 6 se confunden entre sí y con
+el 4 (el 6 acierta el 21 %).</p></li>
+<li><p><strong>La ubicación manda, pero no basta una regla geográfica.</strong> Una línea base
+puramente geográfica, la <strong>clase más frecuente en una zona de 4 km</strong> (el
+tamaño elegido por CV), queda por debajo del modelo en todas las métricas
+de test (F1 0.35 frente a 0.49; MAE 0.52 frente a 0.44; kappa 0.77 frente
+a 0.84), aunque la diferencia de F1 no es significativa (+0.14, IC
+[−0.12, 0.17]). B supera al modelo con solo variables físicas (A) en test
+(F1 0.49 frente a 0.37; IC de la diferencia [0.03, 0.15], que excluye 0),
+pero en la CV espacial la ventaja es menor y queda dentro del ruido (0.322
+frente a 0.286). Lo que aportan las coordenadas depende de la zona: en uno
+de los folds de la CV, desordenarlas <strong>mejora</strong> el F1.</p></li>
+<li><p><strong>Validación.</strong> Una validación aleatoria habría estimado un F1 macro de
+<strong>0.62</strong>, frente a <strong>0.32</strong> con bloques y buffer: casi el doble. El buffer
+también importa: el F1 de CV baja de 0.41 sin buffer a 0.32 con 1 km, una
+caída del orden de la variabilidad entre folds. En este problema, la
+validación espacial no es opcional. Además, la partición y los folds
+dependían de la versión de scikit-learn (con <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>, un
+entorno produjo un test casi sin estratos 4–6). Por eso se construyen con
+una función propia determinista (<code class="docutils literal notranslate"><span class="pre">folds_estratificados_por_grupo</span></code>), y las
+diferencias de ≈0.01–0.04 entre modelos en CV no se interpretan.</p></li>
+<li><p><strong>Residuos y calibración.</strong> Los residuos conservan una autocorrelación
+espacial fuerte (Moran = 0.56 en B y 0.47 en A): el modelo capta la
+tendencia de gran escala, pero no los barrios. En conjunto, las
+probabilidades están bien calibradas (ECE = 0.03), pero no por clase: con
+los pesos de clase, el estrato 1 y el 4 quedan subestimados y el 2, el 3,
+el 5 y el 6 sobreestimados, lo que explica que el 4 pierda casi siempre
+frente al 3 pese a ordenar bien (AUC 0.93). La curva de aprendizaje es
+plana (F1 de 0.325 a 0.322 al multiplicar por 20 los datos): más filas no
+ayudarán, hacen falta un modelo más flexible y variables del entorno.</p></li>
+</ol>
+</section>
+<section id="limitaciones">
+<h2>11.2 Limitaciones<a class="headerlink" href="#limitaciones" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Cobertura:</strong> el 3.1 % de las filas (10 300 viviendas, 98 % informales y
+84 % de estrato 1) sigue sin coordenadas y queda fuera del modelo: sus
+manzanas no tienen viviendas ubicadas, son dispersas o tienen el código
+genérico <code class="docutils literal notranslate"><span class="pre">0000</span></code>. Quitarlas baja el estrato 1 de 32.8 % a 31.1 % (sección
+1.7.3). Las conclusiones sobre esos asentamientos deben leerse con cautela.</p></li>
+<li><p><strong>Ubicación aproximada de las viviendas informales:</strong> las 43 594 viviendas
+ubicadas por su manzana están en el centroide de la manzana, no en su
+propio lote (error mediano estimado de 31 m), y todas las de una manzana
+comparten punto. Los análisis espaciales las cuentan como un punto por
+manzana, pero cualquier variable que dependa de la posición exacta dentro
+de la manzana no es fiable para ellas.</p></li>
+<li><p><strong>Pocos bloques de test:</strong> el test quedó con 7 bloques, con poco estrato 6
+(1.2 % frente a 4.8 % en train). Los intervalos son muy anchos y la cifra de
+test es una realización favorable; la estimación más representativa es la
+de la CV espacial.</p></li>
+<li><p><strong>CV sensible a los folds:</strong> con pocos bloques, la asignación de bloques a
+folds cambia la cifra de CV en varias centésimas. Por eso se fijó una
+partición determinista y se reportan desviaciones e intervalos. La
+ubicación por manzana cambió los conteos por bloque y, con ellos, la
+partición: solo 3 de los 7 bloques de test coinciden con los de la versión
+anterior del libro, así que sus cifras de test no se comparan una a una.</p></li>
+<li><p><strong>Buffer parcial:</strong> el alcance del correlograma (2.6 km) supera el buffer
+usado (1 km). La validación espacial sigue siendo algo optimista.</p></li>
+<li><p><strong>Estrato como etiqueta administrativa:</strong> se asigna por manzana o lado de
+manzana con una metodología que incluye el entorno urbano; el modelo solo ve
+la vivienda y su ubicación aproximada.</p></li>
+<li><p><strong>Calidad del catastro:</strong> las características físicas pueden estar
+desactualizadas. El año de construcción aparece amontonado en ciertos
+valores (1986 concentra el 12 % de train en el diagnóstico de rangos), y hay
+viviendas con 0 habitaciones o 0 baños que no se pudieron verificar contra
+el diccionario oficial; se conservaron.</p></li>
+<li><p><strong>Significado de <code class="docutils literal notranslate"><span class="pre">anio_construccion</span></code> (revisión posterior, octubre de 2026):</strong>
+el campo parece registrar el año de la última incorporación o actualización
+de la construcción en el catastro, no su fecha original. Solo 1.442 casas de
+toda la ciudad tienen años anteriores a 1975, lo que no es compatible con
+barrios antiguos como El Prado, Barrio Abajo o el Centro. Además, 15.376
+apartamentos de estratos 1 y 2, en 24 lotes de bloques de 5 pisos con
+tipología de vivienda de interés prioritario, registran años entre 1932 y
+1972, con un solo año por lote. Como el filtro de plausibilidad aceptaba
+años desde 1900, esas unidades entraron al modelo con 54 a 94 años de
+<code class="docutils literal notranslate"><span class="pre">antiguedad</span></code>. La variable debe leerse como «años desde el registro
+catastral» y no como edad física del edificio. Queda pendiente confirmar su
+definición con la Gerencia de Gestión Catastral. El detalle está en el
+<a class="reference external" href="https://mcarocantillo.github.io/tesis-datos-barranquilla/11_coherencia.html">sitio de datos de la tesis</a>.</p></li>
+<li><p><strong>Significado de <code class="docutils literal notranslate"><span class="pre">total_plantas</span></code>, <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code> y <code class="docutils literal notranslate"><span class="pre">altura</span></code>:</strong> las tres
+describen la vivienda, no el edificio. <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code> es el piso en que
+está la unidad (hasta 41) y es confiable. <code class="docutils literal notranslate"><span class="pre">total_plantas</span></code> son los pisos de la
+propia vivienda (1 en el 96.5 % de los apartamentos de train; 1 o 2 en las
+casas), pero en unas 900 filas, casi todas apartamentos en PH, el catastro
+parece registrar los pisos del edificio (14 o 20 plantas en un piso 3 u 8), y
+hay al menos un error evidente: una casa NPH «de hasta 3 pisos» con 35
+plantas. <code class="docutils literal notranslate"><span class="pre">altura</span></code> vale 3 m en el 99.7 % de las filas, también en casas de dos
+pisos: es un valor casi fijo que no mide la altura del edificio. Una regla de
+coherencia (por ejemplo, anular <code class="docutils literal notranslate"><span class="pre">total_plantas</span></code> &gt; 3 en las viviendas de
+«hasta 3 pisos») queda pendiente.</p></li>
+<li><p><strong>Modelo lineal:</strong> no captura interacciones ni heterogeneidad espacial; la
+multinomial ignora el orden de las clases, y aunque la calibración global
+es buena (ECE = 0.03), las probabilidades por clase están desplazadas por
+los pesos de clase.</p></li>
+<li><p><strong>Riesgos éticos:</strong> reidentificación por NPN + coordenadas y uso
+discriminatorio del estrato (sección 1.11).</p></li>
+</ul>
+</section>
+<section id="proximos-pasos-entregable-2">
+<h2>11.3 Próximos pasos (Entregable 2)<a class="headerlink" href="#proximos-pasos-entregable-2" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Modelos no lineales (árboles, <em>gradient boosting</em>) y <strong>regresión logística
+ordinal</strong>, que respeta el orden de las clases y debería ayudar con los
+estratos intermedios y altos (4 y 5), hoy absorbidos por sus vecinos.</p></li>
+<li><p>Recalibrar probabilidades por clase (Platt o isotónica, dentro de la CV
+espacial) y ajustar umbrales por clase: el estrato 4 ordena bien (AUC 0.93)
+pero casi nunca gana el argmax.</p></li>
+<li><p>Variables de <strong>vecindad física</strong>: rezago espacial de área, baños y
+antigüedad de los vecinos. Son legítimas porque no usan el estrato. Con la
+ubicación por manzana, estas variables también cubren los barrios
+informales.</p></li>
+<li><p>Revisar <code class="docutils literal notranslate"><span class="pre">altura</span></code> (casi constante) y la antigüedad, que no aportan en la
+importancia por permutación.</p></li>
+<li><p>Más folds o bloques más pequeños para un test menos dependiente de pocas
+zonas, y comparar tamaños de bloque y buffer como hiperparámetros de la
+evaluación (notas de clase 9.1.11).</p></li>
+<li><p>Verificar con el diccionario del catastro los ceros de habitaciones y
+baños y el amontonamiento de años.</p></li>
+<li><p>Ubicar el 3.1 % que sigue sin coordenadas con la cartografía oficial de
+manzanas o con geocodificación de direcciones, y, si se consigue la
+geometría del lote de las mejoras informales, reemplazar el centroide de
+la manzana por la posición real.</p></li>
+</ul>
+</section>
+<section id="veredicto-la-base-de-datos-sirve-para-el-proyecto">
+<h2>11.4 Veredicto: ¿la base de datos sirve para el proyecto?<a class="headerlink" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto" title="Link to this heading">#</a></h2>
+<p>Para cerrar, se revisa si la base cumple lo que pide el proyecto, contrastando
+cada requisito con un score calculado en los capítulos anteriores. Cada
+criterio indica de dónde sale: las <strong>instrucciones del proyecto (Entregable 1)</strong> (secciones 1,
+2.3, 2.5 y 3, y la Figura 1) o las <strong>notas de clase</strong> del profesor Lihki Rubio
+(sección 9). Donde ninguna fija un número, se usa el umbral que el propio EDA
+declaró antes de modelar.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Criterio</p></th>
+<th class="head"><p>Fuente</p></th>
+<th class="head"><p>Umbral</p></th>
+<th class="head"><p>Score obtenido</p></th>
+<th class="head"><p>Cap.</p></th>
+<th class="head"><p>¿Cumple?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Tamaño de la muestra</p></td>
+<td><p>Instrucciones 1</p></td>
+<td><p>≥ 20 000 observaciones</p></td>
+<td><p>332 718 viviendas (322 418 con coordenadas)</p></td>
+<td><p>1</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Relación n/p (filas por cada columna del modelo; ver 1.8)</p></td>
+<td><p>Instrucciones 1</p></td>
+<td><p>reportar; n ≫ p</p></td>
+<td><p>~9 500 filas por columna (~9 200 con coordenadas)</p></td>
+<td><p>1</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Casos de la clase minoritaria</p></td>
+<td><p>Instrucciones 1 y 2.1</p></td>
+<td><p>suficientes sin sobremuestreo</p></td>
+<td><p>12 414 (estrato 6, train); desbalance 6.2 : 1</p></td>
+<td><p>4</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Entidades independientes</p></td>
+<td><p>Instrucciones 1</p></td>
+<td><p>reportar el tamaño efectivo</p></td>
+<td><p>168 044 predios matriz (165 954 con coordenadas); ICC = 0.992; tamaño efectivo ≈ 2 300 (≈ 2 170 con coordenadas)</p></td>
+<td><p>1</p></td>
+<td><p>Sí, con partición por bloques</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Valores faltantes</p></td>
+<td><p>Notas 9.10.4.1.2</p></td>
+<td><p>&lt; 30 % por variable</p></td>
+<td><p>máximo 0.12 %; mecanismo MAR</p></td>
+<td><p>3</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Sesgo de muestreo y representatividad</p></td>
+<td><p>Instrucciones 1</p></td>
+<td><p>sin sesgo de cobertura</p></td>
+<td><p>3.1 % sin coordenadas tras ubicar por manzana (16.2 % antes), casi todo informal y de estrato 1; V = 0.22 con el estrato (0.42 antes)</p></td>
+<td><p>1, 3, 8</p></td>
+<td><p>Con reservas</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Asociación predictoras–objetivo (tamaño de efecto)</p></td>
+<td><p>Instrucciones 2.3</p></td>
+<td><p>al menos un efecto grande (η² &gt; 0.14, umbral del cap. 6)</p></td>
+<td><p>η² = 0.46 (<code class="docutils literal notranslate"><span class="pre">y_km</span></code>), 0.33 (baños), 0.25 (piso)</p></td>
+<td><p>6</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Multicolinealidad</p></td>
+<td><p>Instrucciones 2.3</p></td>
+<td><p>VIF ≤ 10 (regla del cap. 6)</p></td>
+<td><p>VIF &lt; 2 en las físicas; 6.1 con las espaciales</p></td>
+<td><p>6</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Fuga de datos</p></td>
+<td><p>Instrucciones 2.5</p></td>
+<td><p>AUC univariado lejos de 1 (alerta en 0.95); 0 entidades compartidas</p></td>
+<td><p>AUC máximo 0.75; 0 edificios, predios o coordenadas compartidos</p></td>
+<td><p>9</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Comparación con la línea base trivial</p></td>
+<td><p>Instrucciones 3; notas 9.10.4.6.2</p></td>
+<td><p>IC 95 % bootstrap de la diferencia excluye 0</p></td>
+<td><p>Δ F1 macro = +0.405 frente al <code class="docutils literal notranslate"><span class="pre">DummyClassifier</span></code>, IC [0.10, 0.44], p = 0.012</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>AUC</p></td>
+<td><p>Instrucciones 3; notas 9.4</p></td>
+<td><p>mayor que el azar (0.5)</p></td>
+<td><p>AUC one-vs-rest macro = 0.90 (test)</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>¿El problema es trivial?</p></td>
+<td><p>Instrucciones, Figura 1 y nota crítica</p></td>
+<td><p>accuracy &lt; 80–90 %</p></td>
+<td><p>accuracy = 0.43 en CV espacial y 0.61 en test</p></td>
+<td><p>10</p></td>
+<td><p>Sí (no es trivial)</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>Tamaño de muestra suficiente</p></td>
+<td><p>Instrucciones 3 (curva de aprendizaje)</p></td>
+<td><p>curva plana al aumentar los datos</p></td>
+<td><p>F1 de 0.325 a 0.322 al multiplicar por 20 los datos</p></td>
+<td><p>10</p></td>
+<td><p>Sí</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Residuos sin dependencia espacial</p></td>
+<td><p>Instrucciones 3</p></td>
+<td><p>Moran de residuos cercano a 0</p></td>
+<td><p>Moran = 0.56</p></td>
+<td><p>10</p></td>
+<td><p>Con reservas</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Veredicto: sí, la base de datos es adecuada para el proyecto, con dos
+reservas.</strong> Cumple 12 de los 14 criterios.</p>
+<ul class="simple">
+<li><p><strong>Base de datos (criterios 1–6).</strong> Es grande, tiene casos de sobra en todas
+las clases y casi no tiene faltantes. Su tamaño efectivo es mucho menor que
+el número de filas, pero eso no la invalida: obliga a partir por bloques y
+a remuestrear bloques, que es lo que hace el libro.</p></li>
+<li><p><strong>EDA (criterios 7–9).</strong> Las predictoras contienen información real sobre
+el estrato (efectos grandes), no son redundantes entre sí y ninguna es un
+proxy del objetivo.</p></li>
+<li><p><strong>Modelo base (criterios 10–13).</strong> El modelo supera con significancia a la
+línea base trivial. La pregunta de control de la Figura 1 de las instrucciones del proyecto
+(»¿accuracy ≥ 80–90 %?») da <strong>no</strong>: el problema no es trivial, no hay
+señales de fuga y el dataset es suficientemente desafiante para el curso.
+La curva de aprendizaje muestra que la cantidad de datos no es el límite.</p></li>
+</ul>
+<p>Las dos reservas son:</p>
+<ul class="simple">
+<li><p><strong>Representatividad (criterio 6).</strong> Tras ubicar por manzana a la mayoría
+de las viviendas informales, la base describe casi toda la ciudad, pero el
+3.1 % que sigue sin coordenadas es casi todo informal y de estrato 1, y las
+viviendas ubicadas por su manzana tienen una posición aproximada. Las
+conclusiones sobre los asentamientos que no se pudieron ubicar deben
+leerse con cautela.</p></li>
+<li><p><strong>Residuos con dependencia espacial (criterio 14).</strong> Según las instrucciones del proyecto, esto
+indica información estructural sin capturar. Es una limitación del modelo
+lineal más que de la base: el modelo capta la tendencia norte-sur, pero no
+los barrios. Lo mismo explica que el F1 macro sea modesto (0.32 en CV
+espacial). Variables de vecindad y modelos más flexibles quedan para el
+Entregable 2 (11.3), con la misma base.</p></li>
+</ul>
+<p>En resumen, la base no necesita más filas ni otra fuente para seguir con el
+proyecto; necesita mejores variables derivadas (vecindad física) y modelos
+más flexibles.</p>
+</section>
+<section id="version-3-validacion-por-vecinos-mas-cercanos-capitulo-14">
+<h2>11.5 Versión 3: validación por vecinos más cercanos (capítulo 14)<a class="headerlink" href="#version-3-validacion-por-vecinos-mas-cercanos-capitulo-14" title="Link to this heading">#</a></h2>
+<p>Tres de los próximos pasos de 11.3 se probaron en la versión 3, a partir de la sugerencia del profesor de usar
+herramientas de <em>k</em> vecinos más cercanos (libro de Modelos Espacio-Temporales, cap. 2):</p>
+<ul class="simple">
+<li><p><strong>El buffer de 1 km medía un escenario más difícil que el declarado.</strong> Una zona nueva de 2 km tiene su vecino
+conocido a 0.45 km (mediana); con el buffer, la validación y el test de la versión 2 evaluaban a 1.4–1.5 km.
+La validación <strong>kNNDM</strong> (Linnenbrink et al., 2024) arma los folds para reproducir esa distancia (q = 30 grupos,
+Wasserstein 0.18 km frente a 1.03 km de la validación con buffer). Con ella la CV estima 0.46 y el test da
+0.49: la brecha entre validación y test baja de +0.17 a +0.03.</p></li>
+<li><p><strong>Modelo principal v3:</strong> la misma logística B, con C = 0.01 sin pesos de clase y entrenada con todo el
+entrenamiento. En test el F1 macro no cambia (0.493 frente a 0.492), pero el MAE ordinal baja de 0.439 a
+0.384 (diferencia significativa), con mejor accuracy, kappa y log loss. A cambio, el estrato 5 casi no se
+predice (recall 0.08).</p></li>
+<li><p><strong>La logística ordinal y los umbrales por clase no mejoran.</strong> La ordinal pierde 0.03 de F1 en CV y tiene un
+MAE más alto, porque la ubicación no ordena los estratos a lo largo de un solo índice. Los umbrales para el F1
+macro no ganan en la validación anidada (−0.01), aunque en test suben 0.02: no se adoptan.</p></li>
+<li><p><strong>Con esta validación, describir el entorno sí ayuda.</strong> En el Entregable 2 (capítulo 6), agregar al modelo B la vecindad física (promedios de área, baños, pisos y régimen de los vecinos, sin su estrato) sube el F1 de test de 0.49 a 0.57–0.60, con diferencias significativas; con el buffer de 1 km esa mejora no se veía. Un grafo de <em>k</em> vecinos más cercanos rinde igual que los radios fijos.</p></li>
+</ul>
+<p>La partición en entrenamiento y prueba no cambió: el test son los mismos 7 bloques. La conclusión principal se
+mantiene: la ubicación domina y el techo lo pone la información que falta dentro de cada zona.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="14_validacion_vecinos.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="A_bitacora.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-principales">11.1 Hallazgos principales</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">11.2 Limitaciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proximos-pasos-entregable-2">11.3 Próximos pasos (Entregable 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-la-base-de-datos-sirve-para-el-proyecto">11.4 Veredicto: ¿la base de datos sirve para el proyecto?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-3-validacion-por-vecinos-mas-cercanos-capitulo-14">11.5 Versión 3: validación por vecinos más cercanos (capítulo 14)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

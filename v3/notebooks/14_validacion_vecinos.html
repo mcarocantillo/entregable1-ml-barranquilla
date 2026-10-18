@@ -1,0 +1,1910 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3) &#8212; Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/14_validacion_vecinos';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="11. Conclusiones, limitaciones y próximos pasos" href="11_conclusiones.html" />
+    <link rel="prev" title="10. Modelo base (sección 3)" href="10_modelo_base.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/14_validacion_vecinos.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-que-distancia-se-predice">14.1 ¿A qué distancia se predice?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-knndm-folds-que-imitan-el-escenario">14.2 Validación kNNDM: folds que imitan el escenario</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hiperparametros-con-la-validacion-knndm">14.3 Hiperparámetros con la validación kNNDM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-en-test-con-y-sin-buffer">14.4 Evaluación en test: con y sin buffer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistica-ordinal">14.5 Logística ordinal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#umbrales-de-decision-para-el-f1-macro">14.6 Umbrales de decisión para el F1 macro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resumen-y-decision">14.7 Resumen y decisión</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="validacion-por-vecinos-mas-cercanos-y-mejoras-del-modelo-base-version-3">
+<h1>14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)<a class="headerlink" href="#validacion-por-vecinos-mas-cercanos-y-mejoras-del-modelo-base-version-3" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> ¿el buffer fijo de 1 km mide el escenario que
+queremos medir?, ¿qué cambia si la validación se diseña emparejando
+distancias al vecino más cercano?, y ¿mejoran el modelo base una logística
+ordinal o unos umbrales de decisión ajustados al F1 macro?</p>
+<p><strong>Datos:</strong> la misma partición del capítulo 2 (<strong>257 273</strong> viviendas de
+entrenamiento y <strong>65 145</strong> de prueba en 7 bloques de 2 km). El test no cambia.</p>
+<p><strong>Recorrido:</strong> a qué distancia se predice en cada diseño (14.1); validación
+kNNDM (14.2); hiperparámetros con esa validación (14.3); test con y sin buffer
+(14.4); logística ordinal (14.5); umbrales para el F1 macro (14.6); resumen y
+decisión (14.7).</p>
+</div>
+<p><strong>Por qué este capítulo.</strong> El buffer de 1 km del capítulo 8 fue un compromiso: el alcance del
+correlograma (2.6 km) vaciaba el entrenamiento y 1 km parecía una franja razonable. Pero un buffer fijo no
+dice qué escenario se está midiendo. Siguiendo la sugerencia del profesor (libro de Modelos
+Espacio-Temporales, cap. 2: grafos de <em>k</em> vecinos más cercanos y una validación que respete la dependencia
+espacial), este capítulo mide el escenario con la <strong>distancia al vecino más cercano</strong> y diseña la validación
+para que lo reproduzca. Todo lo demás (datos, partición, variables, Pipeline, métricas y test) es idéntico al
+capítulo 10.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Preparación del entorno: mismas importaciones y decisiones del EDA que el cap. 10.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"notebooks"</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span><span class="p">))</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">recall_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">cross_val_predict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">C</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">graficos</span> <span class="k">as</span> <span class="n">G</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">modelo</span> <span class="k">as</span> <span class="n">M</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">particion</span> <span class="k">as</span> <span class="n">P</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">vecinos</span> <span class="k">as</span> <span class="n">V</span>
+
+<span class="n">G</span><span class="o">.</span><span class="n">estilo</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">aviso_sintetico</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.float_format"</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">,.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">dec</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">leer_decisiones</span><span class="p">()</span>
+<span class="c1"># Resultados de la versión 2 (cap. 10), para comparar con el mismo test.</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"datos"</span> <span class="o">/</span> <span class="s2">"procesados"</span> <span class="o">/</span> <span class="s2">"resultados_modelo.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Datos y conjuntos de variables: idénticos al cap. 10.</span>
+<span class="n">datos</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">cargar_particion</span><span class="p">()</span>
+<span class="n">vm</span> <span class="o">=</span> <span class="n">dec</span><span class="p">[</span><span class="s2">"variables_modelo"</span><span class="p">][</span><span class="s2">"valor"</span><span class="p">]</span>
+<span class="n">num_log</span> <span class="o">=</span> <span class="n">dec</span><span class="p">[</span><span class="s2">"num_log"</span><span class="p">][</span><span class="s2">"valor"</span><span class="p">]</span>
+<span class="n">buffer_km</span> <span class="o">=</span> <span class="n">dec</span><span class="p">[</span><span class="s2">"buffer_km"</span><span class="p">][</span><span class="s2">"valor"</span><span class="p">]</span>
+<span class="n">q_inf</span><span class="p">,</span> <span class="n">q_sup</span> <span class="o">=</span> <span class="n">dec</span><span class="p">[</span><span class="s2">"winsorizacion_cuantiles"</span><span class="p">][</span><span class="s2">"valor"</span><span class="p">]</span>
+<span class="n">min_frec</span> <span class="o">=</span> <span class="n">dec</span><span class="p">[</span><span class="s2">"onehot_min_frecuencia"</span><span class="p">][</span><span class="s2">"valor"</span><span class="p">]</span>
+<span class="n">train_total</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="n">datos</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">"train"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="n">datos</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">"test"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># El entrenamiento de la versión 2: sin las viviendas a menos de 1 km del test.</span>
+<span class="n">mantener</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">mascara_buffer</span><span class="p">(</span><span class="n">train_total</span><span class="p">[[</span><span class="s2">"x_km"</span><span class="p">,</span> <span class="s2">"y_km"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">test</span><span class="p">[[</span><span class="s2">"x_km"</span><span class="p">,</span> <span class="s2">"y_km"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">buffer_km</span><span class="p">)</span>
+<span class="n">train_buf</span> <span class="o">=</span> <span class="n">train_total</span><span class="p">[</span><span class="n">mantener</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">conjuntos</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"A_fisicas"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"num"</span><span class="p">:</span> <span class="n">vm</span><span class="p">[</span><span class="s2">"numericas"</span><span class="p">],</span> <span class="s2">"cat"</span><span class="p">:</span> <span class="n">vm</span><span class="p">[</span><span class="s2">"categoricas"</span><span class="p">]},</span>
+    <span class="s2">"B_fisicas+ubicacion"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"num"</span><span class="p">:</span> <span class="n">vm</span><span class="p">[</span><span class="s2">"numericas"</span><span class="p">]</span> <span class="o">+</span> <span class="n">vm</span><span class="p">[</span><span class="s2">"espaciales"</span><span class="p">],</span> <span class="s2">"cat"</span><span class="p">:</span> <span class="n">vm</span><span class="p">[</span><span class="s2">"categoricas"</span><span class="p">]},</span>
+<span class="p">}</span>
+<span class="n">B</span> <span class="o">=</span> <span class="s2">"B_fisicas+ubicacion"</span>
+<span class="n">cols_B</span> <span class="o">=</span> <span class="n">conjuntos</span><span class="p">[</span><span class="n">B</span><span class="p">][</span><span class="s2">"num"</span><span class="p">]</span> <span class="o">+</span> <span class="n">conjuntos</span><span class="p">[</span><span class="n">B</span><span class="p">][</span><span class="s2">"cat"</span><span class="p">]</span>
+<span class="n">y_tt</span><span class="p">,</span> <span class="n">y_tb</span><span class="p">,</span> <span class="n">y_te</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">train_total</span><span class="p">,</span> <span class="n">train_buf</span><span class="p">,</span> <span class="n">test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Train completo: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_total</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> | train de la versión 2 (tras buffer de </span><span class="si">{</span><span class="n">buffer_km</span><span class="si">}</span><span class="s2"> km): "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_buf</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> | test: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> en </span><span class="si">{</span><span class="n">test</span><span class="o">.</span><span class="n">bloque</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">}</span><span class="s2"> bloques"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pipeline_logistica</span><span class="p">(</span><span class="n">conj</span><span class="p">,</span> <span class="n">clf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Mismo preprocesamiento del cap. 10; el clasificador puede cambiar (multinomial u ordinal)."""</span>
+    <span class="n">nums</span><span class="p">,</span> <span class="n">cats</span> <span class="o">=</span> <span class="n">conj</span><span class="p">[</span><span class="s2">"num"</span><span class="p">],</span> <span class="n">conj</span><span class="p">[</span><span class="s2">"cat"</span><span class="p">]</span>
+    <span class="n">prep</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">construir_preprocesador</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nums</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_log</span><span class="p">],</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nums</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">num_log</span><span class="p">],</span>
+                                     <span class="n">cats</span><span class="p">,</span> <span class="n">q_inf</span><span class="o">=</span><span class="n">q_inf</span><span class="p">,</span> <span class="n">q_sup</span><span class="o">=</span><span class="n">q_sup</span><span class="p">,</span> <span class="n">min_frecuencia</span><span class="o">=</span><span class="n">min_frec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">"prep"</span><span class="p">,</span> <span class="n">prep</span><span class="p">),</span> <span class="p">(</span><span class="s2">"clf"</span><span class="p">,</span> <span class="n">clf</span> <span class="k">if</span> <span class="n">clf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">xy</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">"x_km"</span><span class="p">,</span> <span class="s2">"y_km"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Train completo: 257,273 | train de la versión 2 (tras buffer de 1.0 km): 144,586 | test: 65,145 en 7 bloques
+</pre></div>
+</div>
+</div>
+</div>
+<section id="a-que-distancia-se-predice">
+<h2>14.1 ¿A qué distancia se predice?<a class="headerlink" href="#a-que-distancia-se-predice" title="Link to this heading">#</a></h2>
+<p>Para cada vivienda que se predice, la pregunta clave es <strong>a qué distancia
+está la vivienda más cercana cuyo estrato conoce el modelo</strong>. Con la
+autocorrelación del estrato (I de Moran 0.92), esa distancia decide casi todo:
+a 50 m el vecino conocido es casi una copia; a 2 km es otro barrio. Se mide
+con un punto por edificio (las unidades de un edificio comparten coordenada)
+y se pondera por viviendas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Un punto por edificio en cada conjunto.</span>
+<span class="n">xy_te_g</span><span class="p">,</span> <span class="n">n_te</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">puntos_unicos</span><span class="p">(</span><span class="n">xy</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">test</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">xy_tt_g</span><span class="p">,</span> <span class="n">n_tt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">puntos_unicos</span><span class="p">(</span><span class="n">xy</span><span class="p">(</span><span class="n">train_total</span><span class="p">),</span> <span class="n">train_total</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">xy_tb_g</span><span class="p">,</span> <span class="n">n_tb</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">puntos_unicos</span><span class="p">(</span><span class="n">xy</span><span class="p">(</span><span class="n">train_buf</span><span class="p">),</span> <span class="n">train_buf</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="c1"># (1) Escenario declarado en el cap. 2: predecir una zona nueva de 2 km cuyo entorno sí se conoce.</span>
+<span class="n">d_escenario</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">distancia_vecino</span><span class="p">(</span><span class="n">xy_te_g</span><span class="p">,</span> <span class="n">xy_tt_g</span><span class="p">)</span>
+<span class="c1"># (2) Lo que midió el test de la versión 2: el entrenamiento sin las viviendas a &lt; 1 km.</span>
+<span class="n">d_test_v2</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">distancia_vecino</span><span class="p">(</span><span class="n">xy_te_g</span><span class="p">,</span> <span class="n">xy_tb_g</span><span class="p">)</span>
+<span class="c1"># (3) La validación cruzada de la versión 2 (bloques + buffer, los mismos folds del cap. 10).</span>
+<span class="n">folds_v2</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">folds_espaciales_con_buffer</span><span class="p">(</span><span class="n">train_buf</span><span class="p">,</span> <span class="n">buffer_km</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">d_cv_v2</span><span class="p">,</span> <span class="n">n_cv_v2</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">distancias_de_folds</span><span class="p">(</span><span class="n">xy</span><span class="p">(</span><span class="n">train_buf</span><span class="p">),</span> <span class="n">train_buf</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">folds_v2</span><span class="p">)</span>
+<span class="c1"># (4) Una validación aleatoria por edificios: cada edificio frente a todos los demás.</span>
+<span class="n">d_aleatoria</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">xy_tt_g</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">xy_tt_g</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">distancias</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"Escenario: zona nueva de 2 km (test → todo train)"</span><span class="p">:</span> <span class="p">(</span><span class="n">d_escenario</span><span class="p">,</span> <span class="n">n_te</span><span class="p">),</span>
+    <span class="s2">"Test de la versión 2 (test → train tras buffer)"</span><span class="p">:</span> <span class="p">(</span><span class="n">d_test_v2</span><span class="p">,</span> <span class="n">n_te</span><span class="p">),</span>
+    <span class="s2">"CV de la versión 2 (bloques + buffer de 1 km)"</span><span class="p">:</span> <span class="p">(</span><span class="n">d_cv_v2</span><span class="p">,</span> <span class="n">n_cv_v2</span><span class="p">),</span>
+    <span class="s2">"CV aleatoria por edificios"</span><span class="p">:</span> <span class="p">(</span><span class="n">d_aleatoria</span><span class="p">,</span> <span class="n">n_tt</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">tabla_dist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s2">"p10 (km)"</span><span class="p">,</span> <span class="s2">"mediana (km)"</span><span class="p">,</span> <span class="s2">"p90 (km)"</span><span class="p">],</span> <span class="n">V</span><span class="o">.</span><span class="n">cuantiles_ponderados</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)))</span>
+                           <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="ow">in</span> <span class="n">distancias</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">tabla_dist</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>p10 (km)</th>
+      <th>mediana (km)</th>
+      <th>p90 (km)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Escenario: zona nueva de 2 km (test → todo train)</th>
+      <td>0.1065</td>
+      <td>0.4534</td>
+      <td>0.8194</td>
+    </tr>
+    <tr>
+      <th>Test de la versión 2 (test → train tras buffer)</th>
+      <td>1.1029</td>
+      <td>1.5319</td>
+      <td>2.0130</td>
+    </tr>
+    <tr>
+      <th>CV de la versión 2 (bloques + buffer de 1 km)</th>
+      <td>1.0740</td>
+      <td>1.4062</td>
+      <td>2.0748</td>
+    </tr>
+    <tr>
+      <th>CV aleatoria por edificios</th>
+      <td>0.0000</td>
+      <td>0.0103</td>
+      <td>0.1091</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>El escenario que declaró el capítulo 2 es predecir una <strong>zona nueva de 2 km</strong>
+cuyo entorno sí está en la base: para la mitad de las viviendas de prueba, la vivienda conocida más cercana
+está a menos de <strong>0.45 km</strong> (p90: 0.82 km). El buffer de 1 km cambió ese escenario: el test de la versión 2 se
+evaluó con el vecino conocido a una mediana de <strong>1.53 km</strong>, y su validación cruzada a <strong>1.41 km</strong>. Se midió
+algo más difícil que lo declarado: predecir un barrio a un kilómetro y medio de cualquier dato. En el otro
+extremo, una validación aleatoria por edificios evalúa a 10 m del vecino conocido: casi lo copia (por eso daba
+F1 0.62).</p>
+</section>
+<section id="validacion-knndm-folds-que-imitan-el-escenario">
+<h2>14.2 Validación kNNDM: folds que imitan el escenario<a class="headerlink" href="#validacion-knndm-folds-que-imitan-el-escenario" title="Link to this heading">#</a></h2>
+<p>La <strong>validación cruzada por emparejamiento de distancias al vecino más
+cercano</strong> (<em>k-fold Nearest Neighbour Distance Matching</em>, kNNDM; Milà et al.
+2022; Linnenbrink et al. 2024) arma los folds de modo que la distribución de
+esas distancias en la validación se parezca a la del escenario de
+predicción. El procedimiento (implementado en <code class="docutils literal notranslate"><span class="pre">src/vecinos.py</span></code>):</p>
+<ol class="arabic simple">
+<li><p>Se agrupan los edificios de entrenamiento con K-Means en <em>q</em> grupos
+compactos y los grupos se reparten en 5 folds estratificados por estrato
+(el mismo algoritmo voraz del cap. 2). Un <em>q</em> pequeño da folds grandes y
+lejanos, como bloques; un <em>q</em> grande da folds salpicados, como una
+validación aleatoria.</p></li>
+<li><p>Para cada <em>q</em> se calcula, para cada edificio, la distancia al edificio
+más cercano de otro fold, y se compara con la distancia del escenario
+mediante la <strong>distancia de Wasserstein</strong> (el área entre las dos curvas de
+distribución acumulada, en km).</p></li>
+<li><p>Se elige el <em>q</em> con la menor distancia de Wasserstein.</p></li>
+</ol>
+<p>Es la idea del grafo de <strong>k vecinos más cercanos</strong> del libro de Modelos
+Espacio-Temporales (Rubio, cap. 2), aplicada a la validación: el tamaño de la
+zona excluida no se fija a mano, sale de la geometría del problema. El
+escenario se define solo con las <strong>coordenadas</strong> del test, nunca con su
+estrato.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">res_knndm</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">knndm</span><span class="p">(</span><span class="n">xy</span><span class="p">(</span><span class="n">train_total</span><span class="p">),</span> <span class="n">train_total</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">y_tt</span><span class="p">,</span> <span class="n">xy_te_g</span><span class="p">,</span> <span class="n">n_te</span><span class="p">)</span>
+<span class="n">folds_v3</span> <span class="o">=</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"folds"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"q elegido = </span><span class="si">{</span><span class="n">res_knndm</span><span class="p">[</span><span class="s1">'q'</span><span class="p">]</span><span class="si">}</span><span class="s2"> grupos | Wasserstein = </span><span class="si">{</span><span class="n">res_knndm</span><span class="p">[</span><span class="s1">'W'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> km "</span>
+      <span class="sa">f</span><span class="s2">"(CV aleatoria: </span><span class="si">{</span><span class="n">res_knndm</span><span class="p">[</span><span class="s1">'W_loo'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> km) | </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> s"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">itr</span><span class="p">,</span> <span class="n">iva</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  fold </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: entrenamiento </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">itr</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;7,</span><span class="si">}</span><span class="s2"> | validación </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">iva</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;6,</span><span class="si">}</span><span class="s2"> | "</span>
+          <span class="sa">f</span><span class="s2">"estratos en validación: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_tt</span><span class="p">[</span><span class="n">iva</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">distancias</span><span class="p">[</span><span class="s2">"CV kNNDM (versión 3)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">res_knndm</span><span class="p">[</span><span class="s2">"d_cv"</span><span class="p">],</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"pesos_g"</span><span class="p">])</span>
+<span class="n">tabla_dist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s2">"p10 (km)"</span><span class="p">,</span> <span class="s2">"mediana (km)"</span><span class="p">,</span> <span class="s2">"p90 (km)"</span><span class="p">],</span> <span class="n">V</span><span class="o">.</span><span class="n">cuantiles_ponderados</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)))</span>
+                           <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="ow">in</span> <span class="n">distancias</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">W_v2</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">V</span><span class="o">.</span><span class="n">wasserstein_distance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">d_escenario</span><span class="p">,</span> <span class="n">u_weights</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">v_weights</span><span class="o">=</span><span class="n">n_te</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="ow">in</span> <span class="n">distancias</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">tabla_dist</span><span class="p">[</span><span class="s2">"Wasserstein al escenario (km)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">W_v2</span><span class="p">)</span>
+<span class="n">tabla_dist</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =     5: W = 0.982 km | mediana de G*_j = 1.325 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =     8: W = 0.662 km | mediana de G*_j = 1.032 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    12: W = 0.564 km | mediana de G*_j = 0.950 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    16: W = 0.330 km | mediana de G*_j = 0.650 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    20: W = 0.270 km | mediana de G*_j = 0.600 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    25: W = 0.214 km | mediana de G*_j = 0.489 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    30: W = 0.178 km | mediana de G*_j = 0.464 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    35: W = 0.180 km | mediana de G*_j = 0.424 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    40: W = 0.191 km | mediana de G*_j = 0.393 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    50: W = 0.213 km | mediana de G*_j = 0.351 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    65: W = 0.237 km | mediana de G*_j = 0.288 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =    80: W = 0.202 km | mediana de G*_j = 0.250 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =   120: W = 0.236 km | mediana de G*_j = 0.198 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =   200: W = 0.283 km | mediana de G*_j = 0.152 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =   300: W = 0.281 km | mediana de G*_j = 0.132 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =   500: W = 0.304 km | mediana de G*_j = 0.103 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =   800: W = 0.324 km | mediana de G*_j = 0.082 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =  1200: W = 0.358 km | mediana de G*_j = 0.069 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =  2000: W = 0.376 km | mediana de G*_j = 0.057 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =  3500: W = 0.384 km | mediana de G*_j = 0.048 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  q =  6000: W = 0.392 km | mediana de G*_j = 0.041 km
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>q elegido = 30 grupos | Wasserstein = 0.178 km (CV aleatoria: 0.428 km) | 179 s
+  fold 0: entrenamiento 207,292 | validación 49,981 | estratos en validación: [1, 2, 3, 4, 5, 6]
+  fold 1: entrenamiento 202,661 | validación 54,612 | estratos en validación: [1, 2, 3, 4, 5, 6]
+  fold 2: entrenamiento 207,441 | validación 49,832 | estratos en validación: [1, 2, 3, 4, 5, 6]
+  fold 3: entrenamiento 207,897 | validación 49,376 | estratos en validación: [1, 2, 3, 4, 5, 6]
+  fold 4: entrenamiento 203,801 | validación 53,472 | estratos en validación: [1, 2, 3, 4, 5, 6]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>p10 (km)</th>
+      <th>mediana (km)</th>
+      <th>p90 (km)</th>
+      <th>Wasserstein al escenario (km)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Escenario: zona nueva de 2 km (test → todo train)</th>
+      <td>0.1065</td>
+      <td>0.4534</td>
+      <td>0.8194</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>Test de la versión 2 (test → train tras buffer)</th>
+      <td>1.1029</td>
+      <td>1.5319</td>
+      <td>2.0130</td>
+      <td>1.0729</td>
+    </tr>
+    <tr>
+      <th>CV de la versión 2 (bloques + buffer de 1 km)</th>
+      <td>1.0740</td>
+      <td>1.4062</td>
+      <td>2.0748</td>
+      <td>1.0331</td>
+    </tr>
+    <tr>
+      <th>CV aleatoria por edificios</th>
+      <td>0.0000</td>
+      <td>0.0103</td>
+      <td>0.1091</td>
+      <td>0.4277</td>
+    </tr>
+    <tr>
+      <th>CV kNNDM (versión 3)</th>
+      <td>0.1044</td>
+      <td>0.4640</td>
+      <td>1.2273</td>
+      <td>0.1782</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Izquierda: distancia de Wasserstein según el número de grupos q. Derecha: curvas de</span>
+<span class="c1"># distribución acumulada de la distancia al vecino conocido más cercano en cada diseño.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"tabla"</span><span class="p">]</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">W_km</span><span class="p">,</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#2a78d6"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">res_knndm</span><span class="p">[</span><span class="s2">"q"</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#e34948"</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"q elegido = </span><span class="si">{</span><span class="n">res_knndm</span><span class="p">[</span><span class="s1">'q'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"número de grupos de K-Means (q)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Wasserstein al escenario (km)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Elegir q: la validación más parecida al escenario"</span><span class="p">)</span>
+<span class="n">rejilla</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
+<span class="n">estilos</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Escenario: zona nueva de 2 km (test → todo train)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"#111111"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+           <span class="s2">"Test de la versión 2 (test → train tras buffer)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"#e34948"</span><span class="p">,</span> <span class="s2">":"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+           <span class="s2">"CV de la versión 2 (bloques + buffer de 1 km)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"#e34948"</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+           <span class="s2">"CV aleatoria por edificios"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"#9aa0a6"</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+           <span class="s2">"CV kNNDM (versión 3)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"#2a78d6"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>
+<span class="n">ecdfs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="ow">in</span> <span class="n">distancias</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">rejilla</span><span class="p">)</span>
+    <span class="n">ecdfs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">F</span>
+    <span class="n">col</span><span class="p">,</span> <span class="n">ls</span><span class="p">,</span> <span class="n">lw</span> <span class="o">=</span> <span class="n">estilos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rejilla</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"distancia a la vivienda conocida más cercana (km)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"proporción acumulada de viviendas"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"¿A qué distancia se evalúa cada diseño?"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/b979dd55567519cae584ba13ef8372c90b77fcf99c122eb32d741d8e4101889e.png" src="../_images/b979dd55567519cae584ba13ef8372c90b77fcf99c122eb32d741d8e4101889e.png" />
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mapa de los folds kNNDM (muestra de edificios): grupos compactos repartidos en 5 folds.</span>
+<span class="n">fold_g</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">res_knndm</span><span class="p">[</span><span class="s2">"fold_fila"</span><span class="p">])</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">train_total</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_tt_g</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">25_000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">xy_tt_g</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xy_tt_g</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy_tt_g</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">fold_g</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xy_te_g</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy_te_g</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"#cccccc"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"test (no participa)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"x (km)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"y (km)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Folds kNNDM: </span><span class="si">{</span><span class="n">res_knndm</span><span class="p">[</span><span class="s1">'q'</span><span class="p">]</span><span class="si">}</span><span class="s2"> grupos repartidos en 5 folds"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/dcbb9de121aa5d78bc03fbe07ec0ae23090579a4d4c4fb97602bbc366c08a614.png" src="../_images/dcbb9de121aa5d78bc03fbe07ec0ae23090579a4d4c4fb97602bbc366c08a614.png" />
+</div>
+</div>
+<p>La distancia de Wasserstein es mínima con <strong>q = 30 grupos</strong> (0.18 km): folds formados
+por grupos compactos de 2 a 3 km repartidos por la ciudad. Con ellos la mediana de la distancia en validación
+(0.46 km) coincide con la del escenario (0.45 km); la cola es algo más larga (p90 1.23 frente a 0.82 km), así
+que la validación queda un poco del lado conservador. La validación de la versión 2 estaba a 1.03 km del
+escenario y la aleatoria a 0.43 km. Los cinco folds tienen entre 49 000 y 55 000 viviendas y los seis estratos
+en validación. Del test solo se usaron las coordenadas.</p>
+</section>
+<section id="hiperparametros-con-la-validacion-knndm">
+<h2>14.3 Hiperparámetros con la validación kNNDM<a class="headerlink" href="#hiperparametros-con-la-validacion-knndm" title="Link to this heading">#</a></h2>
+<p>Se repite la búsqueda del cap. 10 (misma rejilla de C y pesos de clase, misma
+regla de un error estándar) pero con los folds kNNDM y <strong>sin buffer</strong>: el
+entrenamiento de cada fold es todo lo que no está en su validación.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"clf__C"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s2">"clf__class_weight"</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"balanced"</span><span class="p">]}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">regla_1se</span><span class="p">(</span><span class="n">cv_results</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">"""Índice de la combinación más regularizada (menor C) a &lt; 1 SE de la mejor (igual que el cap. 10)."""</span>
+    <span class="n">media</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cv_results</span><span class="p">[</span><span class="s2">"mean_test_score"</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">se</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cv_results</span><span class="p">[</span><span class="s2">"std_test_score"</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">i_mejor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">media</span><span class="p">))</span>
+    <span class="n">candidatos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">media</span> <span class="o">&gt;=</span> <span class="n">media</span><span class="p">[</span><span class="n">i_mejor</span><span class="p">]</span> <span class="o">-</span> <span class="n">se</span><span class="p">[</span><span class="n">i_mejor</span><span class="p">])</span>
+    <span class="n">c_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cv_results</span><span class="p">[</span><span class="s2">"param_clf__C"</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">finalistas</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">candidatos</span> <span class="k">if</span> <span class="n">c_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">c_vals</span><span class="p">[</span><span class="n">candidatos</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">finalistas</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">media</span><span class="p">[</span><span class="n">finalistas</span><span class="p">]))])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scores_por_fold</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""F1 macro de cada fold para la combinación i (por defecto, la elegida)."""</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">best_index_</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gs</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="sa">f</span><span class="s2">"split</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">_test_score"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">))])</span>
+
+
+<span class="n">busquedas</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">conj</span> <span class="ow">in</span> <span class="n">conjuntos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">pipeline_logistica</span><span class="p">(</span><span class="n">conj</span><span class="p">),</span> <span class="n">grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds_v3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="n">regla_1se</span><span class="p">)</span>
+    <span class="n">gs</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_total</span><span class="p">[</span><span class="n">conj</span><span class="p">[</span><span class="s2">"num"</span><span class="p">]</span> <span class="o">+</span> <span class="n">conj</span><span class="p">[</span><span class="s2">"cat"</span><span class="p">]],</span> <span class="n">y_tt</span><span class="p">)</span>
+    <span class="n">busquedas</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">gs</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">: elegido </span><span class="si">{</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="si">}</span><span class="s2"> | F1 macro CV kNNDM = "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">gs</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">'mean_test_score'</span><span class="p">][</span><span class="n">gs</span><span class="o">.</span><span class="n">best_index_</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> s)"</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
+<span class="n">tabla_grid</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"C"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">param_clf__C</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="s2">"pesos"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">param_clf__class_weight</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+                           <span class="s2">"F1 macro CV (media)"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">mean_test_score</span><span class="p">,</span>
+                           <span class="s2">"error estándar"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">std_test_score</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">))})</span>
+<span class="n">tabla_grid</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"pesos"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A_fisicas: elegido {'clf__C': 0.01, 'clf__class_weight': 'balanced'} | F1 macro CV kNNDM = 0.3939 (293 s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B_fisicas+ubicacion: elegido {'clf__C': 0.01, 'clf__class_weight': None} | F1 macro CV kNNDM = 0.4601 (626 s)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>C</th>
+      <th>pesos</th>
+      <th>F1 macro CV (media)</th>
+      <th>error estándar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.0100</td>
+      <td>balanced</td>
+      <td>0.4509</td>
+      <td>0.0194</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.1000</td>
+      <td>balanced</td>
+      <td>0.4611</td>
+      <td>0.0278</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1.0000</td>
+      <td>balanced</td>
+      <td>0.4602</td>
+      <td>0.0349</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>10.0000</td>
+      <td>balanced</td>
+      <td>0.4584</td>
+      <td>0.0349</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.0100</td>
+      <td>NaN</td>
+      <td>0.4601</td>
+      <td>0.0103</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.1000</td>
+      <td>NaN</td>
+      <td>0.4656</td>
+      <td>0.0119</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0000</td>
+      <td>NaN</td>
+      <td>0.4526</td>
+      <td>0.0211</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10.0000</td>
+      <td>NaN</td>
+      <td>0.4506</td>
+      <td>0.0269</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Con kNNDM todas las combinaciones quedan entre 0.451 y 0.466: la superficie sigue
+plana. El máximo es C = 0.1 sin pesos (0.466); la regla de un error estándar elige <strong>C = 0.01 sin pesos de
+clase</strong> (0.460). El cambio frente a la versión 2 está en los pesos: con el buffer ganaban los pesos
+balanceados; ahora empatan (0.451 con pesos frente a 0.460 sin ellos, dentro de un error estándar) y el
+desempate de la regla elige sin pesos. En el modelo A, la regla elige C = 0.01 con pesos balanceados (F1 de CV
+0.394, frente a 0.286 en la versión 2).</p>
+<p>El F1 de CV del modelo B sube de 0.32 a 0.46 no porque el modelo sea mejor, sino porque la validación ya no
+exige predecir a 1.4 km del dato más cercano.</p>
+</section>
+<section id="evaluacion-en-test-con-y-sin-buffer">
+<h2>14.4 Evaluación en test: con y sin buffer<a class="headerlink" href="#evaluacion-en-test-con-y-sin-buffer" title="Link to this heading">#</a></h2>
+<p>Se evalúa en el <strong>mismo test</strong> de siempre. Para separar los dos cambios
+(quitar el buffer y elegir los hiperparámetros con kNNDM) se comparan tres
+versiones del modelo B:</p>
+<ul class="simple">
+<li><p><strong>v2</strong>: hiperparámetros del cap. 10 y entrenamiento sin las viviendas a
+menos de 1 km del test (réplica del resultado publicado).</p></li>
+<li><p><strong>v2 sin buffer</strong>: los mismos hiperparámetros, entrenado con todo train.</p></li>
+<li><p><strong>v3</strong>: hiperparámetros elegidos con kNNDM, entrenado con todo train.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hp_v2</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"clf__"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">"None"</span> <span class="k">else</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"C"</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span><span class="p">))</span>
+         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">v2</span><span class="p">[</span><span class="s2">"mejores_hiperparametros"</span><span class="p">][</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">hp_v3</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"clf__"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">best_params_</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">variantes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"B v2 (con buffer)"</span><span class="p">:</span> <span class="p">(</span><span class="n">hp_v2</span><span class="p">,</span> <span class="n">train_buf</span><span class="p">,</span> <span class="n">y_tb</span><span class="p">),</span>
+             <span class="s2">"B v2 sin buffer"</span><span class="p">:</span> <span class="p">(</span><span class="n">hp_v2</span><span class="p">,</span> <span class="n">train_total</span><span class="p">,</span> <span class="n">y_tt</span><span class="p">),</span>
+             <span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">:</span> <span class="p">(</span><span class="n">hp_v3</span><span class="p">,</span> <span class="n">train_total</span><span class="p">,</span> <span class="n">y_tt</span><span class="p">)}</span>
+<span class="n">finales</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">proba</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">df_tr</span><span class="p">,</span> <span class="n">y_fit</span><span class="p">)</span> <span class="ow">in</span> <span class="n">variantes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">finales</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_logistica</span><span class="p">(</span><span class="n">conjuntos</span><span class="p">[</span><span class="n">B</span><span class="p">],</span> <span class="o">**</span><span class="n">hp</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_tr</span><span class="p">[</span><span class="n">cols_B</span><span class="p">],</span> <span class="n">y_fit</span><span class="p">)</span>
+    <span class="n">proba</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">finales</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">cols_B</span><span class="p">])</span>
+    <span class="n">pred</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">finales</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">cols_B</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">hp</span><span class="si">}</span><span class="s2"> | entrenado con </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_tr</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> viviendas"</span><span class="p">)</span>
+<span class="n">res_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">n</span><span class="p">:</span> <span class="n">M</span><span class="o">.</span><span class="n">metricas</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">finales</span><span class="p">})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">res_test</span><span class="p">[[</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="s2">"accuracy"</span><span class="p">,</span> <span class="s2">"balanced_accuracy"</span><span class="p">,</span> <span class="s2">"MAE_ordinal"</span><span class="p">,</span> <span class="s2">"accuracy_±1"</span><span class="p">,</span> <span class="s2">"kappa_cuadrático"</span><span class="p">,</span>
+          <span class="s2">"AUC_OvR_macro"</span><span class="p">,</span> <span class="s2">"log_loss"</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B v2 (con buffer): {'C': 0.01, 'class_weight': 'balanced'} | entrenado con 144,586 viviendas
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B v2 sin buffer: {'C': 0.01, 'class_weight': 'balanced'} | entrenado con 257,273 viviendas
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B v3 (kNNDM, sin buffer): {'C': 0.01, 'class_weight': None} | entrenado con 257,273 viviendas
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>f1_macro</th>
+      <th>accuracy</th>
+      <th>balanced_accuracy</th>
+      <th>MAE_ordinal</th>
+      <th>accuracy_±1</th>
+      <th>kappa_cuadrático</th>
+      <th>AUC_OvR_macro</th>
+      <th>log_loss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v2 (con buffer)</th>
+      <td>0.4921</td>
+      <td>0.6111</td>
+      <td>0.4987</td>
+      <td>0.4392</td>
+      <td>0.9552</td>
+      <td>0.8353</td>
+      <td>0.9010</td>
+      <td>0.9108</td>
+    </tr>
+    <tr>
+      <th>B v2 sin buffer</th>
+      <td>0.5308</td>
+      <td>0.6528</td>
+      <td>0.5425</td>
+      <td>0.3894</td>
+      <td>0.9618</td>
+      <td>0.8686</td>
+      <td>0.9115</td>
+      <td>0.8147</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer)</th>
+      <td>0.4932</td>
+      <td>0.6614</td>
+      <td>0.4952</td>
+      <td>0.3843</td>
+      <td>0.9585</td>
+      <td>0.8547</td>
+      <td>0.9075</td>
+      <td>0.8143</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># IC 95 % por bootstrap de bloques del test y diferencias pareadas frente a la versión 2.</span>
+<span class="n">bloques_te</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s2">"bloque"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">f1m</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">yy</span><span class="p">,</span> <span class="n">pp</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">yy</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">"macro"</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mae</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">yy</span><span class="p">,</span> <span class="n">pp</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yy</span> <span class="o">-</span> <span class="n">pp</span><span class="p">)))</span>
+<span class="n">ic_test</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_por_bloques</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">bloques_te</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">finales</span><span class="p">}</span>
+<span class="n">dif_test</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"B v2 sin buffer"</span><span class="p">,</span> <span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">nom_m</span><span class="p">,</span> <span class="n">fm</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"F1 macro"</span><span class="p">,</span> <span class="n">f1m</span><span class="p">),</span> <span class="p">(</span><span class="s2">"MAE ordinal"</span><span class="p">,</span> <span class="n">mae</span><span class="p">)]:</span>
+        <span class="n">dif_test</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> − B v2 (con buffer) | </span><span class="si">{</span><span class="n">nom_m</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_diferencia</span><span class="p">(</span>
+            <span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">pred</span><span class="p">[</span><span class="s2">"B v2 (con buffer)"</span><span class="p">],</span> <span class="n">bloques_te</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dif_test</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>diferencia</th>
+      <th>IC95_inf</th>
+      <th>IC95_sup</th>
+      <th>p_bootstrap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v2 sin buffer − B v2 (con buffer) | F1 macro</th>
+      <td>0.0387</td>
+      <td>-0.0172</td>
+      <td>0.0672</td>
+      <td>0.1160</td>
+    </tr>
+    <tr>
+      <th>B v2 sin buffer − B v2 (con buffer) | MAE ordinal</th>
+      <td>-0.0498</td>
+      <td>-0.1357</td>
+      <td>0.0026</td>
+      <td>0.1240</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer) − B v2 (con buffer) | F1 macro</th>
+      <td>0.0011</td>
+      <td>-0.0388</td>
+      <td>0.0618</td>
+      <td>0.7320</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer) − B v2 (con buffer) | MAE ordinal</th>
+      <td>-0.0548</td>
+      <td>-0.1130</td>
+      <td>-0.0153</td>
+      <td>0.0020</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Recall por estrato en test: dónde gana o pierde cada versión.</span>
+<span class="n">recall_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">n</span><span class="p">:</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">finales</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"E</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">recall_test</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>E1</th>
+      <th>E2</th>
+      <th>E3</th>
+      <th>E4</th>
+      <th>E5</th>
+      <th>E6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v2 (con buffer)</th>
+      <td>0.7850</td>
+      <td>0.6045</td>
+      <td>0.6985</td>
+      <td>0.2814</td>
+      <td>0.4158</td>
+      <td>0.2068</td>
+    </tr>
+    <tr>
+      <th>B v2 sin buffer</th>
+      <td>0.8529</td>
+      <td>0.4527</td>
+      <td>0.7105</td>
+      <td>0.5159</td>
+      <td>0.4345</td>
+      <td>0.2888</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer)</th>
+      <td>0.9039</td>
+      <td>0.4037</td>
+      <td>0.7476</td>
+      <td>0.5795</td>
+      <td>0.0820</td>
+      <td>0.2547</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>¿Qué tan bien anticipa cada validación el resultado del test? La v2 estimó
+en CV un F1 macro de 0.322 y el test dio 0.492. Si kNNDM imita mejor el
+escenario, su estimación debería quedar más cerca del test.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f1_cv_v3</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s2">"mean_test_score"</span><span class="p">][</span><span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">best_index_</span><span class="p">])</span>
+<span class="n">se_cv_v3</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scores_por_fold</span><span class="p">(</span><span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">])</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">)))</span>
+<span class="n">cv_vs_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"F1 macro CV"</span><span class="p">:</span> <span class="p">[</span><span class="n">v2</span><span class="p">[</span><span class="s2">"tabla_cv"</span><span class="p">][</span><span class="s2">"f1_macro (media)"</span><span class="p">][</span><span class="sa">f</span><span class="s2">"Logística </span><span class="si">{</span><span class="n">B</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span> <span class="n">f1_cv_v3</span><span class="p">],</span>
+    <span class="s2">"F1 macro test"</span><span class="p">:</span> <span class="p">[</span><span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"B v2 (con buffer)"</span><span class="p">,</span> <span class="s2">"f1_macro"</span><span class="p">],</span> <span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">,</span> <span class="s2">"f1_macro"</span><span class="p">]],</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"v2: bloques + buffer de 1 km"</span><span class="p">,</span> <span class="s2">"v3: kNNDM sin buffer"</span><span class="p">])</span>
+<span class="n">cv_vs_test</span><span class="p">[</span><span class="s2">"test − CV"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_vs_test</span><span class="p">[</span><span class="s2">"F1 macro test"</span><span class="p">]</span> <span class="o">-</span> <span class="n">cv_vs_test</span><span class="p">[</span><span class="s2">"F1 macro CV"</span><span class="p">]</span>
+<span class="n">cv_vs_test</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>F1 macro CV</th>
+      <th>F1 macro test</th>
+      <th>test − CV</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>v2: bloques + buffer de 1 km</th>
+      <td>0.3219</td>
+      <td>0.4921</td>
+      <td>0.1702</td>
+    </tr>
+    <tr>
+      <th>v3: kNNDM sin buffer</th>
+      <td>0.4601</td>
+      <td>0.4932</td>
+      <td>0.0331</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Tres lecturas:</p>
+<ol class="arabic simple">
+<li><p><strong>Validación y test miden ahora lo mismo.</strong> La versión 2 estimó 0.32 en CV y obtuvo 0.49 en test (+0.17),
+aunque las dos evaluaban a unos 1.5 km. Con kNNDM la CV estima 0.46 y el test da 0.49 (+0.03). Con 7 bloques
+de prueba no es una demostración, pero es lo que se espera si los dos miden el mismo escenario.</p></li>
+<li><p><strong>Quitar el buffer no era fuga.</strong> Con los mismos hiperparámetros de la versión 2, entrenar con todo el
+entrenamiento sube el F1 de 0.492 a 0.531 (+0.039, IC 95 % [−0.017, +0.067], no significativo) y baja el MAE
+de 0.439 a 0.389. Las viviendas a menos de 1 km del test no eran «casi copias»: son el entorno conocido que
+el escenario declara.</p></li>
+<li><p><strong>El modelo v3 (sin pesos) se equivoca por menos.</strong> El F1 macro queda igual (0.493; +0.001), pero el <strong>MAE
+baja a 0.384 (−0.055, IC 95 % [−0.113, −0.015], significativo)</strong>, la accuracy sube a 0.66, el kappa a 0.85 y
+el log loss baja de 0.91 a 0.81. El precio: sin pesos, el estrato 5 casi desaparece (recall 0.08 frente a
+0.42) y el 4 sube (0.58 frente a 0.28). Con pesos balanceados y todo el entrenamiento, el test da F1 0.531 y
+recall del estrato 5 de 0.44; en CV las dos opciones empataban. La elección <strong>no se cambia mirando el
+test</strong>: queda como observación para el lector.</p></li>
+</ol>
+</section>
+<section id="logistica-ordinal">
+<h2>14.5 Logística ordinal<a class="headerlink" href="#logistica-ordinal" title="Link to this heading">#</a></h2>
+<p>La logística multinomial del cap. 10 trata los seis estratos como categorías
+sin orden: estima un vector de coeficientes por estrato. La <strong>logística
+ordinal de odds proporcionales</strong> usa un solo vector y cinco umbrales
+ordenados:</p>
+<div class="math notranslate nohighlight">
+\[P(\text{estrato} \le j \mid x) = \sigma(\theta_j - x^\top\beta), \qquad \theta_1 &lt; \dots &lt; \theta_5.\]</div>
+<p>Subir <span class="math notranslate nohighlight">\(x^\top\beta\)</span> desplaza toda la probabilidad hacia estratos más altos,
+así que un error de un estrato es más probable que uno de cuatro. Tiene 5 + p
+parámetros en lugar de 6p. Se implementó en <code class="docutils literal notranslate"><span class="pre">src/vecinos.py</span></code>
+(<code class="docutils literal notranslate"><span class="pre">LogisticaOrdinal</span></code>, con L2 y la misma convención de C de scikit-learn) y se
+eligió C con la misma rejilla, los mismos folds kNNDM y la misma regla.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">gs_ord</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">pipeline_logistica</span><span class="p">(</span><span class="n">conjuntos</span><span class="p">[</span><span class="n">B</span><span class="p">],</span> <span class="n">clf</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">LogisticaOrdinal</span><span class="p">()),</span> <span class="n">grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds_v3</span><span class="p">,</span>
+                      <span class="n">scoring</span><span class="o">=</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="n">regla_1se</span><span class="p">)</span>
+<span class="n">gs_ord</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_total</span><span class="p">[</span><span class="n">cols_B</span><span class="p">],</span> <span class="n">y_tt</span><span class="p">)</span>
+<span class="n">hp_ord</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"clf__"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">gs_ord</span><span class="o">.</span><span class="n">best_params_</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ordinal: elegido </span><span class="si">{</span><span class="n">gs_ord</span><span class="o">.</span><span class="n">best_params_</span><span class="si">}</span><span class="s2"> | F1 macro CV kNNDM = "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">gs_ord</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">'mean_test_score'</span><span class="p">][</span><span class="n">gs_ord</span><span class="o">.</span><span class="n">best_index_</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> s)"</span><span class="p">)</span>
+<span class="n">nombre_ord</span> <span class="o">=</span> <span class="s2">"Ordinal v3 (kNNDM, sin buffer)"</span>
+<span class="n">finales</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">gs_ord</span><span class="o">.</span><span class="n">best_estimator_</span>
+<span class="n">proba</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">finales</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">cols_B</span><span class="p">])</span>
+<span class="n">pred</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">finales</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">cols_B</span><span class="p">])</span>
+<span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">metricas</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]))</span>
+<span class="n">ic_test</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_por_bloques</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">],</span> <span class="n">bloques_te</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">recall_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nom_m</span><span class="p">,</span> <span class="n">fm</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"F1 macro"</span><span class="p">,</span> <span class="n">f1m</span><span class="p">),</span> <span class="p">(</span><span class="s2">"MAE ordinal"</span><span class="p">,</span> <span class="n">mae</span><span class="p">)]:</span>
+    <span class="n">dif_test</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre_ord</span><span class="si">}</span><span class="s2"> − B v3 (kNNDM, sin buffer) | </span><span class="si">{</span><span class="n">nom_m</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_diferencia</span><span class="p">(</span>
+        <span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">],</span> <span class="n">pred</span><span class="p">[</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">],</span> <span class="n">bloques_te</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">,</span> <span class="n">nombre_ord</span><span class="p">],</span>
+             <span class="p">[</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="s2">"accuracy"</span><span class="p">,</span> <span class="s2">"MAE_ordinal"</span><span class="p">,</span> <span class="s2">"accuracy_±1"</span><span class="p">,</span> <span class="s2">"kappa_cuadrático"</span><span class="p">,</span> <span class="s2">"AUC_OvR_macro"</span><span class="p">,</span> <span class="s2">"log_loss"</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ordinal: elegido {'clf__C': 0.01, 'clf__class_weight': 'balanced'} | F1 macro CV kNNDM = 0.4303 (389 s)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>f1_macro</th>
+      <th>accuracy</th>
+      <th>MAE_ordinal</th>
+      <th>accuracy_±1</th>
+      <th>kappa_cuadrático</th>
+      <th>AUC_OvR_macro</th>
+      <th>log_loss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer)</th>
+      <td>0.4932</td>
+      <td>0.6614</td>
+      <td>0.3843</td>
+      <td>0.9585</td>
+      <td>0.8547</td>
+      <td>0.9075</td>
+      <td>0.8143</td>
+    </tr>
+    <tr>
+      <th>Ordinal v3 (kNNDM, sin buffer)</th>
+      <td>0.4565</td>
+      <td>0.5463</td>
+      <td>0.5124</td>
+      <td>0.9455</td>
+      <td>0.8162</td>
+      <td>0.8643</td>
+      <td>1.0440</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La logística ordinal es <strong>peor</strong> en todo: F1 de CV 0.430 (−0.030 frente a la
+multinomial, más de un error estándar), F1 de test 0.457 y, contra lo que se esperaba, <strong>un MAE más alto</strong>
+(0.512 frente a 0.384, diferencia significativa). La explicación está en la estructura del problema: la
+ordinal obliga a que cada variable empuje a todos los estratos en la misma dirección, a lo largo de un único
+índice <span class="math notranslate nohighlight">\(x^\top\beta\)</span>. Las variables de ubicación no ordenan los estratos de forma monótona (el gradiente
+sur-norte sí, pero la posición este-oeste y la distancia al centro no), y un solo índice no puede
+representarlo; la multinomial, con un vector por estrato, sí. El orden se aprovecha mejor al <strong>evaluar</strong> (MAE,
+kappa, accuracy ±1) que imponiéndolo en el modelo.</p>
+</section>
+<section id="umbrales-de-decision-para-el-f1-macro">
+<h2>14.6 Umbrales de decisión para el F1 macro<a class="headerlink" href="#umbrales-de-decision-para-el-f1-macro" title="Link to this heading">#</a></h2>
+<p>Las dos logísticas predicen el estrato más probable. Pero el F1 macro premia
+por igual a los seis estratos, y el estrato 4 casi nunca es el más probable
+(recall 0.28 en la v2). Una corrección estándar es sumar un <strong>sesgo por
+estrato</strong> al logaritmo de la probabilidad antes de elegir:
+<span class="math notranslate nohighlight">\(\hat y = \arg\max_k (\log p_k + b_k)\)</span>. Subir <span class="math notranslate nohighlight">\(b_4\)</span> hace que el modelo elija
+el estrato 4 con menos evidencia: sube su recall a costa de su precisión.</p>
+<p>Los sesgos se aprenden con <strong>predicciones fuera de muestra</strong> de la validación
+kNNDM, nunca con el test. Para medir el beneficio sin optimismo se usa una
+validación anidada: los sesgos que se aplican a cada fold se aprenden con las
+predicciones de los otros cuatro.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oof</span><span class="p">,</span> <span class="n">sesgos</span><span class="p">,</span> <span class="n">f1_folds_sesgos</span><span class="p">,</span> <span class="n">f1_folds_sin</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{}</span>
+<span class="n">fold_fila</span> <span class="o">=</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"fold_fila"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">est</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">,</span> <span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">),</span> <span class="p">(</span><span class="n">nombre_ord</span><span class="p">,</span> <span class="n">gs_ord</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">)]:</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">oof</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">est</span><span class="p">,</span> <span class="n">train_total</span><span class="p">[</span><span class="n">cols_B</span><span class="p">],</span> <span class="n">y_tt</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds_v3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"predict_proba"</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">sin</span><span class="p">,</span> <span class="n">con</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">folds_v3</span><span class="p">)):</span>
+        <span class="n">dentro</span> <span class="o">=</span> <span class="n">fold_fila</span> <span class="o">==</span> <span class="n">f</span>
+        <span class="n">b_f</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">ajustar_sesgos_f1</span><span class="p">(</span><span class="n">y_tt</span><span class="p">[</span><span class="o">~</span><span class="n">dentro</span><span class="p">],</span> <span class="n">oof</span><span class="p">[</span><span class="n">nombre</span><span class="p">][</span><span class="o">~</span><span class="n">dentro</span><span class="p">])</span>
+        <span class="n">sin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f1m</span><span class="p">(</span><span class="n">y_tt</span><span class="p">[</span><span class="n">dentro</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">)[</span><span class="n">oof</span><span class="p">[</span><span class="n">nombre</span><span class="p">][</span><span class="n">dentro</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)]))</span>
+        <span class="n">con</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f1m</span><span class="p">(</span><span class="n">y_tt</span><span class="p">[</span><span class="n">dentro</span><span class="p">],</span> <span class="n">V</span><span class="o">.</span><span class="n">aplicar_sesgos</span><span class="p">(</span><span class="n">oof</span><span class="p">[</span><span class="n">nombre</span><span class="p">][</span><span class="n">dentro</span><span class="p">],</span> <span class="n">b_f</span><span class="p">)))</span>
+    <span class="n">f1_folds_sin</span><span class="p">[</span><span class="n">nombre</span><span class="p">],</span> <span class="n">f1_folds_sesgos</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sin</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+    <span class="n">sesgos</span><span class="p">[</span><span class="n">nombre</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">ajustar_sesgos_f1</span><span class="p">(</span><span class="n">y_tt</span><span class="p">,</span> <span class="n">oof</span><span class="p">[</span><span class="n">nombre</span><span class="p">])</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">f1_folds_sesgos</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span> <span class="o">-</span> <span class="n">f1_folds_sin</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">: F1 CV sin sesgos </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sin</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> -&gt; con sesgos (anidado) </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">con</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | "</span>
+          <span class="sa">f</span><span class="s2">"mejora </span><span class="si">{</span><span class="n">d</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2"> (SE </span><span class="si">{</span><span class="n">d</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">) | sesgos finales "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="sa">f</span><span class="s1">'E</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">'</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">],</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sesgos</span><span class="p">[</span><span class="n">nombre</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> s)"</span><span class="p">)</span>
+    <span class="n">nom_s</span> <span class="o">=</span> <span class="n">nombre</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" (kNNDM, sin buffer)"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" + umbrales F1"</span>
+    <span class="n">pred</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">aplicar_sesgos</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">nombre</span><span class="p">],</span> <span class="n">sesgos</span><span class="p">[</span><span class="n">nombre</span><span class="p">])</span>
+    <span class="n">proba</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">proba</span><span class="p">[</span><span class="n">nombre</span><span class="p">]</span>
+    <span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">metricas</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nom_s</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]))</span>
+    <span class="n">ic_test</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_por_bloques</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nom_s</span><span class="p">],</span> <span class="n">proba</span><span class="p">[</span><span class="n">nom_s</span><span class="p">],</span> <span class="n">bloques_te</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="n">recall_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nom_s</span><span class="p">]</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nom_s</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">nom_m</span><span class="p">,</span> <span class="n">fm</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"F1 macro"</span><span class="p">,</span> <span class="n">f1m</span><span class="p">),</span> <span class="p">(</span><span class="s2">"MAE ordinal"</span><span class="p">,</span> <span class="n">mae</span><span class="p">)]:</span>
+        <span class="n">dif_test</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nom_s</span><span class="si">}</span><span class="s2"> − </span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">nom_m</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">bootstrap_diferencia</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">[</span><span class="n">nom_s</span><span class="p">],</span> <span class="n">pred</span><span class="p">[</span><span class="n">nombre</span><span class="p">],</span>
+                                                                            <span class="n">bloques_te</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">recall_test</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B v3 (kNNDM, sin buffer): F1 CV sin sesgos 0.4601 -&gt; con sesgos (anidado) 0.4494 | mejora -0.0107 (SE 0.0135) | sesgos finales {'E1': np.float64(0.0), 'E2': np.float64(0.2), 'E3': np.float64(-0.2), 'E4': np.float64(-0.1), 'E5': np.float64(0.2), 'E6': np.float64(-0.2)} (308 s)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ordinal v3 (kNNDM, sin buffer): F1 CV sin sesgos 0.4303 -&gt; con sesgos (anidado) 0.4204 | mejora -0.0099 (SE 0.0033) | sesgos finales {'E1': np.float64(0.0), 'E2': np.float64(0.1), 'E3': np.float64(0.2), 'E4': np.float64(0.2), 'E5': np.float64(0.1), 'E6': np.float64(0.0)} (356 s)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>E1</th>
+      <th>E2</th>
+      <th>E3</th>
+      <th>E4</th>
+      <th>E5</th>
+      <th>E6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v2 (con buffer)</th>
+      <td>0.7850</td>
+      <td>0.6045</td>
+      <td>0.6985</td>
+      <td>0.2814</td>
+      <td>0.4158</td>
+      <td>0.2068</td>
+    </tr>
+    <tr>
+      <th>B v2 sin buffer</th>
+      <td>0.8529</td>
+      <td>0.4527</td>
+      <td>0.7105</td>
+      <td>0.5159</td>
+      <td>0.4345</td>
+      <td>0.2888</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer)</th>
+      <td>0.9039</td>
+      <td>0.4037</td>
+      <td>0.7476</td>
+      <td>0.5795</td>
+      <td>0.0820</td>
+      <td>0.2547</td>
+    </tr>
+    <tr>
+      <th>Ordinal v3 (kNNDM, sin buffer)</th>
+      <td>0.6295</td>
+      <td>0.4376</td>
+      <td>0.6013</td>
+      <td>0.5412</td>
+      <td>0.2750</td>
+      <td>0.2976</td>
+    </tr>
+    <tr>
+      <th>B v3 + umbrales F1</th>
+      <td>0.8617</td>
+      <td>0.5016</td>
+      <td>0.6585</td>
+      <td>0.6047</td>
+      <td>0.1764</td>
+      <td>0.2270</td>
+    </tr>
+    <tr>
+      <th>Ordinal v3 + umbrales F1</th>
+      <td>0.6186</td>
+      <td>0.4402</td>
+      <td>0.6291</td>
+      <td>0.5787</td>
+      <td>0.2391</td>
+      <td>0.2799</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>En la validación anidada los umbrales <strong>no mejoran</strong>: −0.011 (SE 0.014) en la
+multinomial y −0.010 (SE 0.003) en la ordinal. Los sesgos aprendidos son pequeños (entre −0.2 y +0.2): el
+modelo ya está cerca de su mejor punto de decisión, y lo que se gana en unos folds se pierde en otros. En test,
+la multinomial con umbrales sube a 0.516 (+0.023, IC 95 % [−0.013, +0.039], no significativo); como la CV no lo
+respalda, no se adopta. Es justamente el caso en que mirar el test llevaría a una decisión distinta, y por eso
+la decisión se toma en validación.</p>
+</section>
+<section id="resumen-y-decision">
+<h2>14.7 Resumen y decisión<a class="headerlink" href="#resumen-y-decision" title="Link to this heading">#</a></h2>
+<p>Todos los modelos se comparan con el <strong>mismo test</strong> y, en validación, con los
+<strong>mismos folds kNNDM</strong>. Para decidir si un modelo reemplaza al principal se
+usa el criterio de siempre: la diferencia pareada por fold en CV debe superar
+un error estándar.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cv_folds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">:</span> <span class="n">scores_por_fold</span><span class="p">(</span><span class="n">busquedas</span><span class="p">[</span><span class="n">B</span><span class="p">]),</span>
+            <span class="n">nombre_ord</span><span class="p">:</span> <span class="n">scores_por_fold</span><span class="p">(</span><span class="n">gs_ord</span><span class="p">),</span>
+            <span class="s2">"B v3 + umbrales F1"</span><span class="p">:</span> <span class="n">f1_folds_sesgos</span><span class="p">[</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">],</span>
+            <span class="s2">"Ordinal v3 + umbrales F1"</span><span class="p">:</span> <span class="n">f1_folds_sesgos</span><span class="p">[</span><span class="n">nombre_ord</span><span class="p">]}</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">cv_folds</span><span class="p">[</span><span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">]</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"B v2 (con buffer)"</span><span class="p">,</span> <span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">,</span> <span class="s2">"B v3 + umbrales F1"</span><span class="p">,</span> <span class="n">nombre_ord</span><span class="p">,</span> <span class="s2">"Ordinal v3 + umbrales F1"</span><span class="p">]:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"F1 macro CV"</span><span class="p">:</span> <span class="n">cv_folds</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">cv_folds</span> <span class="k">else</span> <span class="n">v2</span><span class="p">[</span><span class="s2">"tabla_cv"</span><span class="p">][</span><span class="s2">"f1_macro (media)"</span><span class="p">][</span><span class="sa">f</span><span class="s2">"Logística </span><span class="si">{</span><span class="n">B</span><span class="si">}</span><span class="s2">"</span><span class="p">]}</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">cv_folds</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">!=</span> <span class="s2">"B v3 (kNNDM, sin buffer)"</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">cv_folds</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">ref</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">"Δ CV vs B v3"</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">"SE Δ"</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">d</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+    <span class="n">f</span><span class="p">[</span><span class="s2">"F1 macro test"</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="s2">"f1_macro"</span><span class="p">]</span>
+    <span class="n">f</span><span class="p">[</span><span class="s2">"IC95 inf"</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">"IC95 sup"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ic_test</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="s2">"IC95_inf"</span><span class="p">],</span> <span class="n">ic_test</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"f1_macro"</span><span class="p">,</span> <span class="s2">"IC95_sup"</span><span class="p">]</span>
+    <span class="n">f</span><span class="p">[</span><span class="s2">"MAE test"</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="s2">"kappa test"</span><span class="p">]</span> <span class="o">=</span> <span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="s2">"MAE_ordinal"</span><span class="p">],</span> <span class="n">res_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="s2">"kappa_cuadrático"</span><span class="p">]</span>
+    <span class="n">f</span><span class="p">[</span><span class="s2">"recall E4"</span><span class="p">]</span> <span class="o">=</span> <span class="n">recall_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="s2">"E4"</span><span class="p">]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+<span class="n">resumen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">resumen</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>F1 macro CV</th>
+      <th>F1 macro test</th>
+      <th>IC95 inf</th>
+      <th>IC95 sup</th>
+      <th>MAE test</th>
+      <th>kappa test</th>
+      <th>recall E4</th>
+      <th>Δ CV vs B v3</th>
+      <th>SE Δ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>B v2 (con buffer)</th>
+      <td>0.3219</td>
+      <td>0.4921</td>
+      <td>0.2828</td>
+      <td>0.5137</td>
+      <td>0.4392</td>
+      <td>0.8353</td>
+      <td>0.2814</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>B v3 (kNNDM, sin buffer)</th>
+      <td>0.4601</td>
+      <td>0.4932</td>
+      <td>0.2953</td>
+      <td>0.5125</td>
+      <td>0.3843</td>
+      <td>0.8547</td>
+      <td>0.5795</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>B v3 + umbrales F1</th>
+      <td>0.4494</td>
+      <td>0.5157</td>
+      <td>0.2867</td>
+      <td>0.5329</td>
+      <td>0.3795</td>
+      <td>0.8619</td>
+      <td>0.6047</td>
+      <td>-0.0107</td>
+      <td>0.0135</td>
+    </tr>
+    <tr>
+      <th>Ordinal v3 (kNNDM, sin buffer)</th>
+      <td>0.4303</td>
+      <td>0.4565</td>
+      <td>0.2258</td>
+      <td>0.4607</td>
+      <td>0.5124</td>
+      <td>0.8162</td>
+      <td>0.5412</td>
+      <td>-0.0298</td>
+      <td>0.0187</td>
+    </tr>
+    <tr>
+      <th>Ordinal v3 + umbrales F1</th>
+      <td>0.4204</td>
+      <td>0.4606</td>
+      <td>0.2278</td>
+      <td>0.4646</td>
+      <td>0.5061</td>
+      <td>0.8139</td>
+      <td>0.5787</td>
+      <td>-0.0397</td>
+      <td>0.0198</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Se guardan los resultados para el dashboard y el Entregable 2 (sin datos individuales).</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_limpio</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">_limpio</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_limpio</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">else</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,)):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,)):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">o</span>
+
+
+<span class="n">salida</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"escenario"</span><span class="p">:</span> <span class="s2">"zona nueva de 2 km: coordenadas de los edificios de test frente a todo train"</span><span class="p">,</span>
+    <span class="s2">"knndm"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"q"</span><span class="p">],</span> <span class="s2">"W_km"</span><span class="p">:</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"W"</span><span class="p">],</span> <span class="s2">"W_cv_aleatoria_km"</span><span class="p">:</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"W_loo"</span><span class="p">],</span>
+              <span class="s2">"tabla_q"</span><span class="p">:</span> <span class="n">res_knndm</span><span class="p">[</span><span class="s2">"tabla"</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"list"</span><span class="p">),</span>
+              <span class="s2">"tamano_folds"</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">iva</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">iva</span> <span class="ow">in</span> <span class="n">folds_v3</span><span class="p">]},</span>
+    <span class="s2">"distancias"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"cuantiles"</span><span class="p">:</span> <span class="n">tabla_dist</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+                   <span class="s2">"ecdf_rejilla_km"</span><span class="p">:</span> <span class="n">rejilla</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="s2">"ecdf"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ecdfs</span><span class="o">.</span><span class="n">items</span><span class="p">()}},</span>
+    <span class="s2">"hiperparametros"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"B v2"</span><span class="p">:</span> <span class="n">hp_v2</span><span class="p">,</span> <span class="s2">"B v3"</span><span class="p">:</span> <span class="n">hp_v3</span><span class="p">,</span> <span class="s2">"Ordinal v3"</span><span class="p">:</span> <span class="n">hp_ord</span><span class="p">,</span>
+                        <span class="s2">"A v3"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"clf__"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">busquedas</span><span class="p">[</span><span class="s2">"A_fisicas"</span><span class="p">]</span><span class="o">.</span><span class="n">best_params_</span><span class="o">.</span><span class="n">items</span><span class="p">()}},</span>
+    <span class="s2">"grid_B_knndm"</span><span class="p">:</span> <span class="n">tabla_grid</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"list"</span><span class="p">),</span>
+    <span class="s2">"test"</span><span class="p">:</span> <span class="n">res_test</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="s2">"ic_test_f1"</span><span class="p">:</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">ic_test</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"f1_macro"</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ic_test</span><span class="p">},</span>
+    <span class="s2">"diferencias_test"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dif_test</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">"recall_test"</span><span class="p">:</span> <span class="n">recall_test</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="s2">"cv_vs_test"</span><span class="p">:</span> <span class="n">cv_vs_test</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="s2">"cv_folds_knndm"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cv_folds</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">"sesgos"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sesgos</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">"resumen"</span><span class="p">:</span> <span class="n">resumen</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="s2">"n_train_total"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_total</span><span class="p">),</span> <span class="s2">"n_train_buffer"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_buf</span><span class="p">),</span> <span class="s2">"n_test"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"datos"</span> <span class="o">/</span> <span class="s2">"procesados"</span> <span class="o">/</span> <span class="s2">"resultados_v3.json"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_limpio</span><span class="p">(</span><span class="n">salida</span><span class="p">),</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"guardado datos/procesados/resultados_v3.json"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>guardado datos/procesados/resultados_v3.json
+</pre></div>
+</div>
+</div>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Decisión de la versión 3</p>
+<ul class="simple">
+<li><p><strong>Validación:</strong> kNNDM reemplaza al buffer fijo de 1 km. El escenario «zona nueva de 2 km» queda medido con
+su distancia real al vecino conocido (mediana 0.45 km) y la validación cruzada anticipa el test (0.46 frente
+a 0.49).</p></li>
+<li><p><strong>Modelo principal v3:</strong> logística multinomial B con C = 0.01, sin pesos de clase, entrenada con todo el
+entrenamiento (257 273 viviendas). En test: F1 macro <strong>0.493</strong> (IC 95 % [0.30, 0.51]), MAE ordinal <strong>0.384</strong>,
+accuracy ±1 0.96 y kappa cuadrático 0.85. Frente a la versión 2: mismo F1, errores más cortos y
+probabilidades mejores; a cambio, casi no predice el estrato 5.</p></li>
+<li><p><strong>No se adoptan</strong> la logística ordinal ni los umbrales de decisión: no superan a la multinomial en CV.</p></li>
+<li><p><strong>Lo que no cambia:</strong> el techo. Un F1 cercano a 0.5 con errores casi siempre de un estrato; la información
+que falta (el puntaje del DANE dentro de cada zona) no está en los datos abiertos. El capítulo 6 del
+Entregable 2 prueba la otra idea del libro del profesor: el lag espacial con un grafo KNN.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="10_modelo_base.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">10. Modelo base (sección 3)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="11_conclusiones.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">11. Conclusiones, limitaciones y próximos pasos</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-que-distancia-se-predice">14.1 ¿A qué distancia se predice?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-knndm-folds-que-imitan-el-escenario">14.2 Validación kNNDM: folds que imitan el escenario</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hiperparametros-con-la-validacion-knndm">14.3 Hiperparámetros con la validación kNNDM</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-en-test-con-y-sin-buffer">14.4 Evaluación en test: con y sin buffer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistica-ordinal">14.5 Logística ordinal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#umbrales-de-decision-para-el-f1-macro">14.6 Umbrales de decisión para el F1 macro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resumen-y-decision">14.7 Resumen y decisión</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
