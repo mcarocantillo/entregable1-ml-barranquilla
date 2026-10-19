@@ -23,6 +23,9 @@ parts:
       - file: notebooks/10_modelo_base
       - file: notebooks/14_validacion_vecinos
       - file: notebooks/11_conclusiones
+  - caption: Pedido del Entregable 3
+    chapters:
+      - file: notebooks/15_eda_mejorado
   - caption: Apéndices
     chapters:
       - file: notebooks/A_bitacora
