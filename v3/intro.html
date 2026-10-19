@@ -243,6 +243,10 @@
 <li class="toctree-l1"><a class="reference internal" href="notebooks/14_validacion_vecinos.html">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pedido del Entregable 3</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/15_eda_mejorado.html">15. Correcciones y EDA mejorado con los hallazgos del proyecto</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="notebooks/A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
@@ -412,6 +416,14 @@
 <p><strong>Primer entregable del proyecto de investigación — Machine Learning</strong>
 Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Versión 3, octubre de 2026</p>
 <div class="important admonition">
+<p class="admonition-title">Actualización para el Entregable 3 (19-oct-2026): correcciones y EDA mejorado</p>
+<p>La guía del Entregable 3 pide, sobre esta primera entrega, realizar las correcciones solicitadas y mejorar el
+análisis exploratorio con los hallazgos posteriores. El <strong>capítulo 15</strong> reúne dónde está cada corrección y agrega
+cuatro hallazgos nuevos: el entorno de la vivienda (sus 8 vecinos) se relaciona con el estrato más que la vivienda
+misma; el 22 % de las viviendas está en una frontera entre estratos; el test tiene todo su estrato 6 en un solo
+bloque; y una zona nueva se predice a 0.45 km del dato más cercano. Los capítulos 1 a 14 no cambian.</p>
+</div>
+<div class="important admonition">
 <p class="admonition-title">Versión 3: validación por vecinos más cercanos</p>
 <p>Esta es la <strong>versión 3</strong> del libro. Agrega el <strong>capítulo 14</strong>: la validación cruzada se diseña emparejando
 distancias al vecino más cercano (kNNDM) en lugar de un buffer fijo de 1 km, se prueban una logística ordinal y
@@ -523,7 +535,11 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 <td><p>hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según las instrucciones del proyecto</p></td>
 <td><p>Figura 1, nota crítica</p></td>
 </tr>
-<tr class="row-even"><td><p>Apéndices</p></td>
+<tr class="row-even"><td><p>15. Correcciones y EDA mejorado (Entregable 3)</p></td>
+<td><p>dónde está cada corrección; hallazgos nuevos: vecindad física, fronteras entre estratos, composición del test, distancia de predicción</p></td>
+<td><p>Entregable 3, sección 7.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Apéndices</p></td>
 <td><p>bitácora de decisiones, reproducibilidad, referencias</p></td>
 <td><p>Entregables</p></td>
 </tr>
@@ -555,6 +571,8 @@ otra descarga del catastro, hay que revisar esas cifras frente a las salidas de
 cada celda.</p>
 </div>
 </section>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">

@@ -3,6 +3,15 @@
 **Primer entregable del proyecto de investigación — Machine Learning**
 Maestría · Profesor: Lihki Rubio · Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329) · Versión 3, octubre de 2026
 
+```{admonition} Actualización para el Entregable 3 (19-oct-2026): correcciones y EDA mejorado
+:class: important
+La guía del Entregable 3 pide, sobre esta primera entrega, realizar las correcciones solicitadas y mejorar el
+análisis exploratorio con los hallazgos posteriores. El **capítulo 15** reúne dónde está cada corrección y agrega
+cuatro hallazgos nuevos: el entorno de la vivienda (sus 8 vecinos) se relaciona con el estrato más que la vivienda
+misma; el 22 % de las viviendas está en una frontera entre estratos; el test tiene todo su estrato 6 en un solo
+bloque; y una zona nueva se predice a 0.45 km del dato más cercano. Los capítulos 1 a 14 no cambian.
+```
+
 ```{admonition} Versión 3: validación por vecinos más cercanos
 :class: important
 Esta es la **versión 3** del libro. Agrega el **capítulo 14**: la validación cruzada se diseña emparejando
@@ -71,6 +80,7 @@ datos), y cada capítulo indica qué sección de las instrucciones del proyecto 
 | 10. Modelo base | Pipeline, líneas base, CV espacial, métricas con IC, residuos, curva de aprendizaje | 2.9, 3 |
 | 14. Validación por vecinos más cercanos (versión 3) | distancia al vecino conocido, validación kNNDM, logística ordinal, umbrales para el F1 macro | 3 |
 | 11. Conclusiones | hallazgos, limitaciones, próximos pasos y veredicto sobre la base de datos según las instrucciones del proyecto | Figura 1, nota crítica |
+| 15. Correcciones y EDA mejorado (Entregable 3) | dónde está cada corrección; hallazgos nuevos: vecindad física, fronteras entre estratos, composición del test, distancia de predicción | Entregable 3, sección 7.1 |
 | Apéndices | bitácora de decisiones, reproducibilidad, referencias | Entregables |
 
 Las secciones 2.6 (temporal) y 2.8 (espacio-temporal) **no aplican**: los datos

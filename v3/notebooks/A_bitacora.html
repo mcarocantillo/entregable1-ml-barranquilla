@@ -66,7 +66,7 @@
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
     <link rel="next" title="Apéndice B. Reproducibilidad" href="12_reproducibilidad.html" />
-    <link rel="prev" title="11. Conclusiones, limitaciones y próximos pasos" href="11_conclusiones.html" />
+    <link rel="prev" title="15. Correcciones y EDA mejorado con los hallazgos del proyecto" href="15_eda_mejorado.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="es"/>
   <meta name="docsearch:version" content="" />
@@ -240,6 +240,10 @@
 <li class="toctree-l1"><a class="reference internal" href="14_validacion_vecinos.html">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pedido del Entregable 3</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="15_eda_mejorado.html">15. Correcciones y EDA mejorado con los hallazgos del proyecto</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
@@ -404,7 +408,8 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-12-dos-universos-de-datos-y-reorganizacion-del-libro-16-oct-2026">A.12 Dos universos de datos y reorganización del libro (16-oct-2026)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-13-ubicacion-por-manzana-de-las-viviendas-sin-coordenadas-16-oct-2026">A.13 Ubicación por manzana de las viviendas sin coordenadas (16-oct-2026)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-14-version-3-validacion-knndm-y-mejoras-del-modelo-base-17-oct-2026">A.14 Versión 3: validación kNNDM y mejoras del modelo base (17-oct-2026)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-15-pendientes">A.15 Pendientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-15-correcciones-y-eda-mejorado-para-el-entregable-3-19-oct-2026">A.15 Correcciones y EDA mejorado para el Entregable 3 (19-oct-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-16-pendientes">A.16 Pendientes</a></li>
 </ul>
             </nav>
         </div>
@@ -789,8 +794,22 @@ conservan sus salidas de la versión 2. La réplica de la versión 2 dentro del 
 test (0.4921).</p></li>
 </ul>
 </section>
-<section id="a-15-pendientes">
-<h2>A.15 Pendientes<a class="headerlink" href="#a-15-pendientes" title="Link to this heading">#</a></h2>
+<section id="a-15-correcciones-y-eda-mejorado-para-el-entregable-3-19-oct-2026">
+<h2>A.15 Correcciones y EDA mejorado para el Entregable 3 (19-oct-2026)<a class="headerlink" href="#a-15-correcciones-y-eda-mejorado-para-el-entregable-3-19-oct-2026" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Motivo.</strong> La guía del Entregable 3 (sección 7.1) pide realizar las correcciones de la primera entrega y mejorar
+el EDA con los hallazgos posteriores. Capítulo nuevo <code class="docutils literal notranslate"><span class="pre">15_eda_mejorado.py</span></code> (solo entrenamiento, salvo un
+diagnóstico posterior de la composición del test).</p></li>
+<li><p><strong>Vecindad física</strong> (8 edificios más cercanos, sin estrato): en los seis atributos, el η² de los vecinos supera al
+de la propia vivienda (baños 0.60 frente a 0.33; área 0.45 frente a 0.17).</p></li>
+<li><p><strong>Fronteras:</strong> el 22 % de las viviendas tiene la mitad o más de sus 8 edificios vecinos en otro estrato (estrato 5:
+44 %); el 96 % de esas diferencias es de un estrato.</p></li>
+<li><p><strong>Test:</strong> estrato 6 = 1.2 % (4.8 % en entrenamiento) y sus 793 viviendas están en un solo bloque (4004).</p></li>
+<li><p>Los capítulos 1–14 no cambian.</p></li>
+</ul>
+</section>
+<section id="a-16-pendientes">
+<h2>A.16 Pendientes<a class="headerlink" href="#a-16-pendientes" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>(Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
 textos, conclusiones y resumen.</p></li>
@@ -834,12 +853,12 @@ del lote) y si 0 habitaciones es un valor válido.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="11_conclusiones.html"
+       href="15_eda_mejorado.html"
        title="página anterior">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">anterior</p>
-        <p class="prev-next-title">11. Conclusiones, limitaciones y próximos pasos</p>
+        <p class="prev-next-title">15. Correcciones y EDA mejorado con los hallazgos del proyecto</p>
       </div>
     </a>
     <a class="right-next"
@@ -883,7 +902,8 @@ del lote) y si 0 habitaciones es un valor válido.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-12-dos-universos-de-datos-y-reorganizacion-del-libro-16-oct-2026">A.12 Dos universos de datos y reorganización del libro (16-oct-2026)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-13-ubicacion-por-manzana-de-las-viviendas-sin-coordenadas-16-oct-2026">A.13 Ubicación por manzana de las viviendas sin coordenadas (16-oct-2026)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-14-version-3-validacion-knndm-y-mejoras-del-modelo-base-17-oct-2026">A.14 Versión 3: validación kNNDM y mejoras del modelo base (17-oct-2026)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-15-pendientes">A.15 Pendientes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-15-correcciones-y-eda-mejorado-para-el-entregable-3-19-oct-2026">A.15 Correcciones y EDA mejorado para el Entregable 3 (19-oct-2026)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-16-pendientes">A.16 Pendientes</a></li>
 </ul>
   </nav></div>
 

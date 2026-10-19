@@ -344,7 +344,19 @@ conservan como registro del proceso. Las vigentes están en A.12.
   conservan sus salidas de la versión 2. La réplica de la versión 2 dentro del capítulo 14 da el mismo F1 de
   test (0.4921).
 
-## A.15 Pendientes
+## A.15 Correcciones y EDA mejorado para el Entregable 3 (19-oct-2026)
+
+- **Motivo.** La guía del Entregable 3 (sección 7.1) pide realizar las correcciones de la primera entrega y mejorar
+  el EDA con los hallazgos posteriores. Capítulo nuevo `15_eda_mejorado.py` (solo entrenamiento, salvo un
+  diagnóstico posterior de la composición del test).
+- **Vecindad física** (8 edificios más cercanos, sin estrato): en los seis atributos, el η² de los vecinos supera al
+  de la propia vivienda (baños 0.60 frente a 0.33; área 0.45 frente a 0.17).
+- **Fronteras:** el 22 % de las viviendas tiene la mitad o más de sus 8 edificios vecinos en otro estrato (estrato 5:
+  44 %); el 96 % de esas diferencias es de un estrato.
+- **Test:** estrato 6 = 1.2 % (4.8 % en entrenamiento) y sus 793 viviendas están en un solo bloque (4004).
+- Los capítulos 1–14 no cambian.
+
+## A.16 Pendientes
 
 - (Hecho el 30-sep) Ejecutar el capítulo 10 con la regla 1-SE y actualizar
   textos, conclusiones y resumen.

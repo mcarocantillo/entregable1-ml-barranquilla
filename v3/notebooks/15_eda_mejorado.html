@@ -1,0 +1,1197 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>15. Correcciones y EDA mejorado con los hallazgos del proyecto &#8212; Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/15_eda_mejorado';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+    <link rel="next" title="Apéndice A. Bitácora metodológica (decisiones y hallazgos)" href="A_bitacora.html" />
+    <link rel="prev" title="11. Conclusiones, limitaciones y próximos pasos" href="11_conclusiones.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Estrato y catastro en Barranquilla — Entregable 1 (versión 3)</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Estrato socioeconómico y características catastrales de la vivienda en Barranquilla
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Antes de empezar</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guia_de_lectura.html">Guía de lectura</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Base de datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_base_de_datos.html">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_particion.html">2. Reserva del conjunto de prueba (partición por bloques espaciales)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_calidad_train.html">3. Calidad de datos en entrenamiento: faltantes, outliers y sesgo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Análisis exploratorio (solo entrenamiento)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04_variable_objetivo.html">4. Análisis de la variable objetivo (sección 2.1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_unidimensional.html">5. Análisis unidimensional (sección 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bidimensional.html">6. Análisis bidimensional (sección 2.3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_multivariado.html">7. Análisis multivariado (sección 2.4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_espacial.html">8. Componente espacial (sección 2.7)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_fuga_de_datos.html">9. Auditoría de fuga de datos (sección 2.5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumen_eda.html">Resumen ejecutivo del EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelo base</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_modelo_base.html">10. Modelo base (sección 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_validacion_vecinos.html">14. Validación por vecinos más cercanos y mejoras del modelo base (versión 3)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_conclusiones.html">11. Conclusiones, limitaciones y próximos pasos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pedido del Entregable 3</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">15. Correcciones y EDA mejorado con los hallazgos del proyecto</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_bitacora.html">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_reproducibilidad.html">Apéndice B. Reproducibilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_referencias.html">Apéndice C. Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/15_eda_mejorado.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>15. Correcciones y EDA mejorado con los hallazgos del proyecto</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#las-correcciones-de-la-primera-entrega-y-donde-estan">15.1 Las correcciones de la primera entrega y dónde están</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-1-el-entorno-de-la-vivienda-dice-mas-del-estrato-que-la-vivienda-misma">15.2 Hallazgo 1: el entorno de la vivienda dice más del estrato que la vivienda misma</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-2-las-fronteras-entre-estratos">15.3 Hallazgo 2: las fronteras entre estratos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-3-el-test-no-tiene-la-misma-composicion-que-el-entrenamiento">15.4 Hallazgo 3: el test no tiene la misma composición que el entrenamiento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-4-a-que-distancia-se-predice">15.5 Hallazgo 4: a qué distancia se predice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-decisiones-cambian-con-estos-hallazgos">15.6 Qué decisiones cambian con estos hallazgos</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="correcciones-y-eda-mejorado-con-los-hallazgos-del-proyecto">
+<h1>15. Correcciones y EDA mejorado con los hallazgos del proyecto<a class="headerlink" href="#correcciones-y-eda-mejorado-con-los-hallazgos-del-proyecto" title="Link to this heading">#</a></h1>
+<p><em>Autores: María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)</em></p>
+<div class="tip admonition">
+<p class="admonition-title">Qué hace este capítulo</p>
+<p><strong>Pregunta que responde:</strong> la guía del Entregable 3 pide, sobre esta primera entrega, «realizar todas las
+correcciones solicitadas y mejorar el análisis exploratorio con base en nuevos hallazgos encontrados durante el
+desarrollo del proyecto» (sección 7.1). ¿Dónde está cada corrección y qué agregan al EDA los Entregables 2 y 3?</p>
+<p><strong>Datos:</strong> la misma partición del capítulo 2 y, como en todo el EDA, <strong>solo el entrenamiento</strong> (257 273
+viviendas). La única excepción es la sección 15.4, un diagnóstico de la composición del test que se hizo
+<strong>después</strong> de evaluar los modelos y que no se usa para ninguna decisión.</p>
+<p><strong>Recorrido:</strong> las correcciones y dónde están (15.1); el entorno de la vivienda (15.2); las fronteras entre
+estratos (15.3); la composición del test (15.4); a qué distancia se predice (15.5); qué decisiones cambian (15.6).</p>
+</div>
+<section id="las-correcciones-de-la-primera-entrega-y-donde-estan">
+<h2>15.1 Las correcciones de la primera entrega y dónde están<a class="headerlink" href="#las-correcciones-de-la-primera-entrega-y-donde-estan" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Corrección</p></th>
+<th class="head"><p>Qué cambió</p></th>
+<th class="head"><p>Dónde</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Viviendas sin coordenadas</strong></p></td>
+<td><p>El 16 % de las viviendas (casi todas informales de estratos 1 y 2) no tenía coordenadas y quedaba fuera. Se ubican por el centroide de su manzana cuando la manzana es compacta: la cobertura sube del 83.8 % al 96.9 % y la del estrato 1, del 67 % al 92 %.</p></td>
+<td><p>Versión 2: capítulo 1 (sección 1.7) y apéndice A.13</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Grupo del ICC</strong></p></td>
+<td><p>Las mejoras en terreno ajeno se agrupaban por un prefijo del NPN que reunía viviendas independientes. Ahora cada mejora es su propio grupo: ICC 0.992, efecto de diseño ≈ 144, unas 2 300 viviendas independientes.</p></td>
+<td><p>Apéndice A.11</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Variables de pisos</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">total_plantas</span></code> son los pisos de la propia vivienda (1 en casi todos los apartamentos), <code class="docutils literal notranslate"><span class="pre">planta_ubicacion</span></code> el piso de la unidad y <code class="docutils literal notranslate"><span class="pre">altura</span></code> casi constante (3 m).</p></td>
+<td><p>Diccionario del capítulo 1 y limitaciones (11.2)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dos universos de datos</strong></p></td>
+<td><p>Las estadísticas de la base completa y las del universo con coordenadas se reportan por separado.</p></td>
+<td><p>Apéndice A.12</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Validación con vecinos más cercanos</strong> (sugerencia del profesor)</p></td>
+<td><p>El buffer fijo de 1 km evaluaba a 1.4–1.5 km del dato más cercano, más lejos que el escenario real (0.45 km). La validación kNNDM reproduce esa distancia; el modelo base se reajusta con ella (F1 de test 0.493, MAE ordinal 0.384).</p></td>
+<td><p>Versión 3: capítulo 14 y apéndice A.14</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Las secciones siguientes son la segunda parte del pedido: <strong>lo que el EDA no había visto</strong> y que aprendimos al
+construir los modelos de los Entregables 2 y 3.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Preparación: mismas importaciones y datos que el resto del libro.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">RAIZ</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"notebooks"</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RAIZ</span><span class="p">))</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">C</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">estadistica</span> <span class="k">as</span> <span class="n">E</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">graficos</span> <span class="k">as</span> <span class="n">G</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">particion</span> <span class="k">as</span> <span class="n">P</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">vecinos</span> <span class="k">as</span> <span class="n">V</span>
+
+<span class="n">G</span><span class="o">.</span><span class="n">estilo</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">aviso_sintetico</span><span class="p">()</span>
+<span class="n">datos</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">cargar_particion</span><span class="p">()</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="n">datos</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">"train"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="n">datos</span><span class="o">.</span><span class="n">particion</span> <span class="o">==</span> <span class="s2">"test"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entrenamiento: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> viviendas | prueba: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> (solo para la sección 15.4)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenamiento: 257,273 viviendas | prueba: 65,145 (solo para la sección 15.4)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="hallazgo-1-el-entorno-de-la-vivienda-dice-mas-del-estrato-que-la-vivienda-misma">
+<h2>15.2 Hallazgo 1: el entorno de la vivienda dice más del estrato que la vivienda misma<a class="headerlink" href="#hallazgo-1-el-entorno-de-la-vivienda-dice-mas-del-estrato-que-la-vivienda-misma" title="Link to this heading">#</a></h2>
+<p>El EDA del capítulo 6 midió la relación de cada variable de la vivienda con el estrato. En el Entregable 2
+apareció una pregunta que el EDA no se había hecho: <strong>¿cómo son las viviendas de alrededor?</strong> Para cada vivienda se
+calcula el promedio de seis atributos en sus <strong>8 edificios más cercanos</strong> (sin contar su propio edificio y sin
+usar el estrato de nadie): área construida (log), baños, habitaciones, antigüedad, piso y proporción en propiedad
+horizontal, más la distancia media a esos 8 edificios. Es la <strong>vecindad física</strong> que usan los Entregables 2 y 3.</p>
+<p>La tabla compara el tamaño del efecto (η² de Kruskal-Wallis, capítulo 6) de cada atributo de la propia vivienda
+con el del mismo atributo promediado en sus vecinos.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xy</span> <span class="o">=</span> <span class="n">train</span><span class="p">[[</span><span class="s2">"x_km"</span><span class="p">,</span> <span class="s2">"y_km"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">xy_g</span><span class="p">,</span> <span class="n">n_g</span><span class="p">,</span> <span class="n">cod</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">puntos_unicos</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">train</span><span class="o">.</span><span class="n">npn_edificio</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">attrs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"área construida (log)"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">area_construida</span><span class="p">),</span> <span class="s2">"baños"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">total_banios</span><span class="p">,</span>
+    <span class="s2">"habitaciones"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">total_habitaciones</span><span class="p">,</span> <span class="s2">"antigüedad"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">antiguedad</span><span class="p">,</span> <span class="s2">"piso"</span><span class="p">:</span> <span class="n">train</span><span class="o">.</span><span class="n">planta_ubicacion</span><span class="p">,</span>
+    <span class="s2">"propiedad horizontal"</span><span class="p">:</span> <span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">condicion_predio</span> <span class="o">==</span> <span class="s2">"PH_Unidad_Predial"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)})</span>
+<span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+<span class="n">A_g</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">cod</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_g</span><span class="p">))</span>
+<span class="n">lag</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">lag_knn</span><span class="p">(</span><span class="n">xy_g</span><span class="p">,</span> <span class="n">xy_g</span><span class="p">,</span> <span class="n">A_g</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">grupo_destino</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">grupo_fuente</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lag</span><span class="p">[</span><span class="n">cod</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">attrs</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">df_propia</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">attrs</span><span class="p">,</span> <span class="n">train</span><span class="p">[[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_vec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">vec</span><span class="p">,</span> <span class="n">train</span><span class="p">[[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">filas</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"η² de la propia vivienda"</span><span class="p">:</span> <span class="n">E</span><span class="o">.</span><span class="n">kruskal_eta2</span><span class="p">(</span><span class="n">df_propia</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">)[</span><span class="s2">"eta2_H"</span><span class="p">],</span>
+                <span class="s2">"η² de sus 8 vecinos"</span><span class="p">:</span> <span class="n">E</span><span class="o">.</span><span class="n">kruskal_eta2</span><span class="p">(</span><span class="n">df_vec</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">)[</span><span class="s2">"eta2_H"</span><span class="p">]}</span>
+<span class="n">tabla_eta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">tabla_eta</span><span class="p">[</span><span class="s2">"cuántas veces más"</span><span class="p">]</span> <span class="o">=</span> <span class="n">tabla_eta</span><span class="p">[</span><span class="s2">"η² de sus 8 vecinos"</span><span class="p">]</span> <span class="o">/</span> <span class="n">tabla_eta</span><span class="p">[</span><span class="s2">"η² de la propia vivienda"</span><span class="p">]</span>
+<span class="n">dist_vec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"d"</span><span class="p">:</span> <span class="n">dist</span><span class="p">[</span><span class="n">cod</span><span class="p">],</span> <span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">:</span> <span class="n">y</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Distancia media a los 8 edificios vecinos: η² = </span><span class="si">{</span><span class="n">E</span><span class="o">.</span><span class="n">kruskal_eta2</span><span class="p">(</span><span class="n">dist_vec</span><span class="p">,</span><span class="w"> </span><span class="s1">'d'</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">)[</span><span class="s1">'eta2_H'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">tabla_eta</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Distancia media a los 8 edificios vecinos: η² = 0.264
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>η² de la propia vivienda</th>
+      <th>η² de sus 8 vecinos</th>
+      <th>cuántas veces más</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>área construida (log)</th>
+      <td>0.166</td>
+      <td>0.445</td>
+      <td>2.688</td>
+    </tr>
+    <tr>
+      <th>baños</th>
+      <td>0.330</td>
+      <td>0.601</td>
+      <td>1.824</td>
+    </tr>
+    <tr>
+      <th>habitaciones</th>
+      <td>0.079</td>
+      <td>0.264</td>
+      <td>3.355</td>
+    </tr>
+    <tr>
+      <th>antigüedad</th>
+      <td>0.046</td>
+      <td>0.065</td>
+      <td>1.396</td>
+    </tr>
+    <tr>
+      <th>piso</th>
+      <td>0.244</td>
+      <td>0.308</td>
+      <td>1.261</td>
+    </tr>
+    <tr>
+      <th>propiedad horizontal</th>
+      <td>0.293</td>
+      <td>0.377</td>
+      <td>1.288</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">titulo</span><span class="p">,</span> <span class="n">serie</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[(</span><span class="s2">"Área construida de la vivienda (log)"</span><span class="p">,</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">"área construida (log)"</span><span class="p">]),</span>
+                                      <span class="p">(</span><span class="s2">"Área construida promedio de sus 8 vecinos (log)"</span><span class="p">,</span> <span class="n">vec</span><span class="p">[</span><span class="s2">"área construida (log)"</span><span class="p">])]):</span>
+    <span class="n">datos_cajas</span> <span class="o">=</span> <span class="p">[</span><span class="n">serie</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">datos_cajas</span><span class="p">,</span> <span class="n">showfliers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">patch_artist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">"#9ec5f4"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#1c5cab"</span><span class="p">),</span> <span class="n">medianprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">"#0a2547"</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"E</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">CLASES</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titulo</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"estrato"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"log(1 + área construida, m²)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/af4a6b580ca4c3e2cfdd79bb77b0b6bd59d63d288ca4cb4c8f6f7036734e1f67.png" src="../_images/af4a6b580ca4c3e2cfdd79bb77b0b6bd59d63d288ca4cb4c8f6f7036734e1f67.png" />
+</div>
+</div>
+<p><strong>Lectura.</strong> <strong>En los seis atributos, el promedio de los vecinos se relaciona con el estrato más que el atributo de
+la propia vivienda</strong>: los baños de los vecinos tienen η² = 0.60 frente a 0.33 de los baños propios, y el área de
+los vecinos, 0.45 frente a 0.17 (2.7 veces más). Incluso la distancia media a los 8 edificios vecinos, una medida
+de densidad, tiene η² = 0.26. Las cajas lo muestran: el área propia se solapa mucho entre estratos (una casa
+pequeña puede estar en cualquier barrio), mientras que el área de los vecinos ordena los estratos de forma casi
+monótona.</p>
+<p>Es lo que anticipaba la metodología del DANE (el estrato es una propiedad de la zona, apéndice A.1) y lo que
+confirmaron los modelos: agregar estas variables subió el F1 de test de la logística de 0.49 a 0.57–0.60
+(Entregable 2), y en el análisis SHAP del Entregable 3 las variables más importantes son la posición norte-sur, el
+área y los baños de los vecinos y la distancia al centro; la primera variable propia de la vivienda aparece en el
+décimo lugar.</p>
+</section>
+<section id="hallazgo-2-las-fronteras-entre-estratos">
+<h2>15.3 Hallazgo 2: las fronteras entre estratos<a class="headerlink" href="#hallazgo-2-las-fronteras-entre-estratos" title="Link to this heading">#</a></h2>
+<p>Si el estrato es de la zona, las viviendas difíciles de clasificar deberían estar donde las zonas se tocan. Para
+cada edificio se toma su estrato (el más frecuente entre sus viviendas) y se cuenta cuántos de sus 8 edificios
+más cercanos tienen otro estrato.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">moda_g</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">cod</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">mode</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">xy_g</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">xy_g</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">otro</span> <span class="o">=</span> <span class="n">moda_g</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">moda_g</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="n">salto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">moda_g</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">moda_g</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+<span class="n">fr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="s2">"prop_otro"</span><span class="p">:</span> <span class="n">otro</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="n">cod</span><span class="p">],</span> <span class="s2">"frontera"</span><span class="p">:</span> <span class="n">otro</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="n">cod</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">})</span>
+<span class="n">tabla_fr</span> <span class="o">=</span> <span class="n">fr</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">"vecinos con otro estrato (media)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"prop_otro"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">),</span>
+                                        <span class="s2">"</span><span class="si">% d</span><span class="s2">e viviendas en frontera"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"frontera"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">)})</span>
+<span class="n">tabla_fr</span><span class="p">[</span><span class="s2">"</span><span class="si">% d</span><span class="s2">e viviendas en frontera"</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">100</span>
+<span class="n">tabla_fr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"todas"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">fr</span><span class="o">.</span><span class="n">prop_otro</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">fr</span><span class="o">.</span><span class="n">frontera</span><span class="o">.</span><span class="n">mean</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entre los vecinos con otro estrato, el </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">salto</span><span class="p">[</span><span class="n">otro</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> % difiere en un solo estrato."</span><span class="p">)</span>
+<span class="n">tabla_fr</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entre los vecinos con otro estrato, el 95.7 % difiere en un solo estrato.
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>vecinos con otro estrato (media)</th>
+      <th>% de viviendas en frontera</th>
+    </tr>
+    <tr>
+      <th>estrato_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.193</td>
+      <td>18.693</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.194</td>
+      <td>18.304</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.214</td>
+      <td>21.870</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.281</td>
+      <td>29.844</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.391</td>
+      <td>43.563</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.244</td>
+      <td>20.340</td>
+    </tr>
+    <tr>
+      <th>todas</th>
+      <td>0.223</td>
+      <td>22.304</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Lectura.</strong> El <strong>22 %</strong> de las viviendas de entrenamiento está en una <strong>frontera</strong>: la mitad o más de sus 8
+edificios vecinos tiene otro estrato. No todos los estratos viven igual: el <strong>estrato 5 es el más fronterizo</strong>
+(44 % de sus viviendas), seguido del 4 (30 %); los estratos 1 y 2 son los más homogéneos (18–19 %). Y casi
+todas esas fronteras son de <strong>un solo estrato</strong> (el 96 % de los vecinos con otro estrato difiere en uno).</p>
+<p>Este hallazgo explica tres resultados posteriores: los errores de los modelos son casi siempre de un estrato
+(accuracy ±1 de 0.96 a 0.99), el estrato 5 es el que peor reconoce el modelo base (recall 0.08 en la versión 3,
+capítulo 14) y <strong>ADASYN</strong> fue el peor método de balanceo en el
+Entregable 3, porque concentra los ejemplos sintéticos en las viviendas «difíciles», que aquí son las de frontera.</p>
+</section>
+<section id="hallazgo-3-el-test-no-tiene-la-misma-composicion-que-el-entrenamiento">
+<h2>15.4 Hallazgo 3: el test no tiene la misma composición que el entrenamiento<a class="headerlink" href="#hallazgo-3-el-test-no-tiene-la-misma-composicion-que-el-entrenamiento" title="Link to this heading">#</a></h2>
+<div class="warning admonition">
+<p class="admonition-title">Diagnóstico posterior, no una decisión</p>
+<p>Esta sección mira las etiquetas del test. Se hizo <strong>después</strong> de evaluar los modelos de los Entregables 2 y 3,
+para entender por qué su F1 de test difiere de la validación; no cambia ninguna decisión del EDA ni del modelo.</p>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"entrenamiento (%)"</span><span class="p">:</span> <span class="n">train</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+                     <span class="s2">"prueba (%)"</span><span class="p">:</span> <span class="n">test</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">})</span>
+<span class="n">display</span><span class="p">(</span><span class="n">comp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">por_bloque</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">bloque</span><span class="p">,</span> <span class="n">test</span><span class="p">[</span><span class="n">C</span><span class="o">.</span><span class="n">OBJETIVO</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"E</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">por_bloque</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">=</span> <span class="n">por_bloque</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">por_bloque</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>estrato_num</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>entrenamiento (%)</th>
+      <td>30.0</td>
+      <td>22.7</td>
+      <td>22.9</td>
+      <td>14.4</td>
+      <td>5.2</td>
+      <td>4.8</td>
+    </tr>
+    <tr>
+      <th>prueba (%)</th>
+      <td>35.4</td>
+      <td>20.3</td>
+      <td>19.1</td>
+      <td>18.8</td>
+      <td>5.2</td>
+      <td>1.2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>estrato_num</th>
+      <th>E1</th>
+      <th>E2</th>
+      <th>E3</th>
+      <th>E4</th>
+      <th>E5</th>
+      <th>E6</th>
+      <th>total</th>
+    </tr>
+    <tr>
+      <th>bloque</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1006</th>
+      <td>119</td>
+      <td>3772</td>
+      <td>1116</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5008</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>14953</td>
+      <td>1283</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>16236</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>6618</td>
+      <td>4570</td>
+      <td>2907</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>14097</td>
+    </tr>
+    <tr>
+      <th>3002</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3004</th>
+      <td>1394</td>
+      <td>3051</td>
+      <td>7313</td>
+      <td>1915</td>
+      <td>6</td>
+      <td>0</td>
+      <td>13679</td>
+    </tr>
+    <tr>
+      <th>4004</th>
+      <td>0</td>
+      <td>7</td>
+      <td>1054</td>
+      <td>10332</td>
+      <td>3361</td>
+      <td>793</td>
+      <td>15547</td>
+    </tr>
+    <tr>
+      <th>6005</th>
+      <td>4</td>
+      <td>509</td>
+      <td>62</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>575</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Lectura.</strong> El test tiene más estrato 1 (35 % frente a 30 %) y mucho menos estrato 6: <strong>1.2 % frente a 4.8 %</strong>.
+Y las <strong>793 viviendas de estrato 6 del test están todas en un solo bloque</strong> (el 4004), igual que casi todas las de
+estrato 5. Además, un bloque tiene solo 3 viviendas.</p>
+<p>Consecuencias para leer los resultados: el F1 macro da el mismo peso a los seis estratos, así que el F1 del
+estrato 6, que pesa un sexto del total, depende de <strong>un solo bloque</strong>. Por eso los intervalos de confianza del test
+son anchos y asimétricos, la validación (con 4.8 % de estrato 6) y el test no siempre ordenan igual a los modelos,
+y con 7 bloques ninguna diferencia pequeña entre modelos puede declararse significativa después de corregir por
+comparaciones múltiples (Entregable 3, capítulo 11). No es un error de la partición, que se hizo antes de mirar
+nada (capítulo 2): es una limitación del tamaño del test que conviene tener presente.</p>
+</section>
+<section id="hallazgo-4-a-que-distancia-se-predice">
+<h2>15.5 Hallazgo 4: a qué distancia se predice<a class="headerlink" href="#hallazgo-4-a-que-distancia-se-predice" title="Link to this heading">#</a></h2>
+<p>El capítulo 8 midió que el estrato se parece hasta unos 2.6 km. El capítulo 14 agregó la pregunta que importa para
+validar: <strong>¿a qué distancia del dato más cercano tendrá que predecir el modelo?</strong></p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r3</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"datos"</span> <span class="o">/</span> <span class="s2">"procesados"</span> <span class="o">/</span> <span class="s2">"resultados_v3.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+<span class="n">dist_tab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">r3</span><span class="p">[</span><span class="s2">"distancias"</span><span class="p">][</span><span class="s2">"cuantiles"</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">dist_tab</span><span class="p">[[</span><span class="s2">"p10 (km)"</span><span class="p">,</span> <span class="s2">"mediana (km)"</span><span class="p">,</span> <span class="s2">"p90 (km)"</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>p10 (km)</th>
+      <th>mediana (km)</th>
+      <th>p90 (km)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Escenario: zona nueva de 2 km (test → todo train)</th>
+      <td>0.107</td>
+      <td>0.453</td>
+      <td>0.819</td>
+    </tr>
+    <tr>
+      <th>Test de la versión 2 (test → train tras buffer)</th>
+      <td>1.103</td>
+      <td>1.532</td>
+      <td>2.013</td>
+    </tr>
+    <tr>
+      <th>CV de la versión 2 (bloques + buffer de 1 km)</th>
+      <td>1.074</td>
+      <td>1.406</td>
+      <td>2.075</td>
+    </tr>
+    <tr>
+      <th>CV aleatoria por edificios</th>
+      <td>0.000</td>
+      <td>0.010</td>
+      <td>0.109</td>
+    </tr>
+    <tr>
+      <th>CV kNNDM (versión 3)</th>
+      <td>0.104</td>
+      <td>0.464</td>
+      <td>1.227</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Lectura.</strong> Una zona nueva de 2 km se predice, en la mediana, a <strong>0.45 km</strong> de la vivienda de entrenamiento más
+cercana. La validación con buffer de 1 km evaluaba a 1.41 km y el test de la versión 2 a 1.53 km: medían un
+escenario más difícil que el real. Una validación aleatoria, en cambio, evalúa a 0.01 km (vecinos del mismo
+edificio) y por eso casi duplicaba el F1. La validación kNNDM evalúa a 0.46 km, como el escenario, y es la que
+usan los Entregables 2 y 3.</p>
+</section>
+<section id="que-decisiones-cambian-con-estos-hallazgos">
+<h2>15.6 Qué decisiones cambian con estos hallazgos<a class="headerlink" href="#que-decisiones-cambian-con-estos-hallazgos" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Hallazgo</p></th>
+<th class="head"><p>Decisión</p></th>
+<th class="head"><p>Dónde se aplica</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>El entorno dice más que la vivienda (15.2)</p></td>
+<td><p>Agregar la <strong>vecindad física</strong> (8 vecinos) como variables</p></td>
+<td><p>Entregable 2 (cap. 7) y todos los modelos del Entregable 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Las fronteras concentran la dificultad (15.3)</p></td>
+<td><p>Preferir <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> a ADASYN; reportar métricas ordinales (los errores son de un estrato)</p></td>
+<td><p>Entregable 3 (cap. 5)</p></td>
+</tr>
+<tr class="row-even"><td><p>El test tiene un solo bloque con estrato 6 (15.4)</p></td>
+<td><p>Intervalos por bloques, conclusiones solo si validación y test coinciden, pruebas con más bloques en la validación</p></td>
+<td><p>Entregables 2 y 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Se predice a 0.45 km (15.5)</p></td>
+<td><p>Validación kNNDM en lugar del buffer de 1 km</p></td>
+<td><p>Capítulo 14 y Entregables 2 y 3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Con esto, el EDA de la primera entrega queda corregido (15.1) y ampliado con lo que el proyecto aprendió después:
+el estrato es una propiedad de la <strong>zona</strong>, se decide en las <strong>fronteras</strong> entre zonas, y el test, con solo 7
+bloques, mide esa frontera de forma desigual.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_conclusiones.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">11. Conclusiones, limitaciones y próximos pasos</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="A_bitacora.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Apéndice A. Bitácora metodológica (decisiones y hallazgos)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#las-correcciones-de-la-primera-entrega-y-donde-estan">15.1 Las correcciones de la primera entrega y dónde están</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-1-el-entorno-de-la-vivienda-dice-mas-del-estrato-que-la-vivienda-misma">15.2 Hallazgo 1: el entorno de la vivienda dice más del estrato que la vivienda misma</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-2-las-fronteras-entre-estratos">15.3 Hallazgo 2: las fronteras entre estratos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-3-el-test-no-tiene-la-misma-composicion-que-el-entrenamiento">15.4 Hallazgo 3: el test no tiene la misma composición que el entrenamiento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgo-4-a-que-distancia-se-predice">15.5 Hallazgo 4: a qué distancia se predice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-decisiones-cambian-con-estos-hallazgos">15.6 Qué decisiones cambian con estos hallazgos</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por María Carolina Cantillo Orozco (200179105) y Juan Camilo Oñoro Araujo (200177329)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
