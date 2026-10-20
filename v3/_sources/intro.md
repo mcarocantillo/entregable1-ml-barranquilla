@@ -12,6 +12,29 @@ misma; el 22 % de las viviendas está en una frontera entre estratos; el test ti
 bloque; y una zona nueva se predice a 0.45 km del dato más cercano. Los capítulos 1 a 14 no cambian.
 ```
 
+```{admonition} Contexto agregado el 19-oct-2026: el vacío en la literatura
+:class: note
+Este libro se escribió antes de la revisión bibliográfica, que se hizo en el Entregable 2. Su conclusión explica por
+qué este proyecto no tiene cifras publicadas con las que compararse.
+
+**El estrato es colombiano.** Clasifica los inmuebles residenciales (no los hogares) en seis niveles para cobrar los
+servicios públicos con subsidios cruzados (Ley 142 de 1994): los estratos 1 a 3 reciben subsidio, el 4 paga el costo
+y el 5 y el 6 contribuyen. El DANE lo calcula con la base catastral, sin avalúos ni datos del hogar, y señala que este
+cobro «se institucionalizó sin que existiera un modelo similar en otros países».
+
+**Lo que hacen los trabajos cercanos.** La búsqueda en Scopus (5-oct-2026) halló 9 trabajos, y todos predicen otra
+cosa (una consulta complementaria en Web of Science, el 19-oct-2026, no devolvió ningún documento): el precio de la vivienda (5, con XGBoost, Random Forest o SVR), la pobreza por zonas (1), el nivel
+socioeconómico como variable de entrada (3) o la elección residencial con una logística sobre sectores censales
+(1998). Difieren en el objetivo, en la unidad (zonas en lugar de viviendas, salvo los de precio) y en la tarea
+(regresión con R² en lugar de clasificación en 6 clases con F1 macro).
+
+**El vacío.** Nadie ha clasificado el estrato de cada vivienda con sus datos catastrales y su ubicación. El DANE usa
+insumos del catastro que no son públicos, así que la pregunta precisa es cuánto del estrato se recupera con la parte
+pública. Por eso el desempeño se juzga contra el modelo base de este libro (capítulo 10), evaluado con un protocolo
+espacial. El detalle está en el
+[capítulo 1 del Entregable 2](https://mcarocantillo.github.io/entregable2-ml-barranquilla/v3/notebooks/01_revision.html).
+```
+
 ```{admonition} Versión 3: validación por vecinos más cercanos
 :class: important
 Esta es la **versión 3** del libro. Agrega el **capítulo 14**: la validación cruzada se diseña emparejando
